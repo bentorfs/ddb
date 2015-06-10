@@ -2,22 +2,37 @@
     color: #fff !important;
 }
 
+.navbar-nav {
+    margin: 0;
+}
+
+.navbar-collapse {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
 .navbar-nav > li > a {
     color: #fff !important;
+    background-color: #222 !important;
     border-bottom: 3px solid black !important;
 }
 
-.navbar-nav:hover > li > a {
+.navbar-nav > li > a:hover {
     border-bottom: 3px solid darkorange !important;
 }
 
 .navbar {
-    max-height: 53px !important;
+    max-height: 54px !important;
 }
 
 .dropdown-menu {
     right: 0 !important;
     left: initial;
+    background-color: #222 !important;
+}
+
+.dropdown-menu > li > a {
+    color: #fff;
 }
 
 .page-header {
