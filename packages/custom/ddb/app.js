@@ -25,6 +25,7 @@ Ddb.register(function (app, auth, database) {
 
     Ddb.aggregateAsset('css', 'ddb.css', {weight: -10});
 
+    Ddb.aggregateAsset('js', '../lib/lodash/lodash.min.js', {global: true, weight: -100});
     Ddb.aggregateAsset('js', '../lib/moment/min/moment.min.js', {global: true, weight: -10});
     Ddb.aggregateAsset('js', '../lib/Chart.js/Chart.js', {global:true, weight: 100});
     Ddb.aggregateAsset('js', '../lib/angular-chart.js/dist/angular-chart.min.js', {weight: 101});

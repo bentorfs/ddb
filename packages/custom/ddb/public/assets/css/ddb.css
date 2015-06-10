@@ -4,18 +4,22 @@
 
 .navbar-nav > li > a {
     color: #fff !important;
-    border-bottom: 5px solid black !important;
+    border-bottom: 3px solid black !important;
 }
 
 .navbar-nav:hover > li > a {
-    border-bottom: 5px solid darkorange !important;
+    border-bottom: 3px solid darkorange !important;
 }
 
 .navbar {
-    max-height: 55px !important;
+    max-height: 53px !important;
 }
 
 .dropdown-menu {
     right: 0 !important;
-    left: initial ;
+    left: initial;
+}
+
+.page-header {
+    border-bottom: 1px solid #eee !important;
 }

@@ -47,8 +47,11 @@ module.exports = function () {
                 dataprocessor.processUser(req.user);
             });
         },
-        mine: function (req, res) {
+        all: function (req, res) {
             var user = req.user;
+
+            // Todo: check if the user is a buddy
+
             Measurement.find({user: req.user}).sort('date').populate('user', 'name username').exec(function (err, measurements) {
                 if (err) {
                     return res.status(500).json({

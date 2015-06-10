@@ -1,8 +1,10 @@
 'use strict';
 
 /* jshint -W098 */
-angular.module('mean.ddb').controller('DdbMeasurementsController', ['$scope', 'Global', 'Measurement',
-    function ($scope, Global, Measurement) {
+angular.module('mean.ddb').controller('DdbMeasurementsController', ['$scope', 'Global', 'Measurement', 'MeanUser',
+    function ($scope, Global, Measurement, MeanUser) {
+
+        $scope.user = MeanUser;
 
         Measurement.query(function (measurements) {
             $scope.measurements = measurements;
@@ -16,6 +18,11 @@ angular.module('mean.ddb').controller('DdbMeasurementsController', ['$scope', 'G
 
         $scope.isToday = function (date) {
             return moment.utc(date, 'YYYY-MM-DD hh:mm:ss').startOf('day').valueOf() === moment.utc().startOf('day').valueOf();
+        };
+
+        $scope.isValid = function (measurement) {
+            return (measurement.pilsner >= 0) && (measurement.strongbeer >= 0) && (measurement.wine >= 0) && (measurement.liquor >= 0)
+                && !_.isNull(measurement.pilsner) && !_.isNull(measurement.strongbeer) && !_.isNull(measurement.wine) && !_.isNull(measurement.liquor);
         }
 
     }
