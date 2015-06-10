@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "dependencies": {
     "moment": "~2.10.3",
-    "angular-chart.js": "~0.7.1"
+    "angular-chart.js": "~0.7.1",
+    "lodash": "~3.9.3"
   }
 }
