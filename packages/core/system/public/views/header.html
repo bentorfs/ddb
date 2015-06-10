@@ -1,40 +1,39 @@
-<div class="navbar navbar-inverse navbar-fixed-top" data-role="navigation" ng-controller="HeaderController as hdrctr">
-        <div class="inner">
-            <div class="logo pull-left">
-                <a class="navbar-brand" ui-sref="home" mean-token="'site-title'">MEAN</a>
-            </div>
-
-            <div class="left pull-left">
-                <ul class="navbar-nav nav">
-                    <li ui-route="/{{item.link}}" ng-class="{active: $uiRoute}" ng-repeat="item in hdrctr.menus.main">
-                    <a mean-token="item.link" ui-sref='{{item.link}}'>{{item.title}}</a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="right pull-right">
-                <div class="text-edit" ng-show="hdrctr.hdrvars.authenticated">
-                    <div class="pull-right" mean-token-editable></div>
-                    <div class="pull-right" mean-translate></div>
-                </div>
-                <ul class="navbar-nav nav auth-link" ng-show="!hdrctr.hdrvars.authenticated">
-                    <li><a ui-sref='auth.register'>Join</a></li>
-                    <li class="divider-vertical"></li>
-                    <li><a ui-sref='auth.login'>Log In</a></li>
-                </ul>
-                <ul class="navbar-nav nav" ng-show="hdrctr.hdrvars.authenticated">
-                    <li class="dropdown" dropdown on-toggle="toggled(open)">
-                        <a href="#" class="dropdown-toggle" dropdown-toggle>
-                            <span>{{hdrctr.hdrvars.user.name}}</span> <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#" ng-click="hdrctr.logout()">Log Out</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-
+<nav class="navbar navbar-inverse" ng-controller="HeaderController as hdrctr">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" ng-init="navCollapsed = true"
+                    ng-click="navCollapsed = !navCollapsed">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">
+                <a class="navbar-brand" ui-sref="home">Drankdatabank</a>
+            </a>
         </div>
 
-</div>
+        <div class="collapse navbar-collapse" collapse="navCollapsed">
+            <ul class="nav navbar-nav">
+                <li ui-route="/{{item.link}}" ng-class="{active: $uiRoute}" ng-repeat="item in hdrctr.menus.main">
+                    <a mean-token="item.link" ui-sref='{{item.link}}'>{{item.title}}</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
 
+                <li><a ui-sref='auth.register' ng-show="!hdrctr.hdrvars.authenticated">Join</a></li>
+                <li><a ui-sref='auth.login' ng-show="!hdrctr.hdrvars.authenticated">Log In</a></li>
+
+                <li class="dropdown" ng-show="hdrctr.hdrvars.authenticated" dropdown>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" href dropdown-toggle>{{hdrctr.hdrvars.user.name}}
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#" ng-click="hdrctr.logout()">Log Out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+</nav>
