@@ -8,7 +8,12 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', 'Global
 
         Profile.query(function (profile) {
             $scope.typeLabels = ["Pils", "Zwaar Bier", "Wijn", "Sterke Drank"];
-            $scope.typeProfileData = [[profile[0].totPilsnerAlc, profile[0].totStrongbeerAlc, profile[0].totWineAlc, profile[0].totLiquorAlc]];
+            $scope.typeProfileData = [[profile[0].totAlcPilsner, profile[0].totAlcStrongbeer, profile[0].totAlcWine, profile[0].totAlcLiquor]];
+
+            $scope.weekLabels = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+            $scope.weekProfileData = [[profile[0].totAlcMon, profile[0].totAlcTue, profile[0].totAlcWed, profile[0].totAlcThu, profile[0].totAlcFri, profile[0].totAlcSat, profile[0].totAlcSun]];
+
+            $scope.profile = profile[0];
         });
 
         DailyAnalysis.query(function (dailyAnalyses) {
@@ -34,7 +39,7 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', 'Global
                 $scope.spreadAverageData[0].push(analysis.spreadAverage);
 
                 $scope.cumulativeTrendLabels.push(dateString);
-                $scope.cumulativeTrendData[0].push(analysis.totalCum);
+                $scope.cumulativeTrendData[0].push(analysis.cumAlc);
             });
 
         });

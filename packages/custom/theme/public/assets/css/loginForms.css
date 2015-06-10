@@ -2,11 +2,11 @@ html {
     height: 100%;
 }
 
-body.login, body.register,  body.forgot-password {
-background: url("/theme/assets/img/bg.png");
-    height: 100%;
-    position: relative;
-}
+/*body.login, body.register,  body.forgot-password {*/
+/*background: url("/theme/assets/img/bg.png");*/
+    /*height: 100%;*/
+    /*position: relative;*/
+/*}*/
 @font-face {
     font-family: 'futura_bkbook';
     src: url("/theme/assets/fonts/ufonts.com_futura-book.eot");
@@ -48,7 +48,7 @@ background: url("/theme/assets/img/bg.png");
 }
 .form {
     background: #ffffff;
-    box-shadow: 0 1px 3px 1px #003644;
+    box-shadow: 0 1px 3px 1px #666666;
     margin-top: 35px;
     left: 50%;
     position: relative;

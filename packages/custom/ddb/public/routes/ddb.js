@@ -15,5 +15,8 @@ angular.module('mean.ddb').config(['$stateProvider',
 
 angular.module('mean.ddb')
     .config(['$viewPathProvider', function ($viewPathProvider) {
-        $viewPathProvider.override('system/views/index.html', 'ddb/views/index.html');
+        $viewPathProvider.override('system/views/header.html', 'ddb/views/header.html');
+        $viewPathProvider.override('system/views/index.html', 'ddb/views/measurements.html');
+        $viewPathProvider.override('users/views/login.html', 'ddb/views/login.html');
+        $viewPathProvider.override('users/views/register.html', 'ddb/views/register.html');
     }]);

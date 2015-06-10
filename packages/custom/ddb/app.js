@@ -17,20 +17,13 @@ Ddb.register(function (app, auth, database) {
     Ddb.routes(app, auth, database);
 
     Ddb.menus.add({
-        title: 'Drinkgegevens',
-        link: 'measurements',
-        roles: ['authenticated'],
-        menu: 'main'
-    });
-
-    Ddb.menus.add({
         title: 'Drinkprofiel',
         link: 'profile',
         roles: ['authenticated'],
         menu: 'main'
     });
 
-    Ddb.aggregateAsset('css', 'ddb.css');
+    Ddb.aggregateAsset('css', 'ddb.css', {weight: -10});
 
     Ddb.aggregateAsset('js', '../lib/moment/min/moment.min.js', {global: true, weight: -10});
     Ddb.aggregateAsset('js', '../lib/Chart.js/Chart.js', {global:true, weight: 100});

@@ -9,7 +9,7 @@ var mongoose = require('mongoose'),
     moment = require('moment'),
     dataprocessor = require('./dataprocessor');
 
-module.exports = function (Measurements) {
+module.exports = function () {
 
     var createEmptyMeasurement = function (user, date) {
         var measurementData = {

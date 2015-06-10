@@ -19,35 +19,48 @@ var DailyAnalysisSchema = new Schema({
         type: Number
     },
     // Daily alcohol content
-    pilsnerAlc: {
+    todAlcPilsner: {
         type: Number
     },
-    strongbeerAlc: {
+    todAlcStrongbeer: {
         type: Number
     },
-    wineAlc: {
+    todAlcWine: {
         type: Number
     },
-    liquorAlc: {
+    todAlcLiquor: {
         type: Number
     },
-    totalAlc: {
+    todAlc: {
         type: Number
     },
+
     // Cumulative up till this day
-    pilsnerCum: {
+    cumPilsner: {
         type: Number
     },
-    strongbeerCum: {
+    cumStrongbeer: {
         type: Number
     },
-    wineCum: {
+    cumWine: {
         type: Number
     },
-    liquorCum: {
+    cumLiquor: {
         type: Number
     },
-    totalCum: {
+    cumAlcPilsner: {
+        type: Number
+    },
+    cumAlcStrongbeer: {
+        type: Number
+    },
+    cumAlcWine: {
+        type: Number
+    },
+    cumAlcLiquor: {
+        type: Number
+    },
+    cumAlc: {
         type: Number
     },
     // 7-Day Average
