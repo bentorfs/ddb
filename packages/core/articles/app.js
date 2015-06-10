@@ -18,9 +18,9 @@ Articles.register(function(app, auth, database, swagger) {
 
   Articles.aggregateAsset('css', 'articles.css');
 
-  
+
   //We are adding a link to the main menu for all authenticated users
-  Articles.menus.add({
+/*  Articles.menus.add({
     'roles': ['authenticated'],
     'title': 'Articles',
     'link': 'all articles'
@@ -29,7 +29,7 @@ Articles.register(function(app, auth, database, swagger) {
     'roles': ['authenticated'],
     'title': 'Create New Article',
     'link': 'create article'
-  });
+  });*/
 
   Articles.events.design({
     //http://fontawesome.io/icons
