@@ -8,16 +8,16 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">
-                <a class="navbar-brand" ui-sref="home">Beerkeeper</a>
-            </a>
+            <div class="navbar-brand" href="#">
+                <a ui-sref="home" class="logo">Beerkeeper</a>
+            </div>
         </div>
 
         <div class="collapse navbar-collapse" collapse="navCollapsed">
             <ul class="nav navbar-nav">
                 <li ng-show="hdrctr.hdrvars.authenticated">
                     <a ui-sref='measurements' ng-click="navCollapsed = true"
-                       ng-class="{active: isActive('measurements') || isActive('home')}">
+                       ng-class="{active: isActive('measurements')}">
                         <i class="glyphicon glyphicon-list"/> &nbsp; Data Entry
                     </a>
                 </li>
