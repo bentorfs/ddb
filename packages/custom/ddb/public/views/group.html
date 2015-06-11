@@ -1,0 +1,54 @@
+<div class="" data-ng-controller="DdbGroupController">
+
+    <div class="page-header">
+        <h1>Group
+            <br class="visible-xs"/>
+            <small>{{group.name}}</small>
+        </h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-9">
+
+        </div>
+        <div class="col-md-3">
+
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Members</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table">
+                        <tr ng-repeat="member in group.members | orderBy:'name'">
+                            <td>
+                                {{member.username}}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Invitations</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table">
+                        <tr ng-if="!group.invitations.length">
+                            <th colspan="2">There are no outstanding invitations</th>
+                        </tr>
+                        <tr ng-repeat="member in group.invitations | orderBy:'name'">
+                            <td>
+                                {{member.username}}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+

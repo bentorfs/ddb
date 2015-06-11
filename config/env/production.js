@@ -28,7 +28,7 @@ module.exports = {
   },
   hostname: 'http://localhost:3000',
   app: {
-    name: 'Drankdatabank'
+    name: 'Beerkeeper'
   },
   logging: {
     format: 'combined'

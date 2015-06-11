@@ -10,6 +10,14 @@ angular.module('mean.ddb').config(['$stateProvider',
             url: '/ddb/profile',
             templateUrl: 'ddb/views/profile.html'
         });
+        $stateProvider.state('managegroups', {
+            url: '/ddb/creategroup',
+            templateUrl: 'ddb/views/managegroups.html'
+        });
+        $stateProvider.state('group', {
+            url: '/ddb/group/:groupId',
+            templateUrl: 'ddb/views/group.html'
+        });
         $stateProvider.state('tools', {
             url: '/ddb/tools',
             templateUrl: 'ddb/views/tools.html'

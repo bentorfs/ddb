@@ -18,6 +18,16 @@
                 <li ui-route="/{{item.link}}" ng-class="{active: $uiRoute}" ng-repeat="item in hdrctr.menus.main">
                     <a mean-token="item.link" ui-sref='{{item.link}}'>{{item.title}}</a>
                 </li>
+                <li class="dropdown" ng-show="hdrctr.hdrvars.authenticated" dropdown>
+                    <a href="#" class="dropdown-toggle" role="button" aria-expanded="false" href dropdown-toggle>Groups
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#" ui-sref="managegroups">Manage Groups</a></li>
+                        <li class="divider"></li>
+                        <li ng-repeat="group in groups | orderBy:'name'"><a href="#" ui-sref="group({groupId: group._id})">{{group.name}}</a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
 
@@ -25,7 +35,7 @@
                 <li><a ui-sref='auth.login' ng-show="!hdrctr.hdrvars.authenticated">Log In</a></li>
 
                 <li class="dropdown" ng-show="hdrctr.hdrvars.authenticated" dropdown>
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" href dropdown-toggle>{{hdrctr.hdrvars.user.name}}
+                    <a href="#" class="dropdown-toggle" role="button" aria-expanded="false" href dropdown-toggle>{{hdrctr.hdrvars.user.name}}
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="#" ng-click="hdrctr.logout()">Log Out</a></li>

@@ -13,7 +13,7 @@ module.exports = {
   },
   hostname: 'http://localhost:3000',
   app: {
-    name: 'Drankdatabank - Dev'
+    name: 'Beerkeeper - Dev'
   },
   facebook: {
     clientID: 'DEFAULT_APP_ID',

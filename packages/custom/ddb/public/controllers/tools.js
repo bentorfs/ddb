@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mean.ddb').controller('DdbToolsController', ['$scope', 'Global', 'Measurement', 'MeanUser',
+angular.module('mean.ddb').controller('DdbToolsController', ['$scope', 'Global', 'Measurement',
     function ($scope, Global, Measurement) {
 
 

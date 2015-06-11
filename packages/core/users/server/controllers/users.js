@@ -4,15 +4,14 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-  User = mongoose.model('User'),
-  async = require('async'),
-  config = require('meanio').loadConfig(),
-  crypto = require('crypto'),
-  nodemailer = require('nodemailer'),
-  templates = require('../template'),
-  _ = require('lodash'),
-  jwt = require('jsonwebtoken'); //https://npmjs.org/package/node-jsonwebtoken
-
+    User = mongoose.model('User'),
+    async = require('async'),
+    config = require('meanio').loadConfig(),
+    crypto = require('crypto'),
+    nodemailer = require('nodemailer'),
+    templates = require('../template'),
+    _ = require('lodash'),
+    jwt = require('jsonwebtoken'); //https://npmjs.org/package/node-jsonwebtoken
 
 
 /**
@@ -20,43 +19,42 @@ var mongoose = require('mongoose'),
  */
 function sendMail(mailOptions) {
     var transport = nodemailer.createTransport(config.mailer);
-    transport.sendMail(mailOptions, function(err, response) {
+    transport.sendMail(mailOptions, function (err, response) {
         if (err) return err;
         return response;
     });
 }
 
 
-
-module.exports = function(MeanUser) {
+module.exports = function (MeanUser) {
     return {
         /**
          * Auth callback
          */
-        authCallback: function(req, res) {
-          var payload = req.user;
-          var escaped = JSON.stringify(payload);      
-          escaped = encodeURI(escaped);
-          // We are sending the payload inside the token
-          var token = jwt.sign(escaped, config.secret, { expiresInMinutes: 60*5 });
-          res.cookie('token', token);
-          res.redirect('/');
+        authCallback: function (req, res) {
+            var payload = req.user;
+            var escaped = JSON.stringify(payload);
+            escaped = encodeURI(escaped);
+            // We are sending the payload inside the token
+            var token = jwt.sign(escaped, config.secret, {expiresInMinutes: 60 * 5});
+            res.cookie('token', token);
+            res.redirect('/');
         },
 
         /**
          * Show login form
          */
-        signin: function(req, res) {
-          if (req.isAuthenticated()) {
-            return res.redirect('/');
-          }
-          res.redirect('/login');
+        signin: function (req, res) {
+            if (req.isAuthenticated()) {
+                return res.redirect('/');
+            }
+            res.redirect('/login');
         },
 
         /**
          * Logout
          */
-        signout: function(req, res) {
+        signout: function (req, res) {
 
             MeanUser.events.publish('logout', {
                 description: req.user.name + ' logout.'
@@ -69,14 +67,14 @@ module.exports = function(MeanUser) {
         /**
          * Session
          */
-        session: function(req, res) {
-          res.redirect('/');
+        session: function (req, res) {
+            res.redirect('/');
         },
 
         /**
          * Create user
          */
-        create: function(req, res, next) {
+        create: function (req, res, next) {
             var user = new User(req.body);
 
             user.provider = 'local';
@@ -95,31 +93,31 @@ module.exports = function(MeanUser) {
 
             // Hard coded for now. Will address this with the user permissions system in v0.3.5
             user.roles = ['authenticated'];
-            user.save(function(err) {
+            user.save(function (err) {
                 if (err) {
                     switch (err.code) {
                         case 11000:
                         case 11001:
-                        res.status(400).json([{
-                            msg: 'Username already taken',
-                            param: 'username'
-                        }]);
-                        break;
+                            res.status(400).json([{
+                                msg: 'Username already taken',
+                                param: 'username'
+                            }]);
+                            break;
                         default:
-                        var modelErrors = [];
+                            var modelErrors = [];
 
-                        if (err.errors) {
+                            if (err.errors) {
 
-                            for (var x in err.errors) {
-                                modelErrors.push({
-                                    param: x,
-                                    msg: err.errors[x].message,
-                                    value: err.errors[x].value
-                                });
+                                for (var x in err.errors) {
+                                    modelErrors.push({
+                                        param: x,
+                                        msg: err.errors[x].message,
+                                        value: err.errors[x].value
+                                    });
+                                }
+
+                                res.status(400).json(modelErrors);
                             }
-
-                            res.status(400).json(modelErrors);
-                        }
                     }
                     return res.status(400);
                 }
@@ -128,16 +126,18 @@ module.exports = function(MeanUser) {
                 payload.redirect = req.body.redirect;
                 var escaped = JSON.stringify(payload);
                 escaped = encodeURI(escaped);
-                req.logIn(user, function(err) {
-                    if (err) { return next(err); }
+                req.logIn(user, function (err) {
+                    if (err) {
+                        return next(err);
+                    }
 
                     MeanUser.events.publish('register', {
                         description: user.name + ' register to the system.'
                     });
 
                     // We are sending the payload inside the token
-                    var token = jwt.sign(escaped, config.secret, { expiresInMinutes: 60*5 });
-                    res.json({ token: token });
+                    var token = jwt.sign(escaped, config.secret, {expiresInMinutes: 60 * 5});
+                    res.json({token: token});
                 });
                 res.status(200);
             });
@@ -145,12 +145,12 @@ module.exports = function(MeanUser) {
         /**
          * Send User
          */
-        me: function(req, res) {
+        me: function (req, res) {
             if (!req.user || !req.user.hasOwnProperty('_id')) return null;
 
             User.findOne({
                 _id: req.user._id
-            }).exec(function(err, user) {
+            }).exec(function (err, user) {
 
                 if (err || !user) return res.send(null);
 
@@ -166,19 +166,38 @@ module.exports = function(MeanUser) {
                 var payload = user;
                 var escaped = JSON.stringify(payload);
                 escaped = encodeURI(escaped);
-                var token = jwt.sign(escaped, config.secret, { expiresInMinutes: 60*5 });
-                res.json({ token: token });
-               
+                var token = jwt.sign(escaped, config.secret, {expiresInMinutes: 60 * 5});
+                res.json({token: token});
+
+            });
+        },
+
+        all: function (req, res) {
+            User.find({}).exec(function (err, users) {
+                if (err || !users) return res.send(null);
+
+                var response = [];
+                _.forEach(users, function (user) {
+                    var payload = {
+                        id: user._id,
+                        username: user.username
+                    };
+
+                    response.push(payload);
+                });
+
+                res.json(response);
+
             });
         },
 
         /**
          * Find user by id
          */
-        user: function(req, res, next, id) {
+        user: function (req, res, next, id) {
             User.findOne({
                 _id: id
-            }).exec(function(err, user) {
+            }).exec(function (err, user) {
                 if (err) return next(err);
                 if (!user) return next(new Error('Failed to load User ' + id));
                 req.profile = user;
@@ -190,13 +209,13 @@ module.exports = function(MeanUser) {
          * Resets the password
          */
 
-        resetpassword: function(req, res, next) {
+        resetpassword: function (req, res, next) {
             User.findOne({
                 resetPasswordToken: req.params.token,
                 resetPasswordExpires: {
                     $gt: Date.now()
                 }
-            }, function(err, user) {
+            }, function (err, user) {
                 if (err) {
                     return res.status(400).json({
                         msg: err
@@ -216,13 +235,13 @@ module.exports = function(MeanUser) {
                 user.password = req.body.password;
                 user.resetPasswordToken = undefined;
                 user.resetPasswordExpires = undefined;
-                user.save(function(err) {
+                user.save(function (err) {
 
                     MeanUser.events.publish('resetpassword', {
                         description: user.name + ' reset his password.'
                     });
 
-                    req.logIn(user, function(err) {
+                    req.logIn(user, function (err) {
                         if (err) return next(err);
                         return res.send({
                             user: user
@@ -235,60 +254,60 @@ module.exports = function(MeanUser) {
         /**
          * Callback for forgot password link
          */
-        forgotpassword: function(req, res, next) {
+        forgotpassword: function (req, res, next) {
             async.waterfall([
 
-                function(done) {
-                    crypto.randomBytes(20, function(err, buf) {
-                        var token = buf.toString('hex');
-                        done(err, token);
-                    });
-                },
-                function(token, done) {
-                    User.findOne({
-                        $or: [{
-                            email: req.body.text
-                        }, {
-                            username: req.body.text
-                        }]
-                    }, function(err, user) {
-                        if (err || !user) return done(true);
-                        done(err, user, token);
-                    });
-                },
-                function(user, token, done) {
-                    user.resetPasswordToken = token;
-                    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
-                    user.save(function(err) {
-                        done(err, token, user);
-                    });
-                },
-                function(token, user, done) {
-                    var mailOptions = {
-                        to: user.email,
-                        from: config.emailFrom
+                    function (done) {
+                        crypto.randomBytes(20, function (err, buf) {
+                            var token = buf.toString('hex');
+                            done(err, token);
+                        });
+                    },
+                    function (token, done) {
+                        User.findOne({
+                            $or: [{
+                                email: req.body.text
+                            }, {
+                                username: req.body.text
+                            }]
+                        }, function (err, user) {
+                            if (err || !user) return done(true);
+                            done(err, user, token);
+                        });
+                    },
+                    function (user, token, done) {
+                        user.resetPasswordToken = token;
+                        user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+                        user.save(function (err) {
+                            done(err, token, user);
+                        });
+                    },
+                    function (token, user, done) {
+                        var mailOptions = {
+                            to: user.email,
+                            from: config.emailFrom
+                        };
+                        mailOptions = templates.forgot_password_email(user, req, token, mailOptions);
+                        sendMail(mailOptions);
+                        done(null, user);
+                    }
+                ],
+                function (err, user) {
+
+                    var response = {
+                        message: 'Mail successfully sent',
+                        status: 'success'
                     };
-                    mailOptions = templates.forgot_password_email(user, req, token, mailOptions);
-                    sendMail(mailOptions);
-                    done(null, user);
-                }
-            ],
-            function(err, user) {
+                    if (err) {
+                        response.message = 'User does not exist';
+                        response.status = 'danger';
 
-                var response = {
-                    message: 'Mail successfully sent',
-                    status: 'success'
-                };
-                if (err) {
-                    response.message = 'User does not exist';
-                    response.status = 'danger';
-
-                    MeanUser.events.publish('forgotpassword', {
-                        description: user.name + ' forgot his password.'
-                    });
-                }
-                res.json(response);
-            });
+                        MeanUser.events.publish('forgotpassword', {
+                            description: user.name + ' forgot his password.'
+                        });
+                    }
+                    res.json(response);
+                });
         }
     };
 }

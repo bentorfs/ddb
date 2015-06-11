@@ -9,7 +9,7 @@ module.exports = {
     format: 'common'
   },
   app: {
-    name: 'Drankdatabank - Test'
+    name: 'Beerkeeper - Test'
   },
   facebook: {
     clientID: 'APP_ID',
