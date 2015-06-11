@@ -10,6 +10,10 @@ angular.module('mean.ddb').config(['$stateProvider',
             url: '/ddb/profile',
             templateUrl: 'ddb/views/profile.html'
         });
+        $stateProvider.state('tools', {
+            url: '/ddb/tools',
+            templateUrl: 'ddb/views/tools.html'
+        });
     }
 ]);
 

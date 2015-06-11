@@ -23,6 +23,13 @@ Ddb.register(function (app, auth, database) {
         menu: 'main'
     });
 
+    Ddb.menus.add({
+        title: 'Tools',
+        link: 'tools',
+        roles: ['authenticated'],
+        menu: 'main'
+    });
+
     Ddb.aggregateAsset('css', 'ddb.css', {weight: -10});
 
     Ddb.aggregateAsset('js', '../lib/lodash/lodash.min.js', {global: true, weight: -100});

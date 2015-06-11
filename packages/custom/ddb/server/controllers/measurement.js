@@ -33,7 +33,9 @@ module.exports = function () {
             delete upsertData._id;
             delete upsertData.__v;
 
-            Measurement.findByIdAndUpdate(measurement.id, upsertData, {
+            var dateToUpdate = moment.utc(measurement.date).startOf('day').valueOf();
+
+            Measurement.findOneAndUpdate({date: dateToUpdate, user: req.user}, upsertData, {
                 upsert: true,
                 new: true
             }, function (err, updatedMeasurement) {
@@ -49,8 +51,6 @@ module.exports = function () {
         },
         all: function (req, res) {
             var user = req.user;
-
-            // Todo: check if the user is a buddy
 
             Measurement.find({user: req.user}).sort('date').populate('user', 'name username').exec(function (err, measurements) {
                 if (err) {
@@ -83,6 +83,19 @@ module.exports = function () {
                     res.json(measurements);
                     dataprocessor.processUser(req.user);
                 }
+            });
+        },
+        deleteAll: function (req, res) {
+            var user = req.user;
+
+            Measurement.remove({user: req.user}, function (err) {
+                if (err) {
+                    return res.status(500).json({
+                        error: 'Could not delete data for user ' + JSON.stringify(req.user)
+                    });
+                }
+                console.log('Deleted all data for user ' + JSON.stringify(req.user));
+                res.json({});
             });
         }
     };

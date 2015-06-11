@@ -6,9 +6,11 @@ angular.module('mean.ddb').controller('DdbMeasurementsController', ['$scope', 'G
 
         $scope.user = MeanUser;
 
-        Measurement.query(function (measurements) {
-            $scope.measurements = measurements;
-        });
+        $scope.loadData = function () {
+            Measurement.query(function (measurements) {
+                $scope.measurements = measurements;
+            });
+        };
 
         $scope.save = function (measurement) {
             measurement.$save(function (response) {
@@ -23,8 +25,9 @@ angular.module('mean.ddb').controller('DdbMeasurementsController', ['$scope', 'G
         $scope.isValid = function (measurement) {
             return (measurement.pilsner >= 0) && (measurement.strongbeer >= 0) && (measurement.wine >= 0) && (measurement.liquor >= 0)
                 && !_.isNull(measurement.pilsner) && !_.isNull(measurement.strongbeer) && !_.isNull(measurement.wine) && !_.isNull(measurement.liquor);
-        }
+        };
 
+        $scope.loadData();
     }
 ]);
 

@@ -99,7 +99,7 @@ function updateProfile(measurements, analyses, user) {
         avgAlcLiquor: _.last(analyses).cumAlcLiquor / measurements.length,
         avgAlc: _.last(analyses).cumAlc / measurements.length,
 
-        consistencyFactor: avgAlcStdev / (_.last(analyses).cumAlc / measurements.length),
+        consistencyFactor: (avgAlcStdev / (_.last(analyses).cumAlc / measurements.length)) || 0,
 
         activeDays: measurements.length,
         drinkingDays: drinkingDays,
