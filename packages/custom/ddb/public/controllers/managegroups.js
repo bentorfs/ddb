@@ -5,7 +5,7 @@ angular.module('mean.ddb').controller('DdbManageGroupsController', ['$scope', 'G
 
         $scope.loadUsers = function () {
             User.list().success(function (users) {
-                $scope.users = _.filter(users.data, function (user) {
+                $scope.users = _.filter(users, function (user) {
                     return user.username != MeanUser.user.username;
                 });
             });
@@ -13,7 +13,7 @@ angular.module('mean.ddb').controller('DdbManageGroupsController', ['$scope', 'G
 
         $scope.loadInvitations = function () {
             Invitation.list().success(function (invitation) {
-                $scope.invitations = invitation.data;
+                $scope.invitations = invitation;
             });
         };
 
