@@ -21,6 +21,10 @@
     border-bottom: 3px solid darkorange !important;
 }
 
+.navbar-nav > li > a.active {
+    border-bottom: 3px solid darkorange !important;
+}
+
 .navbar {
     max-height: 54px !important;
 }

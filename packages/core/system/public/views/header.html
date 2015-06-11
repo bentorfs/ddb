@@ -15,30 +15,66 @@
 
         <div class="collapse navbar-collapse" collapse="navCollapsed">
             <ul class="nav navbar-nav">
-                <li ui-route="/{{item.link}}" ng-class="{active: $uiRoute}" ng-repeat="item in hdrctr.menus.main">
-                    <a mean-token="item.link" ui-sref='{{item.link}}'>{{item.title}}</a>
+                <li ng-show="hdrctr.hdrvars.authenticated">
+                    <a ui-sref='measurements' ng-click="navCollapsed = true"
+                       ng-class="{active: isActive('measurements') || isActive('home')}">
+                        <i class="glyphicon glyphicon-list"/> &nbsp; Data Entry
+                    </a>
+                </li>
+                <li ng-show="hdrctr.hdrvars.authenticated">
+                    <a ui-sref='profile' ng-click="navCollapsed = true" ng-class="{active: isActive('profile')}">
+                        <i class="glyphicon glyphicon-stats"/> &nbsp; Profile
+                    </a>
                 </li>
                 <li class="dropdown" ng-show="hdrctr.hdrvars.authenticated" dropdown>
-                    <a href="#" class="dropdown-toggle" role="button" aria-expanded="false" href dropdown-toggle>Groups
-                        <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle"
+                       ng-class="{active: isActive('group')|| isActive('managegroups')}" href dropdown-toggle>
+                        <i class="glyphicon glyphicon-globe"/> &nbsp; Groups
+                        <span class="caret"></span>
+                    </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="#" ui-sref="managegroups">Manage Groups</a></li>
-                        <li class="divider"></li>
-                        <li ng-repeat="group in groups | orderBy:'name'"><a href="#" ui-sref="group({groupId: group._id})">{{group.name}}</a>
+                        <li>
+                            <a href="#" ui-sref="managegroups" ng-click="navCollapsed = true">
+                                <i class="glyphicon glyphicon-link"/> &nbsp; Manage Groups
+                            </a>
+                        </li>
+                        <li class="divider" ng-if="groups.length"></li>
+                        <li ng-repeat="group in groups | orderBy:'name'">
+                            <a href="#" ui-sref="group({groupId: group._id})" ng-click="navCollapsed = true">
+                                <i class="glyphicon glyphicon-globe"/> &nbsp; {{group.name}}
+                            </a>
                         </li>
                     </ul>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-
-                <li><a ui-sref='auth.register' ng-show="!hdrctr.hdrvars.authenticated">Join</a></li>
-                <li><a ui-sref='auth.login' ng-show="!hdrctr.hdrvars.authenticated">Log In</a></li>
-
+                <li>
+                    <a ui-sref='auth.register' ng-show="!hdrctr.hdrvars.authenticated" ng-click="navCollapsed = true"
+                       ng-class="{active: isActive('auth.register')}">
+                        <i class="glyphicon glyphicon-pencil"/> &nbsp; Join
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref='auth.login' ng-show="!hdrctr.hdrvars.authenticated" ng-click="navCollapsed = true"
+                       ng-class="{active: isActive('auth.login')}">
+                        <i class="glyphicon glyphicon-log-in"/> &nbsp; Log In
+                    </a>
+                </li>
+                <li ng-show="hdrctr.hdrvars.authenticated">
+                    <a ui-sref='tools' ng-click="navCollapsed = true" ng-class="{active: isActive('tools')}">
+                        <i class="glyphicon glyphicon-wrench"/> &nbsp; Tools
+                    </a>
+                </li>
                 <li class="dropdown" ng-show="hdrctr.hdrvars.authenticated" dropdown>
-                    <a href="#" class="dropdown-toggle" role="button" aria-expanded="false" href dropdown-toggle>{{hdrctr.hdrvars.user.name}}
-                        <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" href dropdown-toggle>
+                        <i class="glyphicon glyphicon-user"/> &nbsp; {{hdrctr.hdrvars.user.name}}
+                        <span class="caret"></span>
+                    </a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="#" ng-click="hdrctr.logout()">Log Out</a></li>
+                        <li>
+                            <a href="#" ng-click="hdrctr.logout()" ng-click="navCollapsed = true">
+                                <i class="glyphicon glyphicon-log-out"/> &nbsp; Log Out</a>
+                        </li>
                     </ul>
                 </li>
             </ul>

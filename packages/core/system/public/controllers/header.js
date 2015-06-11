@@ -3,6 +3,10 @@
 angular.module('mean.system').controller('HeaderController', ['$scope', '$rootScope', 'Menus', 'MeanUser', '$state', 'Group',
     function ($scope, $rootScope, Menus, MeanUser, $state, Group) {
 
+        $scope.isActive = function(state) {
+            return state === $state.$current.name;
+        };
+
         $scope.updateGroups = function () {
             Group.list().then(function (groups) {
                 $scope.groups = groups.data;
