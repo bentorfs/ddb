@@ -7,17 +7,13 @@ var Module = require('meanio').Module;
 
 var Ddb = new Module('ddb');
 
-/*
- * All MEAN packages require registration
- * Dependency injection is used to define required modules
- */
 Ddb.register(function (app, auth, database) {
 
     //We enable routing. By default the Package Object is passed to the routes
     Ddb.routes(app, auth, database);
 
     Ddb.menus.add({
-        title: 'Drinkprofiel',
+        title: 'Profile',
         link: 'profile',
         roles: ['authenticated'],
         menu: 'main'

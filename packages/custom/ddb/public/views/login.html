@@ -1,12 +1,12 @@
 <div data-ng-controller="LoginCtrl as login">
 
     <div class="alert alert-danger animated fadeIn" ng-show="login.loginError">{{login.loginError}}</div>
-    <h2>Inloggen</h2>
+    <h2>Login</h2>
 
     <form id="login_form" ng-submit="login.login()">
         <div class="form-group">
-            <label for="email_block">Email address</label>
-            <input required id="email_block" type="email" name="email" placeholder="Email Address"
+            <label for="email_block">E-mail address</label>
+            <input required id="email_block" type="email" name="email" placeholder="E-mail Address"
                    ng-model="login.user.email" class="form-control">
         </div>
         <div class="form-group">
@@ -18,11 +18,11 @@
 
         <div class="row">
             <div class="col-xs-6">
-                <button type="submit" class="btn btn-primary">Inloggen</button>
+                <button type="submit" class="btn btn-primary">Login</button>
             </div>
             <div class="col-xs-6 text-right">
-                <p>Nog geen account?
-                    <a ui-sref='auth.register'>Inschrijven</a>
+                <p>Not registered yet?
+                    <a ui-sref='auth.register'>Sign up</a>
                 </p>
             </div>
         </div>

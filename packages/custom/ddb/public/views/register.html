@@ -5,47 +5,47 @@
     <div class="alert alert-danger animated fadeIn" ng-show="reg.usernameError">{{reg.usernameError}}</div>
     <div class="alert alert-danger animated fadeIn" ng-show="reg.emailError">{{reg.emailError}}</div>
 
-    <h2>Inschrijven</h2>
+    <h2>Registration</h2>
 
     <form id="register_form" ng-submit="reg.register()">
 
         <div class="form-group">
-            <label for="name">Volledige Naam</label>
-            <input required id="name" type="text" name="name" placeholder="Volledige Naam"
+            <label for="name">Full Name</label>
+            <input required id="name" type="text" name="name" placeholder="Full Name"
                    ng-model="reg.user.name" class="form-control">
         </div>
 
         <div class="form-group">
-            <label for="email_block">E-mail Adres</label>
-            <input required id="email_block" type="email" name="email" placeholder="E-mail adres"
+            <label for="email_block">E-mail Address</label>
+            <input required id="email_block" type="email" name="email" placeholder="E-mail address"
                    ng-model="reg.user.email" class="form-control">
         </div>
 
         <div class="form-group">
-            <label for="username">Gebruikersnaam</label>
-            <input required id="username" type="text" name="username" placeholder="Gebruikersnaam"
+            <label for="username">Username</label>
+            <input required id="username" type="text" name="username" placeholder="Username"
                    ng-model="reg.user.username" class="form-control">
         </div>
 
         <div class="form-group">
-            <label for="password_block">Paswoord</label>
+            <label for="password_block">Password</label>
             <input required id="password_block" name="password" type="{{reg.input.type}}"
-                   placeholder="Paswoord" ng-model="reg.user.password" class="form-control">
+                   placeholder="Password" ng-model="reg.user.password" class="form-control">
         </div>
 
         <div class="form-group">
-            <label for="confirm_password">Paswoord Herhaling</label>
+            <label for="confirm_password">Repeat Password</label>
             <input required id="confirm_password" name="confirm_password" type="{{reg.input.type}}"
-                   placeholder="Paswoord herhaling" ng-model="reg.user.confirmPassword" class="form-control">
+                   placeholder="Repeat password" ng-model="reg.user.confirmPassword" class="form-control">
         </div>
 
         <div class="row">
             <div class="col-xs-6">
-                <button type="submit" class="btn btn-primary">Inschrijven</button>
+                <button type="submit" class="btn btn-primary">Sign up</button>
             </div>
             <div class="col-xs-6 text-right">
-                <p>Reeds ingeschreven?
-                    <a ui-sref='auth.login'>Inloggen</a>
+                <p>Already registered?
+                    <a ui-sref='auth.login'>Log in</a>
                 </p>
             </div>
         </div>
