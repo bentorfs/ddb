@@ -7,7 +7,7 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', 'Global
         $scope.user = MeanUser;
 
         Profile.query(function (profile) {
-            $scope.typeLabels = ["Pils", "Zwaar Bier", "Wijn", "Sterke Drank"];
+            $scope.typeLabels = ["Pilser", "Strong Beer", "Wine", "Liquor"];
             $scope.typeProfileData = [[profile[0].totAlcPilsner, profile[0].totAlcStrongbeer, profile[0].totAlcWine, profile[0].totAlcLiquor]];
 
             $scope.weekLabels = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];

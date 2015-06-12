@@ -3,8 +3,12 @@
 angular.module('mean.system').controller('HeaderController', ['$scope', '$rootScope', 'Menus', 'MeanUser', '$state', 'Group',
     function ($scope, $rootScope, Menus, MeanUser, $state, Group) {
 
-        $scope.isActive = function(state) {
+        $scope.isActive = function (state) {
             return state === $state.$current.name;
+        };
+
+        $scope.collapse = function () {
+            $scope.navCollapsed = true;
         };
 
         $scope.updateGroups = function () {

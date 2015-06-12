@@ -1,7 +1,7 @@
 <nav class="navbar navbar-inverse" ng-controller="HeaderController as hdrctr">
     <div class="container-fluid">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" ng-init="navCollapsed = true"
+            <button type="button" class="navbar-toggle collapsed" ng-init="collapse()"
                     ng-click="navCollapsed = !navCollapsed">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
@@ -16,13 +16,13 @@
         <div class="collapse navbar-collapse" collapse="navCollapsed">
             <ul class="nav navbar-nav">
                 <li ng-show="hdrctr.hdrvars.authenticated">
-                    <a ui-sref='measurements' ng-click="navCollapsed = true"
+                    <a ui-sref='measurements' ng-click="collapse()"
                        ng-class="{active: isActive('measurements')}">
                         <i class="glyphicon glyphicon-list"/> &nbsp; Data Entry
                     </a>
                 </li>
                 <li ng-show="hdrctr.hdrvars.authenticated">
-                    <a ui-sref='profile' ng-click="navCollapsed = true" ng-class="{active: isActive('profile')}">
+                    <a ui-sref='profile' ng-click="collapse()" ng-class="{active: isActive('profile')}">
                         <i class="glyphicon glyphicon-stats"/> &nbsp; Profile
                     </a>
                 </li>
@@ -34,13 +34,13 @@
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li>
-                            <a href="#" ui-sref="managegroups" ng-click="navCollapsed = true">
+                            <a href="#" ui-sref="managegroups" ng-click="collapse()">
                                 <i class="glyphicon glyphicon-link"/> &nbsp; Manage Groups
                             </a>
                         </li>
                         <li class="divider" ng-if="groups.length"></li>
                         <li ng-repeat="group in groups | orderBy:'name'">
-                            <a href="#" ui-sref="group({groupId: group._id})" ng-click="navCollapsed = true">
+                            <a href="#" ui-sref="group({groupId: group._id})" ng-click="collapse()">
                                 <i class="glyphicon glyphicon-globe"/> &nbsp; {{group.name}}
                             </a>
                         </li>
@@ -49,19 +49,19 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a ui-sref='auth.register' ng-show="!hdrctr.hdrvars.authenticated" ng-click="navCollapsed = true"
+                    <a ui-sref='auth.register' ng-show="!hdrctr.hdrvars.authenticated" ng-click="collapse()"
                        ng-class="{active: isActive('auth.register')}">
                         <i class="glyphicon glyphicon-pencil"/> &nbsp; Join
                     </a>
                 </li>
                 <li>
-                    <a ui-sref='auth.login' ng-show="!hdrctr.hdrvars.authenticated" ng-click="navCollapsed = true"
+                    <a ui-sref='auth.login' ng-show="!hdrctr.hdrvars.authenticated" ng-click="collapse()"
                        ng-class="{active: isActive('auth.login')}">
                         <i class="glyphicon glyphicon-log-in"/> &nbsp; Log In
                     </a>
                 </li>
                 <li ng-show="hdrctr.hdrvars.authenticated">
-                    <a ui-sref='tools' ng-click="navCollapsed = true" ng-class="{active: isActive('tools')}">
+                    <a ui-sref='tools' ng-click="collapse()" ng-class="{active: isActive('tools')}">
                         <i class="glyphicon glyphicon-wrench"/> &nbsp; Tools
                     </a>
                 </li>
@@ -72,7 +72,7 @@
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li>
-                            <a href="#" ng-click="hdrctr.logout()" ng-click="navCollapsed = true">
+                            <a href="#" ng-click="hdrctr.logout()" ng-click="collapse()">
                                 <i class="glyphicon glyphicon-log-out"/> &nbsp; Log Out</a>
                         </li>
                     </ul>
