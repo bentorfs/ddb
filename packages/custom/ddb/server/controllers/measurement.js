@@ -7,7 +7,8 @@ var mongoose = require('mongoose'),
     Measurement = mongoose.model('Measurement'),
     _ = require('lodash'),
     moment = require('moment'),
-    profileGenerator = require('./profile-generator');
+    profileGenerator = require('./profile-generator'),
+    grouprankingGenerator = require('./groupranking-generator');
 
 module.exports = function () {
 
@@ -45,13 +46,14 @@ module.exports = function () {
                 new: true
             }, function (err, updatedMeasurement) {
                 if (err) {
-                    console.log(err);
+                    console.error(err);
                     return res.status(500).json({
                         error: 'Cannot update the measurement'
                     });
                 }
                 res.send(updatedMeasurement);
                 profileGenerator.processUser(req.user);
+                grouprankingGenerator.processUser(req.user);
             });
         },
         all: function (req, res) {
@@ -87,6 +89,7 @@ module.exports = function () {
                     }
                     res.json(measurements);
                     profileGenerator.processUser(req.user);
+                    grouprankingGenerator.processUser(req.user);
                 }
             });
         }

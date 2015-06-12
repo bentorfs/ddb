@@ -7,7 +7,7 @@ angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$statePa
         $scope.inviteUsers = function () {
             var promises = [];
             _.forEach($scope.usersToInvite, function (userToInvite) {
-                promises.push(Group.addInvitation($stateParams.groupId, userToInvite.id));
+                promises.push(Group.addInvitation($stateParams.groupId, userToInvite._id));
             });
 
             $q.all(promises).then(function () {
@@ -28,6 +28,12 @@ angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$statePa
             });
         };
 
+        $scope.loadRanking = function () {
+            Group.getRanking($stateParams.groupId).success(function (ranking) {
+                $scope.ranking = ranking;
+            });
+        };
+
         $scope.leaveGroup = function () {
             Group.leaveGroup($stateParams.groupId).success(function () {
                 $state.go('managegroups');
@@ -36,6 +42,7 @@ angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$statePa
         };
 
         $scope.loadGroup();
+        $scope.loadRanking();
     }
 ]);
 

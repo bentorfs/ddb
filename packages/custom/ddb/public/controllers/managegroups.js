@@ -35,7 +35,7 @@ angular.module('mean.ddb').controller('DdbManageGroupsController', ['$scope', 'G
         $scope.createGroup = function () {
             Group.createGroup({
                 name: $scope.groupName,
-                invitations: _.pluck($scope.usersToInvite, 'id')
+                invitations: _.pluck($scope.usersToInvite, '_id')
             }).success(function (data) {
                 $rootScope.$emit('beerkeeper.groups.update');
                 $state.go('group', {groupId: data._id});

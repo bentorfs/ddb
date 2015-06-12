@@ -16,7 +16,7 @@ module.exports = function () {
         get: function (req, res) {
             Profile.findOne({user: req.params.userId}).exec(function (err, profile) {
                 if (err) {
-                    console.log(err);
+                    console.error(err);
                     return res.status(500).json({
                         error: 'Cannot retrieve profile for user'
                     });

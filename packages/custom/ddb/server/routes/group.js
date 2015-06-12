@@ -21,4 +21,7 @@ module.exports = function (Group, app, auth) {
 
     app.route('/api/invitation')
         .get(auth.requiresLogin, group.listInvitations);
+
+    app.route('/api/group/:groupId/ranking')
+        .get(auth.requiresLogin, group.getRanking);
 };

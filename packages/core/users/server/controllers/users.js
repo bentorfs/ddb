@@ -194,7 +194,7 @@ module.exports = function (MeanUser) {
                 var response = [];
                 _.forEach(users, function (user) {
                     var payload = {
-                        id: user._id,
+                        _id: user._id,
                         username: user.username
                     };
 

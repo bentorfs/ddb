@@ -5,6 +5,7 @@
  */
 var mongoose = require('mongoose'),
     Group = mongoose.model('Group'),
+    GroupRanking = mongoose.model('GroupRanking'),
     ObjectId = mongoose.Types.ObjectId,
     _ = require('lodash'),
     moment = require('moment');
@@ -15,7 +16,7 @@ module.exports = function () {
         listGroups: function (req, res) {
             Group.find({members: req.user._id}, function (err, groups) {
                 if (err) {
-                    console.log(err);
+                    console.error(err);
                     return res.status(500).json({
                         error: 'Cannot list the groups'
                     });
@@ -34,7 +35,7 @@ module.exports = function () {
         getGroup: function (req, res) {
             Group.findById(req.params.groupId).populate('members', 'username').populate('invitations', 'username').exec(function (err, doc) {
                 if (err || !doc) {
-                    console.log(err);
+                    console.error(err);
                     return res.status(500).json({
                         error: 'Cannot retrieve the group'
                     });
@@ -42,10 +43,21 @@ module.exports = function () {
                 res.json(doc);
             });
         },
+        getRanking: function (req, res) {
+            GroupRanking.findOne({group: req.params.groupId}).populate('rankingHighestBinge.user', 'username').exec(function (err, ranking) {
+                if (err || !ranking) {
+                    console.error(err);
+                    return res.status(500).json({
+                        error: 'Cannot retrieve the group ranking'
+                    });
+                }
+                res.json(ranking);
+            });
+        },
         listInvitations: function (req, res) {
             Group.find({invitations: req.user._id}, function (err, groups) {
                 if (err) {
-                    console.log(err);
+                    console.error(err);
                     return res.status(500).json({
                         error: 'Cannot list the invitations'
                     });
@@ -59,7 +71,7 @@ module.exports = function () {
                 '$addToSet': {members: req.user._id}
             }, function (err) {
                 if (err) {
-                    console.log(err);
+                    console.error(err);
                     return res.status(500).json({
                         error: 'Cannot accept the invitation'
                     });
@@ -78,7 +90,7 @@ module.exports = function () {
                 },
                 function (err) {
                     if (err) {
-                        console.log(err);
+                        console.error(err);
                         return res.status(500).json({
                             error: 'Cannot reject the invitation'
                         });
@@ -97,7 +109,7 @@ module.exports = function () {
                     '$addToSet': {invitations: req.params.userId}
                 }, function (err) {
                     if (err) {
-                        console.log(err);
+                        console.error(err);
                         return res.status(500).json({
                             error: 'Cannot add the invitation'
                         });
@@ -116,7 +128,7 @@ module.exports = function () {
                 },
                 function (err) {
                     if (err) {
-                        console.log(err);
+                        console.error(err);
                         return res.status(500).json({
                             error: 'Cannot reject the invitation'
                         });

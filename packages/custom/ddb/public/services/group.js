@@ -68,6 +68,12 @@ angular.module('mean.ddb').factory('Group', ['$http',
             });
         };
 
+        dao.getRanking = function (id) {
+            return $http({
+                url: '/api/group/' + id + '/ranking',
+                method: 'GET'
+            });
+        };
 
         return dao;
     }
