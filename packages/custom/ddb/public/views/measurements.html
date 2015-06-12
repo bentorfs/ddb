@@ -2,7 +2,7 @@
 
     <div class="page-header">
         <h1>Drinking Data<br class="visible-xs"/>
-            <small>for {{user.user.name}}</small>
+            <small>for {{user.user.username}}</small>
         </h1>
     </div>
 
@@ -33,7 +33,7 @@
                 <td class="text-right">
                     <button class="btn btn-sm btn-primary" ng-click="save(measurement); isDirty = false"
                             ng-show="isDirty" ng-disabled="!isValid(measurement)" type="submit">
-                        <i class="glyphicon glyphicon-floppy-saved"></i> Save
+                        <i class="glyphicon glyphicon-save"></i> Save
                     </button>
                 </td>
             </tr>

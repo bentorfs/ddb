@@ -157,11 +157,15 @@ module.exports = function (MeanUser) {
 
                 var dbUser = user.toJSON();
 
+                var userId = dbUser._id;
                 delete dbUser._id;
                 delete req.user._id;
 
-                var eq = _.isEqual(dbUser, req.user);
-                if (eq) return res.json(req.user);
+                var eq = _.isEqual(dbUser, req.user)
+                if (eq) {
+                    req.user._id = userId;
+                    return res.json(req.user);
+                }
 
                 var payload = user;
                 var escaped = JSON.stringify(payload);
@@ -169,6 +173,17 @@ module.exports = function (MeanUser) {
                 var token = jwt.sign(escaped, config.secret, {expiresInMinutes: 60 * 5});
                 res.json({token: token});
 
+            });
+        },
+
+        get: function (req, res) {
+            User.findOne({_id: req.params.userId}).exec(function (err, user) {
+                if (err || !user) return res.send(null);
+
+                res.json({
+                    _id: user._id,
+                    username: user.username
+                });
             });
         },
 

@@ -13,12 +13,12 @@ var mongoose = require('mongoose'),
 module.exports = function () {
 
     return {
-        mine: function (req, res) {
-            Profile.findOne({user: req.user}).exec(function (err, profile) {
+        get: function (req, res) {
+            Profile.findOne({user: req.params.userId}).exec(function (err, profile) {
                 if (err) {
                     console.log(err);
                     return res.status(500).json({
-                        error: 'Cannot retrieve the profile'
+                        error: 'Cannot retrieve profile for user'
                     });
                 }
 

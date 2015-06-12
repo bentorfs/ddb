@@ -7,11 +7,11 @@ angular.module('mean.ddb').config(['$stateProvider',
             templateUrl: 'ddb/views/measurements.html'
         });
         $stateProvider.state('profile', {
-            url: '/ddb/profile',
+            url: '/ddb/profile/:userId',
             templateUrl: 'ddb/views/profile.html'
         });
         $stateProvider.state('managegroups', {
-            url: '/ddb/creategroup',
+            url: '/ddb/managegroups',
             templateUrl: 'ddb/views/managegroups.html'
         });
         $stateProvider.state('group', {

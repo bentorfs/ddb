@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
     Measurement = mongoose.model('Measurement'),
     _ = require('lodash'),
     moment = require('moment'),
-    dataprocessor = require('./dataprocessor');
+    profileGenerator = require('./profile-generator');
 
 module.exports = function () {
 
@@ -51,7 +51,7 @@ module.exports = function () {
                     });
                 }
                 res.send(updatedMeasurement);
-                dataprocessor.processUser(req.user);
+                profileGenerator.processUser(req.user);
             });
         },
         all: function (req, res) {
@@ -86,21 +86,8 @@ module.exports = function () {
                         }
                     }
                     res.json(measurements);
-                    dataprocessor.processUser(req.user);
+                    profileGenerator.processUser(req.user);
                 }
-            });
-        },
-        deleteAll: function (req, res) {
-            var user = req.user;
-
-            Measurement.remove({user: req.user}, function (err) {
-                if (err) {
-                    return res.status(500).json({
-                        error: 'Could not delete data for user ' + JSON.stringify(req.user)
-                    });
-                }
-                console.log('Deleted all data for user ' + JSON.stringify(req.user));
-                res.json({});
             });
         }
     };

@@ -12,6 +12,22 @@ angular.module('mean.ddb').factory('User', ['$http',
             });
         };
 
+        userDao.get = function (userId) {
+            return $http({
+                url: '/api/users/' + userId,
+                method: 'GET',
+                params: {}
+            });
+        };
+
+        userDao.purge = function () {
+            return $http({
+                url: '/api/users/data',
+                method: 'DELETE',
+                params: {}
+            });
+        };
+
         return userDao;
     }
 ]);
