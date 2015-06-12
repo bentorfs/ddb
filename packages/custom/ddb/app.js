@@ -19,7 +19,6 @@ Ddb.register(function (app, auth, database) {
     Ddb.aggregateAsset('js', '../lib/Chart.js/Chart.js', {global: true, weight: -20});
     Ddb.aggregateAsset('js', '../lib/angular-chart.js/dist/angular-chart.js', {weight: 101});
     Ddb.aggregateAsset('js', '../lib/angular-bootstrap-multiselect/dist/angular-bootstrap-multiselect.js', {weight: 102});
-    Ddb.aggregateAsset('js', '../lib/angular-bootstrap-multiselect/dist/angular-bootstrap-multiselect-templates.js', {weight: 102});
     Ddb.aggregateAsset('css', '../lib/angular-chart.js/dist/angular-chart.css');
 
 

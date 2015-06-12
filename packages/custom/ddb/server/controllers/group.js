@@ -67,16 +67,24 @@ module.exports = function () {
                 res.json({});
             });
         },
-        rejectInvitation: function (req, res) {
-            Group.findOneAndUpdate({_id: req.params.groupId}, {'$pull': {invitations: req.user._id}}, function (err) {
-                if (err) {
-                    console.log(err);
-                    return res.status(500).json({
-                        error: 'Cannot reject the invitation'
-                    });
-                }
-                res.json({});
-            });
+        leaveGroup: function (req, res) {
+            Group.findOneAndUpdate(
+                {
+                    _id: req.params.groupId
+                },
+                {
+                    '$pull': {invitations: req.user._id, members: req.user._id}
+
+                },
+                function (err) {
+                    if (err) {
+                        console.log(err);
+                        return res.status(500).json({
+                            error: 'Cannot reject the invitation'
+                        });
+                    }
+                    res.json({});
+                });
         },
         addInvitation: function (req, res) {
             // TODO: check if current user is part of group

@@ -30,7 +30,7 @@
 
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Invitations</h3>
+                    <h3 class="panel-title">Outstanding Invitations</h3>
                 </div>
                 <div class="panel-body">
                     <table class="table">
@@ -41,7 +41,7 @@
                             <td>
                                 {{member.username}}
                             </td>
-                            <td>
+                            <td class="text-right">
                                 <button class="btn btn-default btn-sm" ng-click="uninviteUser(member._id)">
                                     <i class="glyphicon glyphicon-remove"/> Revoke
                                 </button>
@@ -50,10 +50,25 @@
                     </table>
                 </div>
                 <div class="panel-body">
-                    <select-users selection="usersToInvite">
-                    </select-users>
+                    <label>Send more invitations</label>
+
+                    <p>
+                        <select-users selection="usersToInvite" selection-limit="1">
+                        </select-users>
+                    </p>
                     <button class="btn btn-primary" ng-click="inviteUsers()">
-                        <i class="glyphicon glyphicon-ok"/> Invite
+                        <i class="glyphicon glyphicon-send"/> Send
+                    </button>
+                </div>
+            </div>
+
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Leave Group</h3>
+                </div>
+                <div class="panel-body">
+                    <button class="btn btn-danger" ng-click="leaveGroup()">
+                        <i class="glyphicon glyphicon-remove-sign"/> Leave
                     </button>
                 </div>
             </div>

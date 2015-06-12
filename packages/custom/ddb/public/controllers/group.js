@@ -1,31 +1,37 @@
 'use strict';
 
-angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$stateParams', 'User', 'Group', 'MeanUser', 'Invitation',
-    function ($scope, $stateParams, User, Group, MeanUser, Invitation) {
+angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$stateParams', '$state', '$rootScope', 'User', 'Group', '$q',
+    function ($scope, $stateParams, $state, $rootScope, User, Group, $q) {
 
         $scope.usersToInvite = [];
-
         $scope.inviteUsers = function () {
-            Invitation.add($stateParams.groupId, $scope.usersToInvite[0]).success(function () {
+            var promises = [];
+            _.forEach($scope.usersToInvite, function (userToInvite) {
+                promises.push(Group.addInvitation($stateParams.groupId, userToInvite.id));
+            });
+
+            $q.all(promises).then(function () {
                 $scope.loadGroup();
-            })
+                $scope.usersToInvite = [];
+            });
         };
 
         $scope.uninviteUser = function (userId) {
-            Invitation.remove($stateParams.groupId, userId).success(function () {
+            Group.removeInvitation($stateParams.groupId, userId).success(function () {
                 $scope.loadGroup();
             })
         };
 
         $scope.loadGroup = function () {
-            Group.get($stateParams.groupId).success(function (group) {
+            Group.getGroup($stateParams.groupId).success(function (group) {
                 $scope.group = group;
             });
         };
 
-        $scope.addInvitation = function (groupId, userId) {
-            Invitation.add(groupId, userId).success(function () {
-                alert('success');
+        $scope.leaveGroup = function () {
+            Group.leaveGroup($stateParams.groupId).success(function () {
+                $state.go('managegroups');
+                $rootScope.$emit('beerkeeper.groups.update');
             })
         };
 

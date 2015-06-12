@@ -1,7 +1,4 @@
 <div>
-    <div class="checkbox" ng-repeat="user in users | orderBy:'username'">
-        <label>
-            <input type="checkbox" ng-click="toggleUser(user.id)"> {{user.username}}
-        </label>
-    </div>
+    <multiselect ng-model="selection" options="options" id-prop="id" display-prop="username" show-search="true">
+    </multiselect>
 </div>

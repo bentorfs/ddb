@@ -8,11 +8,10 @@ angular.module('mean.system').controller('HeaderController', ['$scope', '$rootSc
         };
 
         $scope.updateGroups = function () {
-            Group.list().then(function (groups) {
+            Group.listGroups().then(function (groups) {
                 $scope.groups = groups.data;
             });
         };
-        $scope.updateGroups();
 
         $rootScope.$on('beerkeeper.groups.update', function () {
             $scope.updateGroups();
@@ -56,6 +55,8 @@ angular.module('mean.system').controller('HeaderController', ['$scope', '$rootSc
                 user: MeanUser.user,
                 isAdmin: MeanUser.isAdmin
             };
+
+            $scope.updateGroups();
         });
 
         vm.logout = function () {
