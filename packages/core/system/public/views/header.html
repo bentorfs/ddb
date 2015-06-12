@@ -22,7 +22,8 @@
                     </a>
                 </li>
                 <li ng-show="hdrctr.hdrvars.authenticated">
-                    <a ui-sref='profile' ng-click="collapse()" ng-class="{active: isActive('profile')}">
+                    <a ui-sref='profile({userId: hdrctr.hdrvars.user._id})' ng-click="collapse()"
+                       ng-class="{active: isActive('profile')}">
                         <i class="glyphicon glyphicon-stats"/> &nbsp; Profile
                     </a>
                 </li>

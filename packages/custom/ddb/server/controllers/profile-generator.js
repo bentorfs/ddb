@@ -14,7 +14,7 @@ module.exports = {
     processUser: function (user) {
         Measurement.find({user: user}).sort('date').exec(function (err, measurements) {
             if (err) {
-                console.log('Could not load measurement to update daily analysis: ' + err);
+                console.error('Could not load measurement to update daily analysis: ' + err);
                 return;
             }
 
@@ -28,7 +28,7 @@ module.exports = {
 
 function updateProfile(measurements, analyses, user) {
     if (measurements.length != analyses.length || measurements.length === 0) {
-        console.log("Inequal number of measurements and analyses");
+        console.error("Inequal number of measurements and analyses");
         return;
     }
 
@@ -113,7 +113,7 @@ function updateProfile(measurements, analyses, user) {
         user: user
     }, profileData, {upsert: true}, function (err) {
         if (err) {
-            console.log('Could not update profile: ' + err);
+            console.error('Could not update profile: ' + err);
         }
     });
 }

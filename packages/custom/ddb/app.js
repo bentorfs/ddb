@@ -16,11 +16,13 @@ Ddb.register(function (app, auth, database) {
 
     Ddb.aggregateAsset('js', '../lib/lodash/lodash.min.js', {global: true, weight: -100});
     Ddb.aggregateAsset('js', '../lib/moment/min/moment.min.js', {global: true, weight: -10});
-    Ddb.aggregateAsset('js', '../lib/Chart.js/Chart.js', {global:true, weight: -20});
+    Ddb.aggregateAsset('js', '../lib/Chart.js/Chart.js', {global: true, weight: -20});
     Ddb.aggregateAsset('js', '../lib/angular-chart.js/dist/angular-chart.js', {weight: 101});
+    Ddb.aggregateAsset('js', '../lib/angular-bootstrap-multiselect/dist/angular-bootstrap-multiselect.js', {weight: 102});
     Ddb.aggregateAsset('css', '../lib/angular-chart.js/dist/angular-chart.css');
 
-    Ddb.angularDependencies(['mean.system', 'chart.js']);
+
+    Ddb.angularDependencies(['mean.system', 'chart.js', 'btorfs.multiselect']);
     /**
      //Uncomment to use. Requires meanio@0.3.7 or above
      // Save settings with callback

@@ -10,6 +10,52 @@
     <div class="row">
         <div class="col-md-9">
 
+            <div class="row">
+                <div class="col-sm-4">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th colspan="3">Binge Trophy</th>
+                        </tr>
+                        </thead>
+                        <tr ng-repeat="rank in ranking.rankingHighestBinge" ng-class="{success: $index === 0}">
+                            <td>{{$index + 1}}</td>
+                            <td>{{rank.user.username}}</td>
+                            <td>{{rank.value | number:2}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-sm-4">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th colspan="3">Binge Trophy</th>
+                        </tr>
+                        </thead>
+                        <tr ng-repeat="rank in ranking.rankingHighestBinge" ng-class="{success: $index === 0}">
+                            <td>{{$index + 1}}</td>
+                            <td>{{rank.user.username}}</td>
+                            <td>{{rank.value | number:2}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-sm-4">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th colspan="3">Binge Trophy</th>
+                        </tr>
+                        </thead>
+                        <tr ng-repeat="rank in ranking.rankingHighestBinge" ng-class="{success: $index === 0}">
+                            <td>{{$index + 1}}</td>
+                            <td>{{rank.user.username}}</td>
+                            <td>{{rank.value | number:2}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+
         </div>
         <div class="col-md-3">
 
@@ -23,6 +69,9 @@
                             <td>
                                 {{member.username}}
                             </td>
+                            <td class="text-right">
+                                <a ui-sref="profile({userId: member._id})"><i class="glyphicon glyphicon-stats"></i></a>
+                            </td>
                         </tr>
                     </table>
                 </div>
@@ -30,19 +79,46 @@
 
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Invitations</h3>
+                    <h3 class="panel-title">Outstanding Invitations</h3>
                 </div>
                 <div class="panel-body">
                     <table class="table">
                         <tr ng-if="!group.invitations.length">
-                            <th colspan="2">There are no outstanding invitations</th>
+                            <th colspan="2">No outstanding invitations</th>
                         </tr>
                         <tr ng-repeat="member in group.invitations | orderBy:'name'">
                             <td>
                                 {{member.username}}
                             </td>
+                            <td class="text-right">
+                                <button class="btn btn-default btn-sm" ng-click="uninviteUser(member._id)">
+                                    <i class="glyphicon glyphicon-remove"/> Revoke
+                                </button>
+                            </td>
                         </tr>
                     </table>
+                </div>
+                <div class="panel-body">
+                    <label>Send more invitations</label>
+
+                    <p>
+                        <select-users selection="usersToInvite" selection-limit="1">
+                        </select-users>
+                    </p>
+                    <button class="btn btn-primary" ng-click="inviteUsers()">
+                        <i class="glyphicon glyphicon-send"/> Send
+                    </button>
+                </div>
+            </div>
+
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Leave Group</h3>
+                </div>
+                <div class="panel-body">
+                    <button class="btn btn-danger" ng-click="leaveGroup()">
+                        <i class="glyphicon glyphicon-remove-sign"/> Leave
+                    </button>
                 </div>
             </div>
 

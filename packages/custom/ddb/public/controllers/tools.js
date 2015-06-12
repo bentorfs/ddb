@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('mean.ddb').controller('DdbToolsController', ['$scope', 'Global', 'Measurement',
-    function ($scope, Global, Measurement) {
+angular.module('mean.ddb').controller('DdbToolsController', ['$scope', '$state', 'User', 'Measurement',
+    function ($scope, $state, User, Measurement) {
 
 
         $scope.firstDay = moment('05/07/2015', 'MM/DD/YYYY').toDate();
@@ -41,14 +41,12 @@ angular.module('mean.ddb').controller('DdbToolsController', ['$scope', 'Global',
             });
 
             console.log('Done');
-            alert('Done');
+            $state.go('measurements');
         };
 
-        $scope.deleteAll = function (measurement) {
-            Measurement.delete().$promise.then(function () {
-                alert("Deletion succesful");
-            }, function () {
-                alert("Deletion failed");
+        $scope.deleteAll = function () {
+            User.purge().then(function () {
+                $state.go('measurements');
             });
         };
 

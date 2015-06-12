@@ -7,7 +7,8 @@ var mongoose = require('mongoose'),
     Measurement = mongoose.model('Measurement'),
     _ = require('lodash'),
     moment = require('moment'),
-    dataprocessor = require('./dataprocessor');
+    profileGenerator = require('./profile-generator'),
+    grouprankingGenerator = require('./groupranking-generator');
 
 module.exports = function () {
 
@@ -33,20 +34,26 @@ module.exports = function () {
             delete upsertData._id;
             delete upsertData.__v;
 
-            var dateToUpdate = moment.utc(measurement.date).startOf('day').valueOf();
+            var dateToUpdate = moment.utc(measurement.date).startOf('day');
+            if (dateToUpdate < moment.utc('2015-01-01 00:00:00', 'YYYY-MM-DD hh:mm:ss')) {
+                return res.status(403).json({
+                    error: 'Cannot add measurements on this date'
+                });
+            }
 
-            Measurement.findOneAndUpdate({date: dateToUpdate, user: req.user}, upsertData, {
+            Measurement.findOneAndUpdate({date: dateToUpdate.valueOf(), user: req.user}, upsertData, {
                 upsert: true,
                 new: true
             }, function (err, updatedMeasurement) {
                 if (err) {
-                    console.log(err);
+                    console.error(err);
                     return res.status(500).json({
                         error: 'Cannot update the measurement'
                     });
                 }
                 res.send(updatedMeasurement);
-                dataprocessor.processUser(req.user);
+                profileGenerator.processUser(req.user);
+                grouprankingGenerator.processUser(req.user);
             });
         },
         all: function (req, res) {
@@ -81,21 +88,9 @@ module.exports = function () {
                         }
                     }
                     res.json(measurements);
-                    dataprocessor.processUser(req.user);
+                    profileGenerator.processUser(req.user);
+                    grouprankingGenerator.processUser(req.user);
                 }
-            });
-        },
-        deleteAll: function (req, res) {
-            var user = req.user;
-
-            Measurement.remove({user: req.user}, function (err) {
-                if (err) {
-                    return res.status(500).json({
-                        error: 'Could not delete data for user ' + JSON.stringify(req.user)
-                    });
-                }
-                console.log('Deleted all data for user ' + JSON.stringify(req.user));
-                res.json({});
             });
         }
     };
