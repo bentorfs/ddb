@@ -7,6 +7,7 @@ var mongoose = require('mongoose'),
     Measurement = mongoose.model('Measurement'),
     _ = require('lodash'),
     moment = require('moment'),
+    dailyanalysisGenerator = require('./dailyanalysis-generator'),
     profileGenerator = require('./profile-generator'),
     grouprankingGenerator = require('./groupranking-generator');
 
@@ -52,6 +53,7 @@ module.exports = function () {
                     });
                 }
                 res.send(updatedMeasurement);
+                dailyanalysisGenerator.processUser(req.user);
                 profileGenerator.processUser(req.user);
                 grouprankingGenerator.processUser(req.user);
             });
@@ -72,6 +74,7 @@ module.exports = function () {
                     var firstEntry = createEmptyMeasurement(req.user, today);
                     res.json([firstEntry]);
                 } else {
+                    var addedRecord = false;
                     var currentDay = moment.utc(measurements[0].date).startOf('day');
                     var i = 1;
                     while (currentDay < today) {
@@ -80,16 +83,21 @@ module.exports = function () {
                         if (nbSaved > i) {
                             while (currentDay < moment.utc(measurements[i].date)) {
                                 measurements.push(createEmptyMeasurement(req.user, currentDay));
+                                addedRecord = true;
                                 currentDay.add(1, 'days');
                             }
                             i++;
                         } else {
                             measurements.push(createEmptyMeasurement(req.user, currentDay));
+                            addedRecord = true;
                         }
                     }
                     res.json(measurements);
-                    profileGenerator.processUser(req.user);
-                    grouprankingGenerator.processUser(req.user);
+                    if (addedRecord) {
+                        dailyanalysisGenerator.processUser(req.user);
+                        profileGenerator.processUser(req.user);
+                        grouprankingGenerator.processUser(req.user);
+                    }
                 }
             });
         }

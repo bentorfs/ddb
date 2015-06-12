@@ -58,3 +58,7 @@ a.logo {
 .page-header {
     border-bottom: 1px solid #eee !important;
 }
+
+tr.active {
+    font-weight: bold;
+}

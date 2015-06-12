@@ -4,7 +4,6 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-    Measurement = mongoose.model('Measurement'),
     DailyAnalysis = mongoose.model('DailyAnalysis'),
     Profile = mongoose.model('Profile'),
     _ = require('lodash'),
@@ -12,33 +11,27 @@ var mongoose = require('mongoose'),
 
 module.exports = {
     processUser: function (user) {
-        Measurement.find({user: user}).sort('date').exec(function (err, measurements) {
+        DailyAnalysis.find({user: user}).sort('date').exec(function (err, analyses) {
             if (err) {
-                console.error('Could not load measurement to update daily analysis: ' + err);
+                console.error('Could not load daily analyses to update profile: ' + err);
                 return;
             }
 
-            var analyses = updateDailyAnalysis(measurements, user);
-            updateProfile(measurements, analyses, user);
+            updateProfile(analyses, user);
         });
 
 
     }
 };
 
-function updateProfile(measurements, analyses, user) {
-    if (measurements.length != analyses.length || measurements.length === 0) {
-        console.error("Inequal number of measurements and analyses");
-        return;
-    }
-
+function updateProfile(analyses, user) {
     var alcPerDay = [0, 0, 0, 0, 0, 0, 0];
     var nbOfWeekDays = [0, 0, 0, 0, 0, 0, 0];
     var drinkingDays = 0;
     var highestBinge = 0;
     var highestBingeDate = null;
     var dailyAlcohol = [];
-    for (var i = 0; i < measurements.length; i++) {
+    for (var i = 0; i < analyses.length; i++) {
         alcPerDay[analyses[i].dayOfWeek] += analyses[i].todAlc;
 
         if (analyses[i].todAlc != 0) {
@@ -74,8 +67,8 @@ function updateProfile(measurements, analyses, user) {
         avgAlcSat: (alcPerDay[6] / nbOfWeekDays[6]) || 0,
         avgAlcSun: (alcPerDay[0] / nbOfWeekDays[0]) || 0,
 
-        avgWorkWeek: ((alcPerDay[1] + alcPerDay[2] + alcPerDay[3] + alcPerDay[4]) / (nbOfWeekDays[1] + nbOfWeekDays[2] + nbOfWeekDays[3] + nbOfWeekDays[4]) || 0),
-        avgWeekend: ((alcPerDay[5] + alcPerDay[6] + alcPerDay[0]) / (nbOfWeekDays[5] + nbOfWeekDays[6] + nbOfWeekDays[0]) || 0),
+        avgAlcWorkWeek: ((alcPerDay[1] + alcPerDay[2] + alcPerDay[3] + alcPerDay[4]) / (nbOfWeekDays[1] + nbOfWeekDays[2] + nbOfWeekDays[3] + nbOfWeekDays[4]) || 0),
+        avgAlcWeekend: ((alcPerDay[5] + alcPerDay[6] + alcPerDay[0]) / (nbOfWeekDays[5] + nbOfWeekDays[6] + nbOfWeekDays[0]) || 0),
 
         totPilsner: _.last(analyses).cumPilsner,
         totStrongbeer: _.last(analyses).cumStrongbeer,
@@ -88,22 +81,22 @@ function updateProfile(measurements, analyses, user) {
         totAlcLiquor: _.last(analyses).cumAlcLiquor,
         totAlc: _.last(analyses).cumAlc,
 
-        avgPilsner: _.last(analyses).cumPilsner / measurements.length,
-        avgStrongbeer: _.last(analyses).cumStrongbeer / measurements.length,
-        avgWine: _.last(analyses).cumWine / measurements.length,
-        avgLiquor: _.last(analyses).cumLiquor / measurements.length,
+        avgPilsner: _.last(analyses).cumPilsner / analyses.length,
+        avgStrongbeer: _.last(analyses).cumStrongbeer / analyses.length,
+        avgWine: _.last(analyses).cumWine / analyses.length,
+        avgLiquor: _.last(analyses).cumLiquor / analyses.length,
 
-        avgAlcPilsner: _.last(analyses).cumAlcPilsner / measurements.length,
-        avgAlcStrongbeer: _.last(analyses).cumAlcStrongbeer / measurements.length,
-        avgAlcWine: _.last(analyses).cumAlcWine / measurements.length,
-        avgAlcLiquor: _.last(analyses).cumAlcLiquor / measurements.length,
-        avgAlc: _.last(analyses).cumAlc / measurements.length,
+        avgAlcPilsner: _.last(analyses).cumAlcPilsner / analyses.length,
+        avgAlcStrongbeer: _.last(analyses).cumAlcStrongbeer / analyses.length,
+        avgAlcWine: _.last(analyses).cumAlcWine / analyses.length,
+        avgAlcLiquor: _.last(analyses).cumAlcLiquor / analyses.length,
+        avgAlc: _.last(analyses).cumAlc / analyses.length,
 
-        consistencyFactor: (avgAlcStdev / (_.last(analyses).cumAlc / measurements.length)) || 0,
+        consistencyFactor: (avgAlcStdev / (_.last(analyses).cumAlc / analyses.length)) || 0,
 
-        activeDays: measurements.length,
+        activeDays: analyses.length,
         drinkingDays: drinkingDays,
-        drinkingDayRate: drinkingDays / measurements.length,
+        drinkingDayRate: drinkingDays / analyses.length,
 
         highestBinge: highestBinge,
         highestBingeDate: highestBingeDate
@@ -116,71 +109,6 @@ function updateProfile(measurements, analyses, user) {
             console.error('Could not update profile: ' + err);
         }
     });
-}
-
-function updateDailyAnalysis(measurements, user) {
-    var result = [];
-    var cumPilsner = 0, cumStrongbeer = 0, cumWine = 0, cumLiquor = 0, cumAlc = 0, todAlc = 0;
-    var spreadData = [0, 0, 0, 0, 0, 0, 0];
-    spreadData.average = function () {
-        return spreadData.reduce(function (prev, cur) {
-                return prev + cur;
-            }) / spreadData.length;
-    };
-
-    var spreadIndex = 0;
-    _.forEach(measurements, function (measurement) {
-        cumPilsner = cumPilsner + measurement.pilsner;
-        cumStrongbeer = cumStrongbeer + measurement.strongbeer;
-        cumWine = cumWine + measurement.wine;
-        cumLiquor = cumLiquor + measurement.liquor;
-
-
-        todAlc = measurement.pilsner * 0.055 + measurement.strongbeer * 0.075 + measurement.wine * 0.125 + measurement.liquor * 0.43;
-        cumAlc = cumAlc + todAlc;
-
-        spreadData[spreadIndex % 7] = todAlc;
-
-        var analysisData = {
-            user: user,
-            date: measurement.date,
-            dayOfWeek: moment(measurement.date).day(),
-
-            todAlcPilsner: measurement.pilsner * 0.055,
-            todAlcStrongbeer: measurement.strongbeer * 0.075,
-            todAlcWine: measurement.wine * 0.125,
-            todAlcLiquor: measurement.liquor * 0.43,
-            todAlc: todAlc,
-
-            cumPilsner: cumPilsner,
-            cumStrongbeer: cumStrongbeer,
-            cumWine: cumWine,
-            cumLiquor: cumLiquor,
-
-            cumAlcPilsner: cumPilsner * 0.055,
-            cumAlcStrongbeer: cumStrongbeer * 0.075,
-            cumAlcWine: cumWine * 0.125,
-            cumAlcLiquor: cumLiquor * 0.43,
-
-            cumAlc: cumAlc,
-
-            spreadAverage: spreadData.average()
-        };
-        result.push(analysisData);
-
-        DailyAnalysis.findOneAndUpdate({
-            user: user,
-            date: measurement.date
-        }, analysisData, {upsert: true}, function (err) {
-            if (err) {
-                console.log('Could not update daily analysis: ' + err);
-            }
-        });
-
-        spreadIndex++;
-    });
-
-    return result;
 }
 
 function standardDeviation(values) {

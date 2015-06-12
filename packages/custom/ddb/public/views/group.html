@@ -10,51 +10,295 @@
     <div class="row">
         <div class="col-md-9">
 
-            <div class="row">
-                <div class="col-sm-4">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th colspan="3">Binge Trophy</th>
-                        </tr>
-                        </thead>
-                        <tr ng-repeat="rank in ranking.rankingHighestBinge" ng-class="{success: $index === 0}">
-                            <td>{{$index + 1}}</td>
-                            <td>{{rank.user.username}}</td>
-                            <td>{{rank.value | number:2}}</td>
-                        </tr>
-                    </table>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Premier Trophies</h3>
                 </div>
-                <div class="col-sm-4">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th colspan="3">Binge Trophy</th>
-                        </tr>
-                        </thead>
-                        <tr ng-repeat="rank in ranking.rankingHighestBinge" ng-class="{success: $index === 0}">
-                            <td>{{$index + 1}}</td>
-                            <td>{{rank.user.username}}</td>
-                            <td>{{rank.value | number:2}}</td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="col-sm-4">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th colspan="3">Binge Trophy</th>
-                        </tr>
-                        </thead>
-                        <tr ng-repeat="rank in ranking.rankingHighestBinge" ng-class="{success: $index === 0}">
-                            <td>{{$index + 1}}</td>
-                            <td>{{rank.user.username}}</td>
-                            <td>{{rank.value | number:2}}</td>
-                        </tr>
-                    </table>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th colspan="3">Consistency Trophy</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="rank in ranking.rankingConsistencyFactor"
+                                    ng-class="{active: $index === 0}">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{rank.user.username}}</td>
+                                    <td>{{rank.value | number:3}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-sm-4">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th colspan="3">Habitual Drinker Trophy</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="rank in ranking.rankingDrinkingDayRate"
+                                    ng-class="{active: $index === 0}">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{rank.user.username}}</td>
+                                    <td>{{rank.value | number:2}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-sm-4">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th colspan="3">Binge Trophy</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="rank in ranking.rankingHighestBinge" ng-class="{active: $index === 0}">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{rank.user.username}}</td>
+                                    <td>{{rank.value | number:2}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th colspan="3">Weekend Trophy</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="rank in ranking.rankingWeekend" ng-class="{active: $index === 0}">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{rank.user.username}}</td>
+                                    <td>{{rank.value | number:3}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-sm-4">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th colspan="3">Sunday Trophy</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="rank in ranking.rankingSun" ng-class="{active: $index === 0}">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{rank.user.username}}</td>
+                                    <td>{{rank.value | number:2}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-sm-4">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th colspan="3">Working Week Trophy</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="rank in ranking.rankingWorkWeek" ng-class="{active: $index === 0}">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{rank.user.username}}</td>
+                                    <td>{{rank.value | number:2}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Side Trophies</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th colspan="3">Pilsner Trophy</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="rank in ranking.rankingPilsner" ng-class="{active: $index === 0}">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{rank.user.username}}</td>
+                                    <td>{{rank.value | number:3}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-sm-4">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th colspan="3">Whisky Trophy</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="rank in ranking.rankingLiquor" ng-class="{active: $index === 0}">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{rank.user.username}}</td>
+                                    <td>{{rank.value | number:2}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-sm-4">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th colspan="3">Happy Loner Trophy</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="rank in ranking.rankingHappyLoner" ng-class="{active: $index === 0}">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{rank.user.username}}</td>
+                                    <td>{{rank.value | number:2}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th colspan="3">Trappist Trophy</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="rank in ranking.rankingStrongbeer" ng-class="{active: $index === 0}">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{rank.user.username}}</td>
+                                    <td>{{rank.value | number:3}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-sm-4">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th colspan="3">Wine Trophy</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="rank in ranking.rankingWine" ng-class="{active: $index === 0}">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{rank.user.username}}</td>
+                                    <td>{{rank.value | number:2}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-sm-4">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th colspan="3">Sad Loner Trophy</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="rank in ranking.rankingSadLoner" ng-class="{active: $index === 0}">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{rank.user.username}}</td>
+                                    <td>{{rank.value | number:2}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Day Trophies</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th colspan="3">Monday Trophy</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="rank in ranking.rankingMon" ng-class="{active: $index === 0}">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{rank.user.username}}</td>
+                                    <td>{{rank.value | number:3}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-sm-4">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th colspan="3">Wednesday Trophy</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="rank in ranking.rankingWed" ng-class="{active: $index === 0}">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{rank.user.username}}</td>
+                                    <td>{{rank.value | number:2}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-sm-4">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th colspan="3">Friday Trophy</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="rank in ranking.rankingFri" ng-class="{active: $index === 0}">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{rank.user.username}}</td>
+                                    <td>{{rank.value | number:2}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th colspan="3">Tuesday Trophy</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="rank in ranking.rankingTue" ng-class="{active: $index === 0}">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{rank.user.username}}</td>
+                                    <td>{{rank.value | number:3}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-sm-4">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th colspan="3">Thursday Trophy</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="rank in ranking.rankingThu" ng-class="{active: $index === 0}">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{rank.user.username}}</td>
+                                    <td>{{rank.value | number:2}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-sm-4">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th colspan="3">Saturday Trophy</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="rank in ranking.rankingSat" ng-class="{active: $index === 0}">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{rank.user.username}}</td>
+                                    <td>{{rank.value | number:2}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
         <div class="col-md-3">
@@ -124,7 +368,6 @@
 
         </div>
     </div>
-
 
 </div>
 

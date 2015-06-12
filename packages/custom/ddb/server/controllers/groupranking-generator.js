@@ -1,6 +1,8 @@
 'use strict';
 
 var mongoose = require('mongoose'),
+    DailyAnalysis = mongoose.model('DailyAnalysis'),
+    DailyGroupAnalysis = mongoose.model('DailyGroupAnalysis'),
     Group = mongoose.model('Group'),
     GroupRanking = mongoose.model('GroupRanking'),
     Profile = mongoose.model('Profile'),
@@ -48,25 +50,66 @@ function processGroup(group) {
 
 function getGroupRanking(group, profiles) {
 
-    var rankingHighestBinge = getBingeRanking(profiles);
+    calculateDailyGroupAnalysis(group);
 
     return {
         group: group,
         calculationDate: moment.utc().valueOf(),
-        rankingHighestBinge: rankingHighestBinge
+        rankingHighestBinge: getFieldRanking(profiles, 'highestBinge', false),
+        rankingConsistencyFactor: getFieldRanking(profiles, 'consistencyFactor', false),
+        rankingDrinkingDayRate: getFieldRanking(profiles, 'drinkingDayRate', false),
+        rankingLiquor: getFieldRanking(profiles, 'avgLiquor', false),
+        rankingWine: getFieldRanking(profiles, 'avgWine', false),
+        rankingStrongbeer: getFieldRanking(profiles, 'avgStrongbeer', false),
+        rankingPilsner: getFieldRanking(profiles, 'avgPilsner', false),
+        rankingWeekend: getFieldRanking(profiles, 'avgAlcWeekend', false),
+        rankingWorkWeek: getFieldRanking(profiles, 'avgAlcWorkWeek', false),
+        rankingSun: getFieldRanking(profiles, 'avgAlcSun', false),
+        rankingSat: getFieldRanking(profiles, 'avgAlcSat', false),
+        rankingFri: getFieldRanking(profiles, 'avgAlcFri', false),
+        rankingThu: getFieldRanking(profiles, 'avgAlcThu', false),
+        rankingWed: getFieldRanking(profiles, 'avgAlcWed', false),
+        rankingTue: getFieldRanking(profiles, 'avgAlcTue', false),
+        rankingMon: getFieldRanking(profiles, 'avgAlcMon', false)
     }
 }
 
-function getBingeRanking(profiles) {
-    var rankedProfiles = _.sortByOrder(profiles, ['highestBinge'], false);
-    var result = [];
-    _.forEach(rankedProfiles, function (profile) {
-        result.push(
-            {
-                user: profile.user,
-                value: profile.highestBinge
-            }
-        )
+function getFieldRanking(profiles, fieldName, reverse) {
+    var rankedProfiles = _.sortByOrder(profiles, [fieldName], reverse);
+    return _.map(rankedProfiles, function (profile) {
+        return {
+            user: profile.user,
+            value: profile[fieldName]
+        }
     });
-    return result;
+}
+
+function calculateDailyGroupAnalysis(group) {
+
+    DailyGroupAnalysis.remove({'_id.group': group._id}, function (err) {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        DailyAnalysis.aggregate([
+            {$project: {date: 1, user: 1, todAlc: 1, group: {$literal: group._id}}},
+            {'$match': {'user': {'$in': group.members}}},
+            {
+                '$group': {
+                    _id: {date: '$date', group: '$group'},
+                    avg: {'$avg': '$todAlc'},
+                    sum: {'$sum': '$todAlc'},
+                    min: {'$min': '$todAlc'},
+                    max: {'$max': '$todAlc'}
+                }
+            },
+            {'$out': 'dailygroupanalyses'}
+        ]).exec(function (err, docs) {
+            if (err) {
+                console.log(err);
+            }
+        })
+    });
+
+
 }

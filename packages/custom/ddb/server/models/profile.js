@@ -55,10 +55,10 @@ var ProfileSchema = new Schema({
     avgAlcSun: {
         type: Number
     },
-    avgWorkWeek: {
+    avgAlcWorkWeek: {
         type: Number
     },
-    avgWeekend: {
+    avgAlcWeekend: {
         type: Number
     },
     // Types of drinks

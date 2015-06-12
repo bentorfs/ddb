@@ -44,15 +44,32 @@ module.exports = function () {
             });
         },
         getRanking: function (req, res) {
-            GroupRanking.findOne({group: req.params.groupId}).populate('rankingHighestBinge.user', 'username').exec(function (err, ranking) {
-                if (err || !ranking) {
-                    console.error(err);
-                    return res.status(500).json({
-                        error: 'Cannot retrieve the group ranking'
-                    });
-                }
-                res.json(ranking);
-            });
+            GroupRanking.findOne({group: req.params.groupId})
+                .populate('rankingHighestBinge.user', 'username')
+                .populate('rankingConsistencyFactor.user', 'username')
+                .populate('rankingDrinkingDayRate.user', 'username')
+                .populate('rankingLiquor.user', 'username')
+                .populate('rankingWine.user', 'username')
+                .populate('rankingStrongbeer.user', 'username')
+                .populate('rankingPilsner.user', 'username')
+                .populate('rankingWeekend.user', 'username')
+                .populate('rankingWorkWeek.user', 'username')
+                .populate('rankingSun.user', 'username')
+                .populate('rankingSat.user', 'username')
+                .populate('rankingFri.user', 'username')
+                .populate('rankingThu.user', 'username')
+                .populate('rankingWed.user', 'username')
+                .populate('rankingTue.user', 'username')
+                .populate('rankingMon.user', 'username')
+                .exec(function (err, ranking) {
+                    if (err || !ranking) {
+                        console.error(err);
+                        return res.status(500).json({
+                            error: 'Cannot retrieve the group ranking'
+                        });
+                    }
+                    res.json(ranking);
+                });
         },
         listInvitations: function (req, res) {
             Group.find({invitations: req.user._id}, function (err, groups) {
