@@ -35,14 +35,26 @@
                 <div class="panel-body">
                     <table class="table">
                         <tr ng-if="!group.invitations.length">
-                            <th colspan="2">There are no outstanding invitations</th>
+                            <th colspan="2">No outstanding invitations</th>
                         </tr>
                         <tr ng-repeat="member in group.invitations | orderBy:'name'">
                             <td>
                                 {{member.username}}
                             </td>
+                            <td>
+                                <button class="btn btn-default btn-sm" ng-click="uninviteUser(member._id)">
+                                    <i class="glyphicon glyphicon-remove"/> Revoke
+                                </button>
+                            </td>
                         </tr>
                     </table>
+                </div>
+                <div class="panel-body">
+                    <select-users selection="usersToInvite">
+                    </select-users>
+                    <button class="btn btn-primary" ng-click="inviteUsers()">
+                        <i class="glyphicon glyphicon-ok"/> Invite
+                    </button>
                 </div>
             </div>
 

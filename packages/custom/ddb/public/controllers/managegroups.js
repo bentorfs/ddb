@@ -30,21 +30,12 @@ angular.module('mean.ddb').controller('DdbManageGroupsController', ['$scope', 'G
             })
         };
 
-        $scope.selectedUsers = [];
-        $scope.toggleUser = function (userId) {
-            if ($scope.selectedUsers.indexOf(userId) == -1) {
-                $scope.selectedUsers.push(userId);
-            } else {
-                _.remove($scope.selectedUsers, function (el) {
-                    return el == userId;
-                })
-            }
-        };
+        $scope.usersToInvite = [];
 
         $scope.createGroup = function () {
             Group.create({
                 name: $scope.groupName,
-                invitations: $scope.selectedUsers
+                invitations: $scope.usersToInvite
             }).success(function (data) {
                 $rootScope.$emit('beerkeeper.groups.update');
                 $state.go('group', {groupId: data._id});

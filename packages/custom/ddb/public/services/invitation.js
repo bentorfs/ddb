@@ -25,6 +25,20 @@ angular.module('mean.ddb').factory('Invitation', ['$http',
             });
         };
 
+        dao.add = function (groupId, userId) {
+            return $http({
+                url: '/api/invitation/' + groupId + '/' + userId,
+                method: 'POST'
+            });
+        };
+
+        dao.remove = function (groupId, userId) {
+            return $http({
+                url: '/api/invitation/' + groupId + '/' + userId,
+                method: 'DELETE'
+            });
+        };
+
         return dao;
     }
 ]);

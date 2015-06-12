@@ -1,0 +1,7 @@
+<div>
+    <div class="checkbox" ng-repeat="user in users | orderBy:'username'">
+        <label>
+            <input type="checkbox" ng-click="toggleUser(user.id)"> {{user.username}}
+        </label>
+    </div>
+</div>

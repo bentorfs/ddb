@@ -32,20 +32,19 @@
                                     </div>
                                 </th>
                                 <td>
-                                    <div class="alert alert-warning" role="alert">
+                                    <div class="alert alert-warning" role="alert" ng-if="!users.length">
                                         There are no other users to invite!
                                     </div>
-                                    <div class="checkbox" ng-repeat="user in users | orderBy:'username'">
-                                        <label>
-                                            <input type="checkbox" ng-click="toggleUser(user.id)"> {{user.username}}
-                                        </label>
-                                    </div>
+                                    <select-users selection="usersToInvite">
+                                    </select-users>
                                 </td>
                             </tr>
                             <tr>
                                 <th></th>
                                 <td>
-                                    <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-ok"/> Create Group</button>
+                                    <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-ok"/>
+                                        Create Group
+                                    </button>
                                 </td>
                             </tr>
                             </tbody>
@@ -73,13 +72,15 @@
                         <tr ng-repeat="invitation in invitations | orderBy:'name'">
                             <th class="col-xs-6">{{invitation.name}}</th>
                             <td class="col-xs-3 text-right">
-                                <button type="submit" class="btn btn-success"
-                                        ng-click="acceptInvitation(invitation._id)"><i class="glyphicon glyphicon-ok"/> Join
+                                <button type="submit" class="btn btn-success btn-sm"
+                                        ng-click="acceptInvitation(invitation._id)">
+                                    <i class="glyphicon glyphicon-ok"/> Join
                                 </button>
                             </td>
                             <td class="col-xs-3 text-right">
-                                <button type="submit" class="btn btn-warning"
-                                        ng-click="rejectInvitation(invitation._id)"><i class="glyphicon glyphicon-remove"/> Reject
+                                <button type="submit" class="btn btn-warning btn-sm"
+                                        ng-click="rejectInvitation(invitation._id)">
+                                    <i class="glyphicon glyphicon-remove"/> Reject
                                 </button>
                             </td>
                         </tr>

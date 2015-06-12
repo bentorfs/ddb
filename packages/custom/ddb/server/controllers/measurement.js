@@ -33,9 +33,14 @@ module.exports = function () {
             delete upsertData._id;
             delete upsertData.__v;
 
-            var dateToUpdate = moment.utc(measurement.date).startOf('day').valueOf();
+            var dateToUpdate = moment.utc(measurement.date).startOf('day');
+            if (dateToUpdate < moment.utc('2015-01-01 00:00:00', 'YYYY-MM-DD hh:mm:ss')) {
+                return res.status(403).json({
+                    error: 'Cannot add measurements on this date'
+                });
+            }
 
-            Measurement.findOneAndUpdate({date: dateToUpdate, user: req.user}, upsertData, {
+            Measurement.findOneAndUpdate({date: dateToUpdate.valueOf(), user: req.user}, upsertData, {
                 upsert: true,
                 new: true
             }, function (err, updatedMeasurement) {
