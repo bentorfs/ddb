@@ -61,6 +61,8 @@ module.exports = function () {
                 .populate('rankingWed.user', 'username')
                 .populate('rankingTue.user', 'username')
                 .populate('rankingMon.user', 'username')
+                .populate('rankingHappyLoner.user', 'username')
+                .populate('rankingSadLoner.user', 'username')
                 .exec(function (err, ranking) {
                     if (err || !ranking) {
                         console.error(err);

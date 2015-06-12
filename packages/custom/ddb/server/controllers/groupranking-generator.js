@@ -70,7 +70,9 @@ function getGroupRanking(group, profiles) {
         rankingThu: getFieldRanking(profiles, 'avgAlcThu', false),
         rankingWed: getFieldRanking(profiles, 'avgAlcWed', false),
         rankingTue: getFieldRanking(profiles, 'avgAlcTue', false),
-        rankingMon: getFieldRanking(profiles, 'avgAlcMon', false)
+        rankingMon: getFieldRanking(profiles, 'avgAlcMon', false),
+        rankingSadLoner: getGroupFieldRanking(profiles, group, 'sadLonerFactor', false),
+        rankingHappyLoner: getGroupFieldRanking(profiles, group, 'happyLonerFactor', false)
     }
 }
 
@@ -82,6 +84,26 @@ function getFieldRanking(profiles, fieldName, reverse) {
             value: profile[fieldName]
         }
     });
+}
+
+function getGroupFieldRanking(profiles, targetGroup, fieldName, reverse) {
+    // HACK
+    _.forEach(profiles, function (profile) {
+        var rightGroup = _.find(profile.groups, function (aGroup) {
+            return _.isEqual(aGroup.group, targetGroup._id);
+        });
+        if (rightGroup) {
+            profile.tmp = rightGroup[fieldName];
+        }
+    });
+
+    var result = getFieldRanking(profiles, 'tmp', reverse);
+
+    _.forEach(profiles, function (profile) {
+        delete profile.tmp;
+    });
+
+    return result;
 }
 
 function calculateDailyGroupAnalysis(group) {
@@ -97,16 +119,16 @@ function calculateDailyGroupAnalysis(group) {
             {
                 '$group': {
                     _id: {date: '$date', group: '$group'},
-                    avg: {'$avg': '$todAlc'},
-                    sum: {'$sum': '$todAlc'},
-                    min: {'$min': '$todAlc'},
-                    max: {'$max': '$todAlc'}
+                    todAvgAlc: {'$avg': '$todAlc'},
+                    todSumAlc: {'$sum': '$todAlc'},
+                    todMinAlc: {'$min': '$todAlc'},
+                    todMaxAlc: {'$max': '$todAlc'}
                 }
             },
             {'$out': 'dailygroupanalyses'}
         ]).exec(function (err, docs) {
             if (err) {
-                console.log(err);
+                console.error(err);
             }
         })
     });

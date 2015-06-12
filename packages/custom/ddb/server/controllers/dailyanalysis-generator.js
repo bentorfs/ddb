@@ -10,7 +10,7 @@ var mongoose = require('mongoose'),
     async = require('async');
 
 module.exports = {
-    processUser: function (user) {
+    processUser: function (user, callback) {
 
         // Get the users groups first
         Group.find({members: user._id}, function (err, groups) {
@@ -43,9 +43,9 @@ module.exports = {
                         return
                     }
 
-                    var dailyAnalyses = updateDailyAnalyses(result.measurements, user);
-
-                    saveDailyAnalyses(dailyAnalyses, user);
+                    var dailyAnalyses = getDailyAnalyses(result.measurements, user);
+                    calculateLonerFactor(dailyAnalyses, result.groupAnalyses);
+                    saveDailyAnalyses(dailyAnalyses, user, callback);
                 }
             );
 
@@ -53,7 +53,7 @@ module.exports = {
     }
 };
 
-function updateDailyAnalyses(measurements, user) {
+function getDailyAnalyses(measurements, user) {
     var result = [];
     var cumPilsner = 0, cumStrongbeer = 0, cumWine = 0, cumLiquor = 0, cumAlc = 0, todAlc = 0;
     var spreadData = [0, 0, 0, 0, 0, 0, 0];
@@ -99,7 +99,9 @@ function updateDailyAnalyses(measurements, user) {
 
             cumAlc: cumAlc,
 
-            spreadAverage: spreadData.average()
+            spreadAverage: spreadData.average(),
+
+            groups: []
         };
         result.push(analysisData);
 
@@ -110,7 +112,9 @@ function updateDailyAnalyses(measurements, user) {
     return result;
 }
 
-function saveDailyAnalyses(dailyAnalyses, user) {
+function saveDailyAnalyses(dailyAnalyses, user, callback) {
+    var finished = _.after(dailyAnalyses.length, callback);
+
     _.forEach(dailyAnalyses, function (analysis) {
         DailyAnalysis.findOneAndUpdate({
             user: user,
@@ -119,6 +123,26 @@ function saveDailyAnalyses(dailyAnalyses, user) {
             if (err) {
                 console.log('Could not update daily analysis: ' + err);
             }
+            finished();
         });
     })
+}
+
+function calculateLonerFactor(dailyAnalyses, dailyGroupAnalyses) {
+    _.forEach(dailyAnalyses, function (dailyAnalysis) {
+
+        var groupAnalysesForThisDay = _.filter(dailyGroupAnalyses, function (groupAnalysis) {
+            var result = _.isEqual(dailyAnalysis.date, groupAnalysis._id.date);
+            return result;
+        });
+
+        _.forEach(groupAnalysesForThisDay, function (groupAnalysis) {
+            dailyAnalysis.groups.push(
+                {
+                    group: groupAnalysis._id.group,
+                    lonerFactor: dailyAnalysis.todAlc - groupAnalysis.todAvgAlc
+                }
+            );
+        })
+    });
 }

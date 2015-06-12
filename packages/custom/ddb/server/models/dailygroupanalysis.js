@@ -13,16 +13,16 @@ var DailyGroupAnalysisSchema = new Schema({
             ref: 'Group'
         }
     },
-    avg: {
+    todAvgAlc: {
         type: Number
     },
-    sum: {
+    todSumAlc: {
         type: Number
     },
-    min: {
+    todMinAlc: {
         type: Number
     },
-    max: {
+    todMaxAlc: {
         type: Number
     }
 });

@@ -135,7 +135,24 @@ var ProfileSchema = new Schema({
     },
     highestBingeDate: {
         type: Date
-    }
+    },
+    // Loner
+    sadLonerFactor: {
+        type: Number
+    },
+    happyLonerFactor: {
+        type: Number
+    },
+    groups: [
+        {
+            group: {
+                type: Schema.ObjectId,
+                ref: 'Group'
+            },
+            sadLonerFactor: Number,
+            happyLonerFactor: Number
+        }
+    ]
 });
 
 

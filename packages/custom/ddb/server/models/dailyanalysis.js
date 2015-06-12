@@ -66,7 +66,16 @@ var DailyAnalysisSchema = new Schema({
     // 7-Day Average
     spreadAverage: {
         type: Number
-    }
+    },
+    groups: [
+        {
+            group: {
+                type: Schema.ObjectId,
+                ref: 'Group'
+            },
+            lonerFactor: Number
+        }
+    ]
 });
 
 

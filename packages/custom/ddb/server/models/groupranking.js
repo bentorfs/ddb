@@ -59,6 +59,12 @@ var GroupRankingSchema = new Schema({
     ],
     rankingMon: [
         {user: {type: Schema.ObjectId, ref: 'User'}, value: {type: Number}}
+    ],
+    rankingSadLoner: [
+        {user: {type: Schema.ObjectId, ref: 'User'}, value: {type: Number}}
+    ],
+    rankingHappyLoner: [
+        {user: {type: Schema.ObjectId, ref: 'User'}, value: {type: Number}}
     ]
 
 });

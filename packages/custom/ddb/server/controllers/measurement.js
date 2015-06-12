@@ -53,9 +53,11 @@ module.exports = function () {
                     });
                 }
                 res.send(updatedMeasurement);
-                dailyanalysisGenerator.processUser(req.user);
-                profileGenerator.processUser(req.user);
-                grouprankingGenerator.processUser(req.user);
+                dailyanalysisGenerator.processUser(req.user, function() {
+                    profileGenerator.processUser(req.user);
+                    grouprankingGenerator.processUser(req.user);
+                });
+
             });
         },
         all: function (req, res) {
@@ -94,9 +96,10 @@ module.exports = function () {
                     }
                     res.json(measurements);
                     if (addedRecord) {
-                        dailyanalysisGenerator.processUser(req.user);
-                        profileGenerator.processUser(req.user);
-                        grouprankingGenerator.processUser(req.user);
+                        dailyanalysisGenerator.processUser(req.user, function() {
+                            profileGenerator.processUser(req.user);
+                            grouprankingGenerator.processUser(req.user);
+                        });
                     }
                 }
             });

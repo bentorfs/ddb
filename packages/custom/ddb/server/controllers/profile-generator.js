@@ -19,8 +19,6 @@ module.exports = {
 
             updateProfile(analyses, user);
         });
-
-
     }
 };
 
@@ -31,6 +29,7 @@ function updateProfile(analyses, user) {
     var highestBinge = 0;
     var highestBingeDate = null;
     var dailyAlcohol = [];
+    var groups = {};
     for (var i = 0; i < analyses.length; i++) {
         alcPerDay[analyses[i].dayOfWeek] += analyses[i].todAlc;
 
@@ -46,7 +45,30 @@ function updateProfile(analyses, user) {
         }
 
         dailyAlcohol.push(analyses[i].todAlc);
+
+        _.forEach(analyses[i].groups, function (group) {
+            if (!groups[group.group]) {
+                groups[group.group] = {happyLonerFactor: 0, sadLonerFactor: 0}
+            }
+
+            if (group.lonerFactor < 0) {
+                groups[group.group].sadLonerFactor += Math.abs(group.lonerFactor);
+            } else  if (group.lonerFactor > 0){
+                groups[group.group].happyLonerFactor += group.lonerFactor;
+            }
+        });
     }
+
+    var groupData = [];
+    _.forEach(_.keys(groups), function (key) {
+        groupData.push(
+            {
+                group: key,
+                sadLonerFactor: groups[key].sadLonerFactor,
+                happyLonerFactor: groups[key].happyLonerFactor
+            }
+        );
+    });
 
     var avgAlcStdev = standardDeviation(dailyAlcohol);
 
@@ -99,7 +121,9 @@ function updateProfile(analyses, user) {
         drinkingDayRate: drinkingDays / analyses.length,
 
         highestBinge: highestBinge,
-        highestBingeDate: highestBingeDate
+        highestBingeDate: highestBingeDate,
+
+        groups: groupData
     };
 
     Profile.findOneAndUpdate({
