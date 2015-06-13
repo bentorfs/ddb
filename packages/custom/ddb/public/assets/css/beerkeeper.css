@@ -75,3 +75,9 @@ tr.active {
 .today {
     background-color: #d9edf7;
 }
+
+@media (max-width: 767px) {
+    .navbar-nav .open .dropdown-menu {
+        background-color: #fff;
+    }
+}
