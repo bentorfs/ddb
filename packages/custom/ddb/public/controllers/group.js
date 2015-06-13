@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$stateParams', '$state', '$rootScope', 'User', 'Group', '$q',
-    function ($scope, $stateParams, $state, $rootScope, User, Group, $q) {
+angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$stateParams', '$state', '$filter', '$rootScope', 'Group', 'DailyAnalysis', '$q',
+    function ($scope, $stateParams, $state, $filter, $rootScope, Group, DailyAnalysis, $q) {
 
         $scope.usersToInvite = [];
         $scope.inviteUsers = function () {
@@ -25,6 +25,8 @@ angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$statePa
         $scope.loadGroup = function () {
             Group.getGroup($stateParams.groupId).success(function (group) {
                 $scope.group = group;
+
+                $scope.loadTrendData();
             });
         };
 
@@ -40,6 +42,69 @@ angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$statePa
                 $rootScope.$emit('beerkeeper.groups.update');
             })
         };
+
+        $scope.drawGroupChart = function (nbDays) {
+            $scope.nbGroupDaysShown = nbDays;
+            $scope.groupTrendLabels = [];
+            $scope.groupTrendData = [];
+            $scope.groupTrendDataOptions = {
+                datasetFill: false,
+                scaleOverride: true,
+                scaleShowVerticalLines: false,
+                scaleSteps: 15,
+                scaleStepWidth: 1,
+                scaleStartValue: 0,
+                bezierCurve: true,
+                showScale: true,
+                pointDot: false,
+                pointHitDetectionRadius: 1
+            };
+            $scope.groupTrendSeries = [];
+            var fromDate = moment.utc().subtract(nbDays, 'days');
+            var today = moment.utc().startOf('day');
+            var maxLength = 0;
+            _.forEach($scope.group.members, function (member) {
+                var dataForMember = [];
+                var i = 0;
+                _.forEach($scope.dailyAnalyses[member.username].data, function (analysis) {
+                    var date = moment.utc(analysis.date, 'YYYY-MM-DD hh:mm:ss');
+                    if (date >= fromDate && date < today) {
+                        i++;
+                        dataForMember.push($filter('number')(analysis.spreadAverage, 2));
+                    }
+                });
+                if (i > maxLength) {
+                    maxLength = i;
+                }
+                $scope.groupTrendData.push(dataForMember);
+                $scope.groupTrendSeries.push(member.username);
+            });
+            for (var j = 0; j < maxLength; j++) {
+                $scope.groupTrendLabels.push('');
+            }
+
+            // Pad in front for data that are shorter than maxLength
+            _.forEach($scope.groupTrendData, function (series) {
+                var difference = maxLength - series.length;
+                for (var j = 0; j < difference; j++) {
+                    series.unshift(null);
+                }
+            })
+        };
+
+        $scope.loadTrendData = function () {
+            $scope.dailyAnalyses = {};
+            var promises = {};
+            _.forEach($scope.group.members, function (member) {
+                promises[member.username] = DailyAnalysis.get(member._id)
+            });
+
+            $q.all(promises).then(function (result) {
+                $scope.dailyAnalyses = result;
+                $scope.drawGroupChart(30);
+            });
+        };
+
 
         $scope.loadGroup();
         $scope.loadRanking();

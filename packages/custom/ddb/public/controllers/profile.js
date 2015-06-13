@@ -1,8 +1,8 @@
 'use strict';
 
 /* jshint -W098 */
-angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$stateParams', 'Global', 'Profile', 'DailyAnalysis', 'User', 'MeanUser',
-    function ($scope, $stateParams, Global, Profile, DailyAnalysis, User, MeanUser) {
+angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$stateParams', 'Global', 'Profile', 'DailyAnalysis', 'User', '$filter',
+    function ($scope, $stateParams, Global, Profile, DailyAnalysis, User, $filter) {
 
         User.get($stateParams.userId).success(function (user) {
             $scope.user = user;
@@ -23,30 +23,65 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$state
         DailyAnalysis.get($stateParams.userId).success(function (dailyAnalyses) {
             $scope.dailyAnalyses = dailyAnalyses;
 
-            $scope.spreadAverageDataOptions = {showScale: false, pointDot: false, pointHitDetectionRadius: 1};
+            $scope.getSpreadAverageChartData(30);
+            $scope.getCumulativeChartData(30);
+        });
+
+        $scope.getSpreadAverageChartData = function (nbDays) {
+            $scope.nbSpreadAverageDaysShown = nbDays;
             $scope.spreadAverageLabels = [];
-            $scope.spreadAverageSeries = ['Series A'];
             $scope.spreadAverageData = [
                 []
             ];
+            $scope.spreadAverageDataOptions = {
+                scaleOverride: true,
+                scaleShowVerticalLines: false,
+                scaleSteps: 15,
+                scaleStepWidth: 1,
+                scaleStartValue: 0,
+                bezierCurve : true,
+                showScale: true,
+                pointDot: false,
+                pointHitDetectionRadius: 1
+            };
 
-            $scope.cumulativeTrendDataOptions = {showScale: false, pointDot: false, pointHitDetectionRadius: 1};
+            $scope.spreadAverageSeries = ['Spread Average'];
+            var fromDate = moment.utc().subtract(nbDays, 'days');
+            angular.forEach($scope.dailyAnalyses, function (analysis) {
+                var date = moment.utc(analysis.date, 'YYYY-MM-DD hh:mm:ss');
+                if (date >= fromDate) {
+                    //var displayDate = date.format('MM/DD');
+                    $scope.spreadAverageLabels.push('');
+                    $scope.spreadAverageData[0].push($filter('number')(analysis.spreadAverage, 2));
+                }
+            });
+        };
+
+        $scope.getCumulativeChartData = function (nbDays) {
+            $scope.nbCumulativeDaysShown = nbDays;
             $scope.cumulativeTrendLabels = [];
-            $scope.cumulativeTrendSeries = ['Series A'];
             $scope.cumulativeTrendData = [
                 []
             ];
-
-            angular.forEach(dailyAnalyses, function (analysis) {
-                var dateString = moment.utc(analysis.date, 'YYYY-MM-DD hh:mm:ss').format('MM/DD');
-                $scope.spreadAverageLabels.push(dateString);
-                $scope.spreadAverageData[0].push(analysis.spreadAverage);
-
-                $scope.cumulativeTrendLabels.push(dateString);
-                $scope.cumulativeTrendData[0].push(analysis.cumAlc);
+            $scope.cumulativeTrendDataOptions = {
+                scaleOverride: false,
+                scaleShowVerticalLines: false,
+                bezierCurve : true,
+                showScale: true,
+                pointDot: false,
+                pointHitDetectionRadius: 1
+            };
+            $scope.cumulativeTrendSeries = ['Cumulative Trend'];
+            var fromDate = moment.utc().subtract(nbDays, 'days');
+            angular.forEach($scope.dailyAnalyses, function (analysis) {
+                var date = moment.utc(analysis.date, 'YYYY-MM-DD hh:mm:ss');
+                if (date >= fromDate) {
+                    //var displayDate = date.format('MM/DD');
+                    $scope.cumulativeTrendLabels.push('');
+                    $scope.cumulativeTrendData[0].push($filter('number')(analysis.cumAlc, 2));
+                }
             });
-
-        });
+        }
     }
 ]);
 

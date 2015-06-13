@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('mean.ddb').controller('DdbToolsController', ['$scope', '$state', 'User', 'Measurement',
-    function ($scope, $state, User, Measurement) {
+angular.module('mean.ddb').controller('DdbToolsController', ['$scope', '$state', '$http', 'User', 'Measurement',
+    function ($scope, $state, $http, User, Measurement) {
 
 
         $scope.firstDay = moment('05/07/2015', 'MM/DD/YYYY').toDate();
@@ -49,6 +49,14 @@ angular.module('mean.ddb').controller('DdbToolsController', ['$scope', '$state',
                 $state.go('measurements');
             });
         };
+
+        $scope.rebuild = function() {
+            $http({
+                url: '/api/rebuild',
+                method: 'POST',
+                params: {}
+            });
+        }
 
     }
 ]);

@@ -77,7 +77,9 @@ function getGroupRanking(group, profiles) {
 }
 
 function getFieldRanking(profiles, fieldName, reverse) {
-    var rankedProfiles = _.sortByOrder(profiles, [fieldName], reverse);
+    var rankedProfiles = _.sortByOrder(_.filter(profiles, function (profile) {
+        return profile[fieldName]
+    }), [fieldName], reverse);
     return _.map(rankedProfiles, function (profile) {
         return {
             user: profile.user,
@@ -87,7 +89,6 @@ function getFieldRanking(profiles, fieldName, reverse) {
 }
 
 function getGroupFieldRanking(profiles, targetGroup, fieldName, reverse) {
-    var rightGroup;
     var rankedProfiles = _.sortByOrder(profiles, function (profile) {
         var rightGroup = _.find(profile.groups, function (aGroup) {
             return _.isEqual(aGroup.group, targetGroup._id);
@@ -112,6 +113,8 @@ function getGroupFieldRanking(profiles, targetGroup, fieldName, reverse) {
 
 function calculateDailyGroupAnalysis(group) {
 
+    console.info('Generating daily group analyses for: ' + group.name);
+
     DailyGroupAnalysis.remove({'_id.group': group._id}, function (err) {
         if (err) {
             console.error(err);
@@ -128,12 +131,14 @@ function calculateDailyGroupAnalysis(group) {
                     todMinAlc: {'$min': '$todAlc'},
                     todMaxAlc: {'$max': '$todAlc'}
                 }
-            },
-            {'$out': 'dailygroupanalyses'}
-        ]).exec(function (err, docs) {
+            }
+        ]).exec(function (err, dailygroupanalyses) {
             if (err) {
                 console.error(err);
+                return
             }
+            console.info('Generated ' + dailygroupanalyses.length + ' daily group analyses for ' + group.name);
+            DailyGroupAnalysis.collection.insert(dailygroupanalyses);
         })
     });
 

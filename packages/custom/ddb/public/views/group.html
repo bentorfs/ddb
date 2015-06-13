@@ -12,29 +12,67 @@
 
             <div class="panel panel-primary">
                 <div class="panel-heading">
+                    <h3 class="panel-title">Group Trend</h3>
+                </div>
+                <div class="panel-body">
+                    <canvas id="groupTrend" class="chart chart-line" data="groupTrendData"
+                            options="groupTrendDataOptions" legend="true"
+                            labels="groupTrendLabels" series="groupTrendSeries">
+                    </canvas>
+                </div>
+                <div class="panel-body text-center">
+                    <div class="btn-group" role="group" aria-label="...">
+                        <button type="button" class="btn btn-sm btn-default" ng-click="drawGroupChart(365)"
+                                ng-class="{active: nbGroupDaysShown === 365}">
+                            1 Year
+                        </button>
+                        <button type="button" class="btn btn-sm btn-default" ng-click="drawGroupChart(90)"
+                                ng-class="{active: nbGroupDaysShown === 90}">
+                            3 Months
+                        </button>
+                        <button type="button" class="btn btn-sm btn-default" ng-click="drawGroupChart(30)"
+                                ng-class="{active: nbGroupDaysShown === 30}">
+                            1 Month
+                        </button>
+                        <button type="button" class="btn btn-sm btn-default" ng-click="drawGroupChart(7)"
+                                ng-class="{active: nbGroupDaysShown === 7}">
+                            1 Week
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="panel panel-danger">
+                <div class="panel-heading">
                     <h3 class="panel-title">Premier Trophies</h3>
                 </div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-sm-4">
-                            <trophy-ranking trophy-name="Consistency Trophy" ranking="ranking.rankingConsistencyFactor"></trophy-ranking>
+                            <trophy-ranking trophy-name="Consistency Trophy"
+                                            ranking="ranking.rankingConsistencyFactor"></trophy-ranking>
                         </div>
                         <div class="col-sm-4">
-                            <trophy-ranking trophy-name="Habitual Drinker Trophy" ranking="ranking.rankingDrinkingDayRate"></trophy-ranking>
+                            <trophy-ranking trophy-name="Habitual Drinker Trophy"
+                                            ranking="ranking.rankingDrinkingDayRate"></trophy-ranking>
                         </div>
                         <div class="col-sm-4">
-                            <trophy-ranking trophy-name="Binge Trophy" ranking="ranking.rankingHighestBinge"></trophy-ranking>
+                            <trophy-ranking trophy-name="Binge Trophy"
+                                            ranking="ranking.rankingHighestBinge"></trophy-ranking>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-4">
-                            <trophy-ranking trophy-name="Weekend Trophy" ranking="ranking.rankingWeekend"></trophy-ranking>
+                            <trophy-ranking trophy-name="Weekend Trophy"
+                                            ranking="ranking.rankingWeekend"></trophy-ranking>
                         </div>
                         <div class="col-sm-4">
                             <trophy-ranking trophy-name="Sunday Trophy" ranking="ranking.rankingSun"></trophy-ranking>
                         </div>
                         <div class="col-sm-4">
-                            <trophy-ranking trophy-name="Working Week Trophy" ranking="ranking.rankingWorkWeek"></trophy-ranking>
+                            <trophy-ranking trophy-name="Working Week Trophy"
+                                            ranking="ranking.rankingWorkWeek"></trophy-ranking>
                         </div>
                     </div>
                 </div>
@@ -47,24 +85,29 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-sm-4">
-                            <trophy-ranking trophy-name="Pilsner Trophy" ranking="ranking.rankingPilsner"></trophy-ranking>
+                            <trophy-ranking trophy-name="Pilsner Trophy"
+                                            ranking="ranking.rankingPilsner"></trophy-ranking>
                         </div>
                         <div class="col-sm-4">
-                            <trophy-ranking trophy-name="Whisky Trophy" ranking="ranking.rankingLiquor"></trophy-ranking>
+                            <trophy-ranking trophy-name="Whisky Trophy"
+                                            ranking="ranking.rankingLiquor"></trophy-ranking>
                         </div>
                         <div class="col-sm-4">
-                            <trophy-ranking trophy-name="Happy Loner Trophy" ranking="ranking.rankingHappyLoner"></trophy-ranking>
+                            <trophy-ranking trophy-name="Happy Loner Trophy"
+                                            ranking="ranking.rankingHappyLoner"></trophy-ranking>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-4">
-                            <trophy-ranking trophy-name="Trappist Trophy" ranking="ranking.rankingStrongbeer"></trophy-ranking>
+                            <trophy-ranking trophy-name="Trappist Trophy"
+                                            ranking="ranking.rankingStrongbeer"></trophy-ranking>
                         </div>
                         <div class="col-sm-4">
                             <trophy-ranking trophy-name="Wine Trophy" ranking="ranking.rankingWine"></trophy-ranking>
                         </div>
                         <div class="col-sm-4">
-                            <trophy-ranking trophy-name="Sad Loner Trophy" ranking="ranking.rankingSadLoner"></trophy-ranking>
+                            <trophy-ranking trophy-name="Sad Loner Trophy"
+                                            ranking="ranking.rankingSadLoner"></trophy-ranking>
                         </div>
                     </div>
                 </div>
@@ -80,7 +123,8 @@
                             <trophy-ranking trophy-name="Monday Trophy" ranking="ranking.rankingMon"></trophy-ranking>
                         </div>
                         <div class="col-sm-4">
-                            <trophy-ranking trophy-name="Wednesday Trophy" ranking="ranking.rankingWed"></trophy-ranking>
+                            <trophy-ranking trophy-name="Wednesday Trophy"
+                                            ranking="ranking.rankingWed"></trophy-ranking>
                         </div>
                         <div class="col-sm-4">
                             <trophy-ranking trophy-name="Friday Trophy" ranking="ranking.rankingFri"></trophy-ranking>

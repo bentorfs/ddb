@@ -14,7 +14,8 @@
             <ul>
                 <li>Chrome gebruiken</li>
                 <li>Google sheet drankdatabank openen</li>
-                <li>Selecteer de gegevens van jouw 4 kolommen (zonder headers). Bv J3:M50 voor Michiel. Altijd beginnen op rij 3, ookal ben je pas later gegevens beginnen ingeven.
+                <li>Selecteer de gegevens van jouw 4 kolommen (zonder headers). Bv J3:M50 voor Michiel. Altijd beginnen
+                    op rij 3, ookal ben je pas later gegevens beginnen ingeven.
                 </li>
                 <li>CTRL+C om de gegevens te kopieren, en plakken in het invoerveld hieronder</li>
                 <li>Indien je niet hebt meegedaan vanaf de eerste dag, hieronder corrigeren naar de eerste dag waarop je
@@ -34,6 +35,18 @@
         </div>
     </div>
 
+    <div class="panel panel-warning">
+        <div class="panel-heading">
+            <h3 class="panel-title">Rebuild Database</h3>
+        </div>
+        <div class="panel-body">
+            <p>
+                Don't delete measurements, but rebuild all statistics
+            </p>
+            <button class="btn btn-warning" ng-click="rebuild()"><i class="glyphicon glyphicon-ok"/> Rebuild</button>
+        </div>
+    </div>
+
     <div class="panel panel-danger">
         <div class="panel-heading">
             <h3 class="panel-title">Delete all data</h3>
@@ -43,7 +56,8 @@
                 Clicking this button will delete <strong>all your data</strong>. There is no confirmation. There is no
                 way to undo it.
             </p>
-            <button class="btn btn-danger" ng-click="deleteAll()"><i class="glyphicon glyphicon-ok"/> Delete all data</button>
+            <button class="btn btn-danger" ng-click="deleteAll()"><i class="glyphicon glyphicon-ok"/> Delete all data
+            </button>
         </div>
     </div>
 
