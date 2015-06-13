@@ -152,7 +152,19 @@ module.exports = function (MeanUser) {
                 _id: req.user._id
             }).exec(function (err, user) {
 
-                if (err || !user) return res.send(null);
+                if (err) {
+                    console.error(err);
+                    return res.status(500).json({
+                        error: 'Cannot retrieve user'
+                    });
+                }
+                if (!user) {
+                    //res.redirect('/login');
+
+                    return res.status(401).json({
+                        error: 'Invalid credentials',
+                    });
+                }
 
 
                 var dbUser = user.toJSON();
