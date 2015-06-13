@@ -30,8 +30,8 @@ module.exports = function () {
 
     var updateStatistics = function (user) {
         dailyanalysisGenerator.processUser(user, function () {
-            dailygroupanalysisGenerator.processUser(user, function () {
-                profileGenerator.processUser(user, function () {
+            profileGenerator.processUser(user, function () {
+                dailygroupanalysisGenerator.processUser(user, function () {
                     grouprankingGenerator.processUser(user);
                 });
             });

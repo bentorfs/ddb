@@ -5,7 +5,7 @@
  */
 var mongoose = require('mongoose'),
     Profile = mongoose.model('Profile'),
-    User = mongoose.model('User'),
+    permissions = require('./../service/permissions'),
     ObjectId = mongoose.Types.ObjectId,
     _ = require('lodash'),
     moment = require('moment');
@@ -21,8 +21,15 @@ module.exports = function () {
                         error: 'Cannot retrieve profile for user'
                     });
                 }
-
-                res.json([profile]);
+                if (profile) {
+                    permissions.ifProfilePermission(req.user, profile, function () {
+                        res.json([profile]);
+                    }, function () {
+                        res.status(401).json({error: 'You are not allowed to see this profile'})
+                    });
+                } else {
+                    res.status(404).json({error: 'Profile does not exist'})
+                }
             });
         }
     };

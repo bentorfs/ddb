@@ -26,14 +26,14 @@ angular.module('mean.ddb').controller('DdbToolsController', ['$scope', '$state',
                     var wine = entries[2] || 0;
                     var liquor = entries[3] || 0;
 
-                    var measurement = new Measurement({
+                    var measurement = {
                         date: currentDate.valueOf(),
                         pilsner: pilsner,
                         strongbeer: strongbeer,
                         wine: wine,
                         liquor: liquor
-                    });
-                    measurement.$save();
+                    };
+                    Measurement.update(measurement);
                     console.log('Imported data for ' + currentDate.format());
 
                 }
