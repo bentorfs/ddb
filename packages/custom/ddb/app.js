@@ -12,7 +12,8 @@ Ddb.register(function (app, auth, database) {
     //We enable routing. By default the Package Object is passed to the routes
     Ddb.routes(app, auth, database);
 
-    Ddb.aggregateAsset('css', 'ddb.css', {weight: -10});
+    Ddb.aggregateAsset('css', 'beerkeeper.css', {weight: -10});
+    Ddb.aggregateAsset('css', 'spinners.css', {weight: -10});
 
     Ddb.aggregateAsset('js', '../lib/lodash/lodash.min.js', {global: true, weight: -100});
     Ddb.aggregateAsset('js', '../lib/moment/min/moment.min.js', {global: true, weight: -10});

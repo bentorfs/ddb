@@ -9,7 +9,7 @@
         <td class="col-xs-6">{{rank.user.username}}</td>
         <td class="col-xs-4 text-right">{{rank.value | number:2}}</td>
     </tr>
-    <tr ng-hide="showMore">
+    <tr ng-hide="showMore || ranking.length <=3">
         <td colspan="3" class="text-center"><a href="#" ng-click="showMore=true"><small>Show more..</small></a></td>
     </tr>
     <tr ng-show="showMore">

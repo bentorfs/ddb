@@ -7,15 +7,49 @@ angular.module('mean.ddb').controller('DdbMeasurementsController', ['$scope', 'G
         $scope.user = MeanUser;
 
         $scope.loadData = function () {
-            Measurement.query(function (measurements) {
+            Measurement.list().success(function (measurements) {
                 $scope.measurements = measurements;
+                $scope.selectedMeasurement = _.last($scope.measurements);
             });
         };
 
+        $scope.status = {};
         $scope.save = function (measurement) {
-            measurement.$save(function (response) {
-                console.log('saved');
-            });
+            if ($scope.isValid(measurement)) {
+                $scope.status[measurement.date] = 'saving';
+                Measurement.update(measurement).success(function (response) {
+                    console.log('saved');
+                    $scope.status[measurement.date] = 'saved';
+                }).error(function () {
+                    $scope.status[measurement.date] = 'failed';
+                });
+            } else {
+                $scope.status[measurement.date] = 'failed';
+            }
+        };
+
+        $scope.addPilsner = function (measurement, amount) {
+            measurement.pilsner = measurement.pilsner + amount;
+            $scope.save(measurement);
+        };
+
+        $scope.addStrongbeer = function (measurement, amount) {
+            measurement.strongbeer = measurement.strongbeer + amount;
+            $scope.save(measurement);
+        };
+
+        $scope.addWine = function (measurement, amount) {
+            measurement.wine = measurement.wine + amount;
+            $scope.save(measurement);
+        };
+
+        $scope.addLiquor = function (measurement, amount) {
+            measurement.liquor = measurement.liquor + amount;
+            $scope.save(measurement);
+        };
+
+        $scope.selectMeasurement = function (measurement) {
+            $scope.selectedMeasurement = measurement;
         };
 
         $scope.isToday = function (date) {
@@ -23,8 +57,11 @@ angular.module('mean.ddb').controller('DdbMeasurementsController', ['$scope', 'G
         };
 
         $scope.isValid = function (measurement) {
-            return (measurement.pilsner >= 0) && (measurement.strongbeer >= 0) && (measurement.wine >= 0) && (measurement.liquor >= 0)
-                && !_.isNull(measurement.pilsner) && !_.isNull(measurement.strongbeer) && !_.isNull(measurement.wine) && !_.isNull(measurement.liquor);
+            measurement.pilsner = measurement.pilsner || 0;
+            measurement.strongbeer = measurement.strongbeer || 0;
+            measurement.wine = measurement.wine || 0;
+            measurement.liquor = measurement.liquor || 0;
+            return (measurement.pilsner >= 0) && (measurement.strongbeer >= 0) && (measurement.wine >= 0) && (measurement.liquor >= 0);
         };
 
         $scope.loadData();
