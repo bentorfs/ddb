@@ -8,7 +8,8 @@ var mongoose = require('mongoose'),
     GroupRanking = mongoose.model('GroupRanking'),
     ObjectId = mongoose.Types.ObjectId,
     _ = require('lodash'),
-    moment = require('moment');
+    moment = require('moment'),
+    grouprankingGenerator = require('./../service/groupranking-generator');
 
 module.exports = function () {
 
@@ -29,7 +30,9 @@ module.exports = function () {
             var upsertData = group.toObject();
             group.members = [req.user._id];
             group.creationDate = moment.utc().valueOf();
-            group.save();
+            group.save(function(){
+                grouprankingGenerator.processGroup(group);
+            });
             res.json(group);
         },
         getGroup: function (req, res) {

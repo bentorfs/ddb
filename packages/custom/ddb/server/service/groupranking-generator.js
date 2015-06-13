@@ -56,7 +56,7 @@ function getGroupRanking(group, profiles) {
         group: group,
         calculationDate: moment.utc().valueOf(),
         rankingHighestBinge: getFieldRanking(profiles, 'highestBinge', false),
-        rankingConsistencyFactor: getFieldRanking(profiles, 'consistencyFactor', false),
+        rankingConsistencyFactor: getFieldRanking(profiles, 'consistencyFactor', true),
         rankingDrinkingDayRate: getFieldRanking(profiles, 'drinkingDayRate', false),
         rankingLiquor: getFieldRanking(profiles, 'avgLiquor', false),
         rankingWine: getFieldRanking(profiles, 'avgWine', false),
@@ -87,23 +87,27 @@ function getFieldRanking(profiles, fieldName, reverse) {
 }
 
 function getGroupFieldRanking(profiles, targetGroup, fieldName, reverse) {
-    // HACK
-    _.forEach(profiles, function (profile) {
+    var rightGroup;
+    var rankedProfiles = _.sortByOrder(profiles, function (profile) {
         var rightGroup = _.find(profile.groups, function (aGroup) {
             return _.isEqual(aGroup.group, targetGroup._id);
         });
         if (rightGroup) {
-            profile.tmp = rightGroup[fieldName];
+            return rightGroup[fieldName];
+        } else {
+            return 0;
+        }
+    }, reverse);
+
+    return _.map(rankedProfiles, function (profile) {
+        var rightGroup = _.find(profile.groups, function (aGroup) {
+            return _.isEqual(aGroup.group, targetGroup._id);
+        });
+        return {
+            user: profile.user,
+            value: rightGroup ? rightGroup[fieldName] : 0
         }
     });
-
-    var result = getFieldRanking(profiles, 'tmp', reverse);
-
-    _.forEach(profiles, function (profile) {
-        delete profile.tmp;
-    });
-
-    return result;
 }
 
 function calculateDailyGroupAnalysis(group) {

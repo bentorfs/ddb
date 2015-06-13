@@ -7,9 +7,9 @@ var mongoose = require('mongoose'),
     Measurement = mongoose.model('Measurement'),
     _ = require('lodash'),
     moment = require('moment'),
-    dailyanalysisGenerator = require('./dailyanalysis-generator'),
-    profileGenerator = require('./profile-generator'),
-    grouprankingGenerator = require('./groupranking-generator');
+    dailyanalysisGenerator = require('./../service/dailyanalysis-generator'),
+    profileGenerator = require('./../service/profile-generator'),
+    grouprankingGenerator = require('./../service/groupranking-generator');
 
 module.exports = function () {
 

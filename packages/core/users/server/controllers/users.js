@@ -159,10 +159,8 @@ module.exports = function (MeanUser) {
                     });
                 }
                 if (!user) {
-                    //res.redirect('/login');
-
                     return res.status(401).json({
-                        error: 'Invalid credentials',
+                        error: 'Invalid credentials'
                     });
                 }
 
