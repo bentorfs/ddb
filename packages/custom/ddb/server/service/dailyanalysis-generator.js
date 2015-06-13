@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
     DailyAnalysis = mongoose.model('DailyAnalysis'),
     Group = mongoose.model('Group'),
     DailyGroupAnalysis = mongoose.model('DailyGroupAnalysis'),
+    ObjectId = mongoose.Types.ObjectId,
     _ = require('lodash'),
     moment = require('moment'),
     async = require('async');
@@ -15,10 +16,9 @@ module.exports = {
         // Get the users groups first
         Group.find({members: user._id}, function (err, groups) {
             if (err) {
-                console.error(err);
+                console.error('Could not load groups that user ' + user.username + 'is a member of, because: ' + err);
                 return;
             }
-
             async.parallel(
                 {
                     measurements: function (callback) {
@@ -77,7 +77,7 @@ function getDailyAnalyses(measurements, user) {
         spreadData[spreadIndex % 7] = todAlc;
 
         var analysisData = {
-            user: user,
+            user: new ObjectId(user._id),
             date: measurement.date,
             dayOfWeek: moment(measurement.date).day(),
 
@@ -105,7 +105,6 @@ function getDailyAnalyses(measurements, user) {
         };
         result.push(analysisData);
 
-
         spreadIndex++;
     });
 
@@ -113,19 +112,26 @@ function getDailyAnalyses(measurements, user) {
 }
 
 function saveDailyAnalyses(dailyAnalyses, user, callback) {
-    var finished = _.after(dailyAnalyses.length, callback);
-
-    _.forEach(dailyAnalyses, function (analysis) {
-        DailyAnalysis.findOneAndUpdate({
-            user: user,
-            date: analysis.date
-        }, analysis, {upsert: true}, function (err) {
-            if (err) {
-                console.log('Could not update daily analysis: ' + err);
-            }
-            finished();
-        });
-    })
+    console.info('Clearing daily group analyses for: ' + user.username);
+    DailyAnalysis.remove({'user': user._id}, function (err) {
+        if (err) {
+            console.error('Failed to clear daily analyses for: ' + user.username + ', due to: ' + err);
+            return;
+        }
+        if (dailyAnalyses.length > 0) {
+            console.info('Saving ' + dailyAnalyses.length + ' new daily analyses for: ' + user.username);
+            DailyAnalysis.collection.insert(dailyAnalyses, function (err) {
+                if (err) {
+                    console.error('Failed to save daily analyses for: ' + user.username + ', due to: ' + err);
+                    return;
+                }
+                console.info('Successfully saved ' + dailyAnalyses.length + ' daily analyses for ' + user.username);
+                callback();
+            });
+        } else {
+            console.info('Not saving any daily analyses for ' + user.username);
+        }
+    });
 }
 
 function calculateLonerFactor(dailyAnalyses, dailyGroupAnalyses) {

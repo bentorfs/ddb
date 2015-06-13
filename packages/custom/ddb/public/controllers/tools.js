@@ -50,11 +50,13 @@ angular.module('mean.ddb').controller('DdbToolsController', ['$scope', '$state',
             });
         };
 
-        $scope.rebuild = function() {
+        $scope.rebuild = function () {
             $http({
                 url: '/api/rebuild',
                 method: 'POST',
                 params: {}
+            }).success(function () {
+                alert('Rebuild triggered');
             });
         }
 

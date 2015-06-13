@@ -35,31 +35,40 @@
         </div>
     </div>
 
-    <div class="panel panel-warning">
-        <div class="panel-heading">
-            <h3 class="panel-title">Rebuild Database</h3>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Rebuild Database</h3>
+                </div>
+                <div class="panel-body">
+                    <p>
+                        Don't delete measurements, but rebuild all statistics
+                    </p>
+                    <button class="btn btn-warning" ng-click="rebuild()"><i class="glyphicon glyphicon-ok"/> Rebuild
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="panel-body">
-            <p>
-                Don't delete measurements, but rebuild all statistics
-            </p>
-            <button class="btn btn-warning" ng-click="rebuild()"><i class="glyphicon glyphicon-ok"/> Rebuild</button>
+        <div class="col-md-6">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Delete all data</h3>
+                </div>
+                <div class="panel-body">
+                    <p>
+                        Clicking this button will delete <strong>all your data</strong>. There is no confirmation. There
+                        is no
+                        way to undo it.
+                    </p>
+                    <button class="btn btn-danger" ng-click="deleteAll()"><i class="glyphicon glyphicon-ok"/> Delete all
+                        data
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="panel panel-danger">
-        <div class="panel-heading">
-            <h3 class="panel-title">Delete all data</h3>
-        </div>
-        <div class="panel-body">
-            <p>
-                Clicking this button will delete <strong>all your data</strong>. There is no confirmation. There is no
-                way to undo it.
-            </p>
-            <button class="btn btn-danger" ng-click="deleteAll()"><i class="glyphicon glyphicon-ok"/> Delete all data
-            </button>
-        </div>
-    </div>
 
 </div>
 

@@ -12,6 +12,9 @@ var GroupRankingSchema = new Schema({
     calculationDate: {
         type: Date
     },
+    rankingSuperCup: [
+        {user: {type: Schema.ObjectId, ref: 'User'}, value: {type: Number}}
+    ],
     rankingHighestBinge: [
         {user: {type: Schema.ObjectId, ref: 'User'}, value: {type: Number}}
     ],

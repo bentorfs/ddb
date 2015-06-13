@@ -10,19 +10,25 @@ var mongoose = require('mongoose'),
     moment = require('moment');
 
 module.exports = {
-    processUser: function (user) {
+    processUser: function (user, callback) {
         DailyAnalysis.find({user: user}).sort('date').exec(function (err, analyses) {
             if (err) {
-                console.error('Could not load daily analyses to update profile: ' + err);
+                console.error('Could not load daily analyses to update profile for user: ' + user.username + ', because: ' + err);
                 return;
             }
 
-            updateProfile(analyses, user);
+            if (analyses.length > 0) {
+                console.info('Updating profile for user ' + user.username);
+                updateProfile(analyses, user, callback);
+            } else {
+                console.info('Skipping profile update for user ' + user.username + ', because there are no daily analyses');
+            }
+
         });
     }
 };
 
-function updateProfile(analyses, user) {
+function updateProfile(analyses, user, callback) {
     var alcPerDay = [0, 0, 0, 0, 0, 0, 0];
     var nbOfWeekDays = [0, 0, 0, 0, 0, 0, 0];
     var drinkingDays = 0;
@@ -53,7 +59,7 @@ function updateProfile(analyses, user) {
 
             if (group.lonerFactor < 0) {
                 groups[group.group].sadLonerFactor += Math.abs(group.lonerFactor);
-            } else  if (group.lonerFactor > 0){
+            } else if (group.lonerFactor > 0) {
                 groups[group.group].happyLonerFactor += group.lonerFactor;
             }
         });
@@ -130,8 +136,11 @@ function updateProfile(analyses, user) {
         user: user
     }, profileData, {upsert: true}, function (err) {
         if (err) {
-            console.error('Could not update profile: ' + err);
+            console.error('Could not update profile for user: ' + user.username + ', because: ' + err);
+            return;
         }
+        console.info('Successfully saved updated profile for user ' + user.username);
+        callback();
     });
 }
 

@@ -8,6 +8,7 @@ var mongoose = require('mongoose'),
     _ = require('lodash'),
     moment = require('moment'),
     dailyanalysisGenerator = require('./../service/dailyanalysis-generator'),
+    dailygroupanalysisGenerator = require('./../service/dailygroupanalysis-generator'),
     profileGenerator = require('./../service/profile-generator'),
     grouprankingGenerator = require('./../service/groupranking-generator');
 
@@ -25,6 +26,16 @@ module.exports = function () {
         var emptyMeasurement = new Measurement(measurementData);
         emptyMeasurement.save(emptyMeasurement);
         return emptyMeasurement;
+    };
+
+    var updateStatistics = function (user) {
+        dailyanalysisGenerator.processUser(user, function () {
+            dailygroupanalysisGenerator.processUser(user, function () {
+                profileGenerator.processUser(user, function () {
+                    grouprankingGenerator.processUser(user);
+                });
+            });
+        });
     };
 
     return {
@@ -53,17 +64,13 @@ module.exports = function () {
                     });
                 }
                 res.send(updatedMeasurement);
-                dailyanalysisGenerator.processUser(req.user, function() {
-                    profileGenerator.processUser(req.user);
-                    grouprankingGenerator.processUser(req.user);
-                });
-
+                updateStatistics(req.user);
             });
         },
         all: function (req, res) {
             var user = req.user;
 
-            Measurement.find({user: req.user}).sort('date').populate('user', 'name username').exec(function (err, measurements) {
+            Measurement.find({user: req.user}).sort('date').exec(function (err, measurements) {
                 if (err) {
                     return res.status(500).json({
                         error: 'Cannot list the measurements'
@@ -96,10 +103,7 @@ module.exports = function () {
                     }
                     res.json(measurements);
                     if (addedRecord) {
-                        dailyanalysisGenerator.processUser(req.user, function() {
-                            profileGenerator.processUser(req.user);
-                            grouprankingGenerator.processUser(req.user);
-                        });
+                        updateStatistics(req.user);
                     }
                 }
             });

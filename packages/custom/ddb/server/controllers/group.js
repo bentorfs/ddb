@@ -6,7 +6,6 @@
 var mongoose = require('mongoose'),
     Group = mongoose.model('Group'),
     GroupRanking = mongoose.model('GroupRanking'),
-    ObjectId = mongoose.Types.ObjectId,
     _ = require('lodash'),
     moment = require('moment'),
     grouprankingGenerator = require('./../service/groupranking-generator');
@@ -66,6 +65,7 @@ module.exports = function () {
                 .populate('rankingMon.user', 'username')
                 .populate('rankingHappyLoner.user', 'username')
                 .populate('rankingSadLoner.user', 'username')
+                .populate('rankingSuperCup.user', 'username')
                 .exec(function (err, ranking) {
                     if (err || !ranking) {
                         console.error(err);

@@ -20,11 +20,9 @@ function processUser(user) {
             console.error('Could not load groups of user: ' + err);
             return;
         }
-
         _.forEach(groups, function (group) {
             processGroup(group);
         });
-
     });
 }
 
@@ -37,20 +35,74 @@ function processGroup(group) {
 
         var groupRanking = getGroupRanking(group, profiles);
 
+        var superCupRanking = getSuperCupRanking(groupRanking);
+        groupRanking.rankingSuperCup = superCupRanking;
+
         GroupRanking.findOneAndUpdate({
             group: group._id
         }, groupRanking, {upsert: true}, function (err) {
             if (err) {
                 console.error('Could not update group ranking: ' + err);
             }
-            console.info('Updated group ' + group.id);
+            console.info('Updated rankings for group ' + group.name);
         });
     });
 }
 
-function getGroupRanking(group, profiles) {
+function getSuperCupRanking(groupRanking) {
+    var scores = {};
 
-    calculateDailyGroupAnalysis(group);
+    var majorScores = [10, 5, 3];
+    var majorTrophies = ['rankingHighestBinge', 'rankingConsistencyFactor', 'rankingDrinkingDayRate', 'rankingWeekend', 'rankingWorkWeek', 'rankingSun'];
+    var sideScores = [5, 3, 1];
+    var sideTrophies = ['rankingLiquor', 'rankingWine', 'rankingStrongbeer', 'rankingPilsner', 'rankingSadLoner', 'rankingHappyLoner'];
+    var minorScores = [3, 1, 0];
+    var minorTrophies = ['rankingSat', 'rankingFri', 'rankingThu', 'rankingWed', 'rankingTue', 'rankingMon'];
+
+    _.forEach(majorTrophies, function (trophy) {
+        var trophyRanking = groupRanking[trophy];
+        _.forEach(majorScores, function (score, index) {
+            if (trophyRanking[index]) {
+                var user = trophyRanking[index].user._id;
+                var currentScore = scores[user] || 0;
+                scores[user] = currentScore + score;
+            }
+        });
+    });
+
+    _.forEach(sideTrophies, function (trophy) {
+        var trophyRanking = groupRanking[trophy];
+        _.forEach(sideScores, function (score, index) {
+            if (trophyRanking[index]) {
+                var user = trophyRanking[index].user._id;
+                var currentScore = scores[user] || 0;
+                scores[user] = currentScore + score;
+            }
+        });
+    });
+
+    _.forEach(minorTrophies, function (trophy) {
+        var trophyRanking = groupRanking[trophy];
+        _.forEach(minorScores, function (score, index) {
+            if (trophyRanking[index]) {
+                var user = trophyRanking[index].user._id;
+                var currentScore = scores[user] || 0;
+                scores[user] = currentScore + score;
+            }
+        });
+    });
+
+    var result = [];
+    _.forEach(_.keys(scores), function (user) {
+        result.push({
+            user: user,
+            value: scores[user]
+        })
+    });
+    return _.sortByOrder(result, 'value', false);
+}
+
+function getGroupRanking(group, profiles) {
 
     return {
         group: group,
@@ -111,36 +163,3 @@ function getGroupFieldRanking(profiles, targetGroup, fieldName, reverse) {
     });
 }
 
-function calculateDailyGroupAnalysis(group) {
-
-    console.info('Generating daily group analyses for: ' + group.name);
-
-    DailyGroupAnalysis.remove({'_id.group': group._id}, function (err) {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        DailyAnalysis.aggregate([
-            {$project: {date: 1, user: 1, todAlc: 1, group: {$literal: group._id}}},
-            {'$match': {'user': {'$in': group.members}}},
-            {
-                '$group': {
-                    _id: {date: '$date', group: '$group'},
-                    todAvgAlc: {'$avg': '$todAlc'},
-                    todSumAlc: {'$sum': '$todAlc'},
-                    todMinAlc: {'$min': '$todAlc'},
-                    todMaxAlc: {'$max': '$todAlc'}
-                }
-            }
-        ]).exec(function (err, dailygroupanalyses) {
-            if (err) {
-                console.error(err);
-                return
-            }
-            console.info('Generated ' + dailygroupanalyses.length + ' daily group analyses for ' + group.name);
-            DailyGroupAnalysis.collection.insert(dailygroupanalyses);
-        })
-    });
-
-
-}
