@@ -2,6 +2,10 @@
 
 angular.module('mean.ddb').config(['$stateProvider',
     function ($stateProvider) {
+        $stateProvider.state('news', {
+            url: '/ddb/news',
+            templateUrl: 'ddb/views/news.html'
+        });
         $stateProvider.state('measurements', {
             url: '/ddb/measurements',
             templateUrl: 'ddb/views/measurements.html'
@@ -27,9 +31,11 @@ angular.module('mean.ddb').config(['$stateProvider',
 
 angular.module('mean.ddb')
     .config(['$viewPathProvider', function ($viewPathProvider) {
-        $viewPathProvider.override('system/views/header.html', 'ddb/views/header.html');
         $viewPathProvider.override('system/views/index.html', 'ddb/views/home.html');
         $viewPathProvider.override('users/views/login.html', 'ddb/views/login.html');
         $viewPathProvider.override('users/views/register.html', 'ddb/views/register.html');
         $viewPathProvider.override('users/views/index.html', 'ddb/views/authenticationparent.html');
     }]);
+console.log(Chart.defaults.global);
+Chart.defaults.global.colours = ['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000']
+console.log(Chart.defaults.global.colours);

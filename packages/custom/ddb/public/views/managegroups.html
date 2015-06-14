@@ -1,96 +1,100 @@
-<div class="" data-ng-controller="DdbManageGroupsController">
+<section class="container">
+    <div data-ng-controller="DdbManageGroupsController">
 
-    <div class="page-header">
-        <h1>Manage Groups</h1>
-    </div>
+        <div class="page-header">
+            <h1>Manage Groups</h1>
+        </div>
 
-    <div class="row">
-        <div class="col-md-8">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Create a group</h3>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Create a group</h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <form ng-submit="createGroup()">
+                            <table class="table">
+                                <tbody>
+                                <tr>
+                                    <th class="col-xs-6">Group Name</th>
+                                    <td>
+                                        <input type="text" class="form-control" id="groupName" placeholder="Group name"
+                                               ng-model="groupName">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="col-xs-6">
+                                        <p>Invited Users</p>
+
+                                        <div class="well" style="font-weight: normal">
+                                            Each invited user will have the choice to accept or reject your invitation
+                                            to
+                                            this group
+                                        </div>
+                                    </th>
+                                    <td>
+                                        <div class="alert alert-warning" role="alert" ng-if="!users.length">
+                                            There are no other users to invite!
+                                        </div>
+                                        <select-users selection="usersToInvite">
+                                        </select-users>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <td>
+                                        <button type="submit" class="btn btn-primary"><i
+                                                class="glyphicon glyphicon-ok"/>
+                                            Create Group
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
                 </div>
-                <div class="panel-body">
+            </div>
 
-                    <form ng-submit="createGroup()">
-                        <table class="table">
+            <div class="col-md-4">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Join groups</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="well">
+                            You can only join a group if you have an invitation
+                        </div>
+
+                        <table class="table table-striped">
                             <tbody>
-                            <tr>
-                                <th class="col-xs-6">Group Name</th>
-                                <td>
-                                    <input type="text" class="form-control" id="groupName" placeholder="Group name"
-                                           ng-model="groupName">
-                                </td>
+                            <tr ng-if="!invitations.length">
+                                <th colspan="2">You are not invited to any groups</th>
                             </tr>
-                            <tr>
-                                <th class="col-xs-6">
-                                    <p>Invited Users</p>
-
-                                    <div class="well" style="font-weight: normal">
-                                        Each invited user will have the choice to accept or reject your invitation to
-                                        this group
-                                    </div>
-                                </th>
-                                <td>
-                                    <div class="alert alert-warning" role="alert" ng-if="!users.length">
-                                        There are no other users to invite!
-                                    </div>
-                                    <select-users selection="usersToInvite">
-                                    </select-users>
+                            <tr ng-repeat="invitation in invitations | orderBy:'name'">
+                                <th class="col-xs-6">{{invitation.name}}</th>
+                                <td class="col-xs-3 text-right">
+                                    <button type="submit" class="btn btn-success btn-sm"
+                                            ng-click="acceptInvitation(invitation._id)">
+                                        <i class="glyphicon glyphicon-ok"/> Join
+                                    </button>
                                 </td>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                <td>
-                                    <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-ok"/>
-                                        Create Group
+                                <td class="col-xs-3 text-right">
+                                    <button type="submit" class="btn btn-warning btn-sm"
+                                            ng-click="rejectInvitation(invitation._id)">
+                                        <i class="glyphicon glyphicon-remove"/> Reject
                                     </button>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Join groups</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="well">
-                        You can only join a group if you have an invitation
                     </div>
-
-                    <table class="table table-striped">
-                        <tbody>
-                        <tr ng-if="!invitations.length">
-                            <th colspan="2">You are not invited to any groups</th>
-                        </tr>
-                        <tr ng-repeat="invitation in invitations | orderBy:'name'">
-                            <th class="col-xs-6">{{invitation.name}}</th>
-                            <td class="col-xs-3 text-right">
-                                <button type="submit" class="btn btn-success btn-sm"
-                                        ng-click="acceptInvitation(invitation._id)">
-                                    <i class="glyphicon glyphicon-ok"/> Join
-                                </button>
-                            </td>
-                            <td class="col-xs-3 text-right">
-                                <button type="submit" class="btn btn-warning btn-sm"
-                                        ng-click="rejectInvitation(invitation._id)">
-                                    <i class="glyphicon glyphicon-remove"/> Reject
-                                </button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
+
+
     </div>
 
-
-</div>
-
+</section>

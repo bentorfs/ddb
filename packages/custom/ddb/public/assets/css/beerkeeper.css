@@ -1,23 +1,18 @@
-div.navbar-brand {
-    background: #fdc026; /* Old browsers */
-    background: -moz-linear-gradient(left, #fdc026 0%, #feac00 29%, #f19700 54%, #d98005 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, right top, color-stop(0%, #fdc026), color-stop(29%, #feac00), color-stop(54%, #f19700), color-stop(100%, #d98005)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(left, #fdc026 0%, #feac00 29%, #f19700 54%, #d98005 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(left, #fdc026 0%, #feac00 29%, #f19700 54%, #d98005 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(left, #fdc026 0%, #feac00 29%, #f19700 54%, #d98005 100%); /* IE10+ */
-    background: linear-gradient(to right, #fdc026 0%, #feac00 29%, #f19700 54%, #d98005 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdc026', endColorstr='#d98005', GradientType=1); /* IE6-9 */
+body {
+    background-color: #FFF4E6;
+}
 
-    color: #000 !important;
+div.navbar-brand {
+    background-color: #222 !important;
     height: 53px !important;
     font-size: 14pt;
 }
 
-a.logo {
-    color: #000;
-    text-decoration: none;
-    font-weight: bold;
-}
+/*a.logo {*/
+    /*color: #FFA539;*/
+    /*text-decoration: none;*/
+    /*font-weight: bold;*/
+/*}*/
 
 .navbar-nav {
     margin: 0;
@@ -72,12 +67,43 @@ tr.active {
     background-color: #f9f9f9;
 }
 
-/*.today {
-    background-color: #d9edf7;
-}*/
-
 @media (max-width: 767px) {
     .navbar-nav .open .dropdown-menu {
         background-color: #fff;
     }
+}
+
+.beer-gradient {
+    background: linear-gradient(120deg, #FFD8AA, #FFD8AA);
+    color: #000 !important;
+}
+
+.beer-gradient input {
+    background-color: #FFEFDC;
+    color: #000;
+    border-color: #FFA539;
+}
+
+.beer-gradient a {
+    color: #874E00;
+}
+
+.beer-gradient button {
+    color: #000 !important;
+    border-color: #FFB45B;
+    background-color: #FFEFDC;
+    font-weight: bold;
+}
+
+.form-control::-webkit-input-placeholder {
+    color: #B06600;
+}
+.form-control:-moz-placeholder {
+    color: #B06600;
+}
+.form-control::-moz-placeholder {
+    color: #B06600;
+}
+.form-control:-ms-input-placeholder {
+    color: #B06600;
 }

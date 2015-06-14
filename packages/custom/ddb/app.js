@@ -13,6 +13,7 @@ Ddb.register(function (app, auth, database) {
     Ddb.routes(app, auth, database);
 
     Ddb.aggregateAsset('css', 'beerkeeper.css', {weight: -10});
+    Ddb.aggregateAsset('css', 'bootstrap.css', {weight: -10});
     Ddb.aggregateAsset('css', 'spinners.css', {weight: -10});
 
     Ddb.aggregateAsset('js', '../lib/lodash/lodash.min.js', {global: true, weight: -100});
@@ -21,7 +22,6 @@ Ddb.register(function (app, auth, database) {
     Ddb.aggregateAsset('js', '../lib/angular-chart.js/dist/angular-chart.js', {weight: 101});
     Ddb.aggregateAsset('js', '../lib/angular-bootstrap-multiselect/dist/angular-bootstrap-multiselect.js', {weight: 102});
     Ddb.aggregateAsset('css', '../lib/angular-chart.js/dist/angular-chart.css');
-
 
     Ddb.angularDependencies(['mean.system', 'chart.js', 'btorfs.multiselect']);
     /**

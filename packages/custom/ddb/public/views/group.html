@@ -1,213 +1,223 @@
-<div class="" data-ng-controller="DdbGroupController">
+<section class="container">
+    <div data-ng-controller="DdbGroupController">
 
-    <div class="page-header">
-        <h1>Group
-            <br class="visible-xs"/>
-            <small>{{group.name}}</small>
-        </h1>
-    </div>
+        <div class="page-header">
+            <h1>Group
+                <br class="visible-xs"/>
+                <small>{{group.name}}</small>
+            </h1>
+        </div>
 
-    <div class="row">
-        <div class="col-md-9">
+        <div class="row">
+            <div class="col-md-9">
 
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Super Cup</h3>
-                        </div>
-                        <div class="panel-body">
-                            <table class="table table-condensed">
-                                <tr ng-repeat="rank in ranking.rankingSuperCup | limitTo:20" ng-class="{active: $index === 0}">
-                                    <td class="col-xs-2">{{$index + 1}}</td>
-                                    <td class="col-xs-6">{{rank.user.username}}</td>
-                                    <td class="col-xs-4 text-right">{{rank.value}}</td>
-                                </tr>
-                            </table>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Super Cup</h3>
+                            </div>
+                            <div class="panel-body">
+                                <table class="table table-condensed">
+                                    <tr ng-repeat="rank in ranking.rankingSuperCup | limitTo:20"
+                                        ng-class="{active: $index === 0}">
+                                        <td class="col-xs-2">{{$index + 1}}</td>
+                                        <td class="col-xs-6">{{rank.user.username}}</td>
+                                        <td class="col-xs-4 text-right">{{rank.value}}</td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="col-md-9">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Group Trend</h3>
-                        </div>
-                        <div class="panel-body">
-                            <canvas id="groupTrend" class="chart chart-line" data="groupTrendData"
-                                    options="groupTrendDataOptions" legend="true"
-                                    labels="groupTrendLabels" series="groupTrendSeries">
-                            </canvas>
-                        </div>
-                        <div class="panel-body text-center">
-                            <div class="btn-group" role="group" aria-label="...">
-                                <button type="button" class="btn btn-sm btn-default" ng-click="drawGroupChart(365)"
-                                        ng-class="{active: nbGroupDaysShown === 365}">
-                                    1 Year
-                                </button>
-                                <button type="button" class="btn btn-sm btn-default" ng-click="drawGroupChart(90)"
-                                        ng-class="{active: nbGroupDaysShown === 90}">
-                                    3 Months
-                                </button>
-                                <button type="button" class="btn btn-sm btn-default" ng-click="drawGroupChart(30)"
-                                        ng-class="{active: nbGroupDaysShown === 30}">
-                                    1 Month
-                                </button>
-                                <button type="button" class="btn btn-sm btn-default" ng-click="drawGroupChart(7)"
-                                        ng-class="{active: nbGroupDaysShown === 7}">
-                                    1 Week
-                                </button>
+                    <div class="col-md-9">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Group Trend</h3>
+                            </div>
+                            <div class="panel-body">
+                                <canvas id="groupTrend" class="chart chart-line" data="groupTrendData"
+                                        options="groupTrendDataOptions" legend="true"
+                                        labels="groupTrendLabels" series="groupTrendSeries">
+                                </canvas>
+                            </div>
+                            <div class="panel-body text-center">
+                                <div class="btn-group" role="group" aria-label="...">
+                                    <button type="button" class="btn btn-sm btn-default" ng-click="drawGroupChart(365)"
+                                            ng-class="{active: nbGroupDaysShown === 365}">
+                                        1 Year
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-default" ng-click="drawGroupChart(90)"
+                                            ng-class="{active: nbGroupDaysShown === 90}">
+                                        3 Months
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-default" ng-click="drawGroupChart(30)"
+                                            ng-class="{active: nbGroupDaysShown === 30}">
+                                        1 Month
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-default" ng-click="drawGroupChart(7)"
+                                            ng-class="{active: nbGroupDaysShown === 7}">
+                                        1 Week
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="panel panel-danger">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Premier Trophies</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <trophy-ranking trophy-name="Consistency Trophy"
-                                            ranking="ranking.rankingConsistencyFactor"></trophy-ranking>
-                            <trophy-ranking trophy-name="Weekend Trophy"
-                                            ranking="ranking.rankingWeekend"></trophy-ranking>
-                        </div>
-                        <div class="col-sm-4">
-                            <trophy-ranking trophy-name="Habitual Drinker Trophy"
-                                            ranking="ranking.rankingDrinkingDayRate"></trophy-ranking>
-                            <trophy-ranking trophy-name="Sunday Trophy" ranking="ranking.rankingSun"></trophy-ranking>
-                        </div>
-                        <div class="col-sm-4">
-                            <trophy-ranking trophy-name="Binge Trophy"
-                                            ranking="ranking.rankingHighestBinge"></trophy-ranking>
-                            <trophy-ranking trophy-name="Working Week Trophy"
-                                            ranking="ranking.rankingWorkWeek"></trophy-ranking>
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Premier Trophies</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <trophy-ranking trophy-name="Consistency Trophy"
+                                                ranking="ranking.rankingConsistencyFactor"></trophy-ranking>
+                                <trophy-ranking trophy-name="Weekend Trophy"
+                                                ranking="ranking.rankingWeekend"></trophy-ranking>
+                            </div>
+                            <div class="col-sm-4">
+                                <trophy-ranking trophy-name="Habitual Drinker Trophy"
+                                                ranking="ranking.rankingDrinkingDayRate"></trophy-ranking>
+                                <trophy-ranking trophy-name="Sunday Trophy"
+                                                ranking="ranking.rankingSun"></trophy-ranking>
+                            </div>
+                            <div class="col-sm-4">
+                                <trophy-ranking trophy-name="Binge Trophy"
+                                                ranking="ranking.rankingHighestBinge"></trophy-ranking>
+                                <trophy-ranking trophy-name="Working Week Trophy"
+                                                ranking="ranking.rankingWorkWeek"></trophy-ranking>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Side Trophies</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <trophy-ranking trophy-name="Pilsner Trophy"
-                                            ranking="ranking.rankingPilsner"></trophy-ranking>
-                            <trophy-ranking trophy-name="Trappist Trophy"
-                                            ranking="ranking.rankingStrongbeer"></trophy-ranking>
-                        </div>
-                        <div class="col-sm-4">
-                            <trophy-ranking trophy-name="Whisky Trophy"
-                                            ranking="ranking.rankingLiquor"></trophy-ranking>
-                            <trophy-ranking trophy-name="Wine Trophy" ranking="ranking.rankingWine"></trophy-ranking>
-                        </div>
-                        <div class="col-sm-4">
-                            <trophy-ranking trophy-name="Happy Loner Trophy"
-                                            ranking="ranking.rankingHappyLoner"></trophy-ranking>
-                            <trophy-ranking trophy-name="Sad Loner Trophy"
-                                            ranking="ranking.rankingSadLoner"></trophy-ranking>
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Side Trophies</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <trophy-ranking trophy-name="Pilsner Trophy"
+                                                ranking="ranking.rankingPilsner"></trophy-ranking>
+                                <trophy-ranking trophy-name="Trappist Trophy"
+                                                ranking="ranking.rankingStrongbeer"></trophy-ranking>
+                            </div>
+                            <div class="col-sm-4">
+                                <trophy-ranking trophy-name="Whisky Trophy"
+                                                ranking="ranking.rankingLiquor"></trophy-ranking>
+                                <trophy-ranking trophy-name="Wine Trophy"
+                                                ranking="ranking.rankingWine"></trophy-ranking>
+                            </div>
+                            <div class="col-sm-4">
+                                <trophy-ranking trophy-name="Happy Loner Trophy"
+                                                ranking="ranking.rankingHappyLoner"></trophy-ranking>
+                                <trophy-ranking trophy-name="Sad Loner Trophy"
+                                                ranking="ranking.rankingSadLoner"></trophy-ranking>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Day Trophies</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <trophy-ranking trophy-name="Monday Trophy" ranking="ranking.rankingMon"></trophy-ranking>
-                            <trophy-ranking trophy-name="Tuesday Trophy" ranking="ranking.rankingTue"></trophy-ranking>
-                        </div>
-                        <div class="col-sm-4">
-                            <trophy-ranking trophy-name="Wednesday Trophy"
-                                            ranking="ranking.rankingWed"></trophy-ranking>
-                            <trophy-ranking trophy-name="Thursday Trophy" ranking="ranking.rankingThu"></trophy-ranking>
-                        </div>
-                        <div class="col-sm-4">
-                            <trophy-ranking trophy-name="Friday Trophy" ranking="ranking.rankingFri"></trophy-ranking>
-                            <trophy-ranking trophy-name="Saturday Trophy" ranking="ranking.rankingSat"></trophy-ranking>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Day Trophies</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <trophy-ranking trophy-name="Monday Trophy"
+                                                ranking="ranking.rankingMon"></trophy-ranking>
+                                <trophy-ranking trophy-name="Tuesday Trophy"
+                                                ranking="ranking.rankingTue"></trophy-ranking>
+                            </div>
+                            <div class="col-sm-4">
+                                <trophy-ranking trophy-name="Wednesday Trophy"
+                                                ranking="ranking.rankingWed"></trophy-ranking>
+                                <trophy-ranking trophy-name="Thursday Trophy"
+                                                ranking="ranking.rankingThu"></trophy-ranking>
+                            </div>
+                            <div class="col-sm-4">
+                                <trophy-ranking trophy-name="Friday Trophy"
+                                                ranking="ranking.rankingFri"></trophy-ranking>
+                                <trophy-ranking trophy-name="Saturday Trophy"
+                                                ranking="ranking.rankingSat"></trophy-ranking>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
+            </div>
+            <div class="col-md-3">
+
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Members</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table">
+                            <tr ng-repeat="member in group.members | orderBy:'name'">
+                                <td>
+                                    {{member.username}}
+                                </td>
+                                <td class="text-right">
+                                    <a ui-sref="profile({userId: member._id})"><i class="glyphicon glyphicon-stats"></i></a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Outstanding Invitations</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table">
+                            <tr ng-if="!group.invitations.length">
+                                <th colspan="2">No outstanding invitations</th>
+                            </tr>
+                            <tr ng-repeat="member in group.invitations | orderBy:'name'">
+                                <td>
+                                    {{member.username}}
+                                </td>
+                                <td class="text-right">
+                                    <button class="btn btn-default btn-sm" ng-click="uninviteUser(member._id)">
+                                        <i class="glyphicon glyphicon-remove"/> Revoke
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="panel-body">
+                        <label>Send more invitations</label>
+
+                        <p>
+                            <select-users selection="usersToInvite" selection-limit="1">
+                            </select-users>
+                        </p>
+                        <button class="btn btn-primary" ng-click="inviteUsers()">
+                            <i class="glyphicon glyphicon-send"/> Send
+                        </button>
+                    </div>
+                </div>
+
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Leave Group</h3>
+                    </div>
+                    <div class="panel-body">
+                        <button class="btn btn-danger" ng-click="leaveGroup()">
+                            <i class="glyphicon glyphicon-remove-sign"/> Leave
+                        </button>
+                    </div>
+                </div>
+
+            </div>
         </div>
-        <div class="col-md-3">
 
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Members</h3>
-                </div>
-                <div class="panel-body">
-                    <table class="table">
-                        <tr ng-repeat="member in group.members | orderBy:'name'">
-                            <td>
-                                {{member.username}}
-                            </td>
-                            <td class="text-right">
-                                <a ui-sref="profile({userId: member._id})"><i class="glyphicon glyphicon-stats"></i></a>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Outstanding Invitations</h3>
-                </div>
-                <div class="panel-body">
-                    <table class="table">
-                        <tr ng-if="!group.invitations.length">
-                            <th colspan="2">No outstanding invitations</th>
-                        </tr>
-                        <tr ng-repeat="member in group.invitations | orderBy:'name'">
-                            <td>
-                                {{member.username}}
-                            </td>
-                            <td class="text-right">
-                                <button class="btn btn-default btn-sm" ng-click="uninviteUser(member._id)">
-                                    <i class="glyphicon glyphicon-remove"/> Revoke
-                                </button>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="panel-body">
-                    <label>Send more invitations</label>
-
-                    <p>
-                        <select-users selection="usersToInvite" selection-limit="1">
-                        </select-users>
-                    </p>
-                    <button class="btn btn-primary" ng-click="inviteUsers()">
-                        <i class="glyphicon glyphicon-send"/> Send
-                    </button>
-                </div>
-            </div>
-
-            <div class="panel panel-danger">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Leave Group</h3>
-                </div>
-                <div class="panel-body">
-                    <button class="btn btn-danger" ng-click="leaveGroup()">
-                        <i class="glyphicon glyphicon-remove-sign"/> Leave
-                    </button>
-                </div>
-            </div>
-
-        </div>
     </div>
 
-</div>
-
+</section>

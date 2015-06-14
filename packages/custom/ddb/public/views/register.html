@@ -1,54 +1,60 @@
 <div data-ng-controller="RegisterCtrl as reg">
-    <div ng-repeat="error in reg.registerError">
-        <div class="alert alert-danger animated fadeIn">{{error.msg}}</div>
+
+    <div class="jumbotron beer-gradient">
+        <section class="container">
+            <div ng-repeat="error in reg.registerError">
+                <div class="alert alert-danger animated fadeIn">{{error.msg}}</div>
+            </div>
+            <div class="alert alert-danger animated fadeIn" ng-show="reg.usernameError">{{reg.usernameError}}</div>
+            <div class="alert alert-danger animated fadeIn" ng-show="reg.emailError">{{reg.emailError}}</div>
+
+            <h2>Registration</h2>
+
+            <form id="register_form" ng-submit="reg.register()">
+
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input required id="name" type="text" name="name" placeholder="Full Name"
+                           ng-model="reg.user.name" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="email_block">E-mail Address</label>
+                    <input required id="email_block" type="email" name="email" placeholder="E-mail address"
+                           ng-model="reg.user.email" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Display Name</label>
+                    <input required id="username" type="text" name="username" placeholder="Username"
+                           ng-model="reg.user.username" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="password_block">Password</label>
+                    <input required id="password_block" name="password" type="{{reg.input.type}}"
+                           placeholder="Password" ng-model="reg.user.password" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password">Repeat Password</label>
+                    <input required id="confirm_password" name="confirm_password" type="{{reg.input.type}}"
+                           placeholder="Repeat password" ng-model="reg.user.confirmPassword" class="form-control">
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-6">
+                        <button type="submit" class="btn btn-warning
+                        ">Sign up</button>
+                    </div>
+                    <div class="col-xs-6 text-right">
+                        <p>Already registered?
+                            <a ui-sref='auth.login'>Log in</a>
+                        </p>
+                    </div>
+                </div>
+            </form>
+        </section>
     </div>
-    <div class="alert alert-danger animated fadeIn" ng-show="reg.usernameError">{{reg.usernameError}}</div>
-    <div class="alert alert-danger animated fadeIn" ng-show="reg.emailError">{{reg.emailError}}</div>
-
-    <h2>Registration</h2>
-
-    <form id="register_form" ng-submit="reg.register()">
-
-        <div class="form-group">
-            <label for="name">Full Name</label>
-            <input required id="name" type="text" name="name" placeholder="Full Name"
-                   ng-model="reg.user.name" class="form-control">
-        </div>
-
-        <div class="form-group">
-            <label for="email_block">E-mail Address</label>
-            <input required id="email_block" type="email" name="email" placeholder="E-mail address"
-                   ng-model="reg.user.email" class="form-control">
-        </div>
-
-        <div class="form-group">
-            <label for="username">Display Name</label>
-            <input required id="username" type="text" name="username" placeholder="Username"
-                   ng-model="reg.user.username" class="form-control">
-        </div>
-
-        <div class="form-group">
-            <label for="password_block">Password</label>
-            <input required id="password_block" name="password" type="{{reg.input.type}}"
-                   placeholder="Password" ng-model="reg.user.password" class="form-control">
-        </div>
-
-        <div class="form-group">
-            <label for="confirm_password">Repeat Password</label>
-            <input required id="confirm_password" name="confirm_password" type="{{reg.input.type}}"
-                   placeholder="Repeat password" ng-model="reg.user.confirmPassword" class="form-control">
-        </div>
-
-        <div class="row">
-            <div class="col-xs-6">
-                <button type="submit" class="btn btn-primary">Sign up</button>
-            </div>
-            <div class="col-xs-6 text-right">
-                <p>Already registered?
-                    <a ui-sref='auth.login'>Log in</a>
-                </p>
-            </div>
-        </div>
-    </form>
 
 </div>
