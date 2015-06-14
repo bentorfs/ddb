@@ -4,13 +4,13 @@ var mongoose = require('mongoose'),
     User = mongoose.model('User'),
     DailyAnalysis = mongoose.model('DailyAnalysis'),
     ObjectId = mongoose.Types.ObjectId,
+    permissions = require('./../service/permissions'),
     _ = require('lodash'),
     moment = require('moment');
 
-module.exports = function () {
-
-    return {
-        get: function (req, res) {
+module.exports = {
+    get: function (req, res) {
+        permissions.ifDailyAnalysisPermission(req.user, req.params.userId, function () {
             DailyAnalysis.find({user: req.params.userId}).sort('date').exec(function (err, analyses) {
                 if (err) {
                     console.error(err);
@@ -20,6 +20,8 @@ module.exports = function () {
                 }
                 res.json(analyses);
             });
-        }
-    };
+        }, function () {
+            res.status(401).json({error: 'You are not allowed to see this data'})
+        });
+    }
 };

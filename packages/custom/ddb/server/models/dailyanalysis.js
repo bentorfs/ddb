@@ -1,11 +1,7 @@
 'use strict';
 
-/**
- * Module dependencies.
- */
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
-
 
 var DailyAnalysisSchema = new Schema({
     user: {
@@ -13,67 +9,88 @@ var DailyAnalysisSchema = new Schema({
         ref: 'User'
     },
     date: {
-        type: Date
+        type: Date,
+        required: true
     },
     dayOfWeek: {
-        type: Number
+        type: Number,
+        required: true
     },
     // Daily alcohol content
     todAlcPilsner: {
-        type: Number
+        type: Number,
+        required: true
     },
     todAlcStrongbeer: {
-        type: Number
+        type: Number,
+        required: true
     },
     todAlcWine: {
-        type: Number
+        type: Number,
+        required: true
     },
     todAlcLiquor: {
-        type: Number
+        type: Number,
+        required: true
     },
     todAlc: {
-        type: Number
+        type: Number,
+        required: true
     },
 
     // Cumulative up till this day
     cumPilsner: {
-        type: Number
+        type: Number,
+        required: true
     },
     cumStrongbeer: {
-        type: Number
+        type: Number,
+        required: true
     },
     cumWine: {
-        type: Number
+        type: Number,
+        required: true
     },
     cumLiquor: {
-        type: Number
+        type: Number,
+        required: true
     },
     cumAlcPilsner: {
-        type: Number
+        type: Number,
+        required: true
     },
     cumAlcStrongbeer: {
-        type: Number
+        type: Number,
+        required: true
     },
     cumAlcWine: {
-        type: Number
+        type: Number,
+        required: true
     },
     cumAlcLiquor: {
-        type: Number
+        type: Number,
+        required: true
     },
     cumAlc: {
-        type: Number
+        type: Number,
+        required: true
     },
     // 7-Day Average
     spreadAverage: {
-        type: Number
+        type: Number,
+        required: true
     },
     groups: [
         {
             group: {
                 type: Schema.ObjectId,
-                ref: 'Group'
+                ref: 'Group',
+                required: true
             },
-            lonerFactor: Number
+            lonerFactor: {
+                type: Number,
+                required: true
+            }
         }
     ]
 });

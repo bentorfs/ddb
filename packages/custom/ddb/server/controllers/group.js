@@ -1,40 +1,42 @@
 'use strict';
 
-/**
- * Module dependencies.
- */
 var mongoose = require('mongoose'),
     Group = mongoose.model('Group'),
     GroupRanking = mongoose.model('GroupRanking'),
+    permissions = require('./../service/permissions'),
     _ = require('lodash'),
     moment = require('moment'),
     grouprankingGenerator = require('./../service/groupranking-generator');
 
-module.exports = function () {
-
-    return {
-        listGroups: function (req, res) {
-            Group.find({members: req.user._id}, function (err, groups) {
-                if (err) {
-                    console.error(err);
-                    return res.status(500).json({
-                        error: 'Cannot list the groups'
-                    });
-                }
-                res.json(groups);
-            });
-        },
-        createGroup: function (req, res) {
-            var group = new Group(req.body);
-            var upsertData = group.toObject();
-            group.members = [req.user._id];
-            group.creationDate = moment.utc().valueOf();
-            group.save(function(){
-                grouprankingGenerator.processGroup(group);
-            });
+module.exports = {
+    listGroups: function (req, res) {
+        Group.find({members: req.user._id}, function (err, groups) {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({
+                    error: 'Cannot list the groups'
+                });
+            }
+            res.json(groups);
+        });
+    },
+    createGroup: function (req, res) {
+        var group = new Group(req.body);
+        group.members = [req.user._id];
+        group.creationDate = moment.utc().valueOf();
+        group.save(function (err) {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({
+                    error: 'Could not create group'
+                });
+            }
+            grouprankingGenerator.processGroup(group);
             res.json(group);
-        },
-        getGroup: function (req, res) {
+        });
+    },
+    getGroup: function (req, res) {
+        permissions.ifGroupPermission(req.user, req.params.groupId, function () {
             Group.findById(req.params.groupId).populate('members', 'username').populate('invitations', 'username').exec(function (err, doc) {
                 if (err || !doc) {
                     console.error(err);
@@ -44,8 +46,12 @@ module.exports = function () {
                 }
                 res.json(doc);
             });
-        },
-        getRanking: function (req, res) {
+        }, function () {
+            res.status(401).json({error: 'You are not allowed to see this data'})
+        });
+    },
+    getRanking: function (req, res) {
+        permissions.ifGroupPermission(req.user, req.params.groupId, function () {
             GroupRanking.findOne({group: req.params.groupId})
                 .populate('rankingHighestBinge.user', 'username')
                 .populate('rankingConsistencyFactor.user', 'username')
@@ -75,53 +81,57 @@ module.exports = function () {
                     }
                     res.json(ranking);
                 });
-        },
-        listInvitations: function (req, res) {
-            Group.find({invitations: req.user._id}, function (err, groups) {
+        }, function () {
+            res.status(401).json({error: 'You are not allowed to see this data'})
+        });
+    },
+    listInvitations: function (req, res) {
+        Group.find({invitations: req.user._id}, function (err, groups) {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({
+                    error: 'Cannot list the invitations'
+                });
+            }
+            res.json(groups);
+        });
+    },
+    approveInvitation: function (req, res) {
+        Group.findOneAndUpdate({_id: req.params.groupId}, {
+            '$pull': {invitations: req.user._id},
+            '$addToSet': {members: req.user._id}
+        }, function (err) {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({
+                    error: 'Cannot accept the invitation'
+                });
+            }
+            res.json({});
+        });
+    },
+    leaveGroup: function (req, res) {
+        // This is both for leaving a group, and rejecting an invitation to it
+        Group.findOneAndUpdate(
+            {
+                _id: req.params.groupId
+            },
+            {
+                '$pull': {invitations: req.user._id, members: req.user._id}
+
+            },
+            function (err) {
                 if (err) {
                     console.error(err);
                     return res.status(500).json({
-                        error: 'Cannot list the invitations'
-                    });
-                }
-                res.json(groups);
-            });
-        },
-        approveInvitation: function (req, res) {
-            Group.findOneAndUpdate({_id: req.params.groupId}, {
-                '$pull': {invitations: req.user._id},
-                '$addToSet': {members: req.user._id}
-            }, function (err) {
-                if (err) {
-                    console.error(err);
-                    return res.status(500).json({
-                        error: 'Cannot accept the invitation'
+                        error: 'Cannot leave the group'
                     });
                 }
                 res.json({});
             });
-        },
-        leaveGroup: function (req, res) {
-            Group.findOneAndUpdate(
-                {
-                    _id: req.params.groupId
-                },
-                {
-                    '$pull': {invitations: req.user._id, members: req.user._id}
-
-                },
-                function (err) {
-                    if (err) {
-                        console.error(err);
-                        return res.status(500).json({
-                            error: 'Cannot reject the invitation'
-                        });
-                    }
-                    res.json({});
-                });
-        },
-        addInvitation: function (req, res) {
-            // TODO: check if current user is part of group
+    },
+    addInvitation: function (req, res) {
+        permissions.ifGroupPermission(req.user, req.params.groupId, function () {
             Group.findOneAndUpdate(
                 {
                     _id: req.params.groupId,
@@ -138,9 +148,12 @@ module.exports = function () {
                     }
                     res.json({});
                 });
-        },
-        removeInvitation: function (req, res) {
-            // TODO: check if current user is part of group
+        }, function () {
+            res.status(401).json({error: 'You are not allowed to perform this action'})
+        });
+    },
+    removeInvitation: function (req, res) {
+        permissions.ifGroupPermission(req.user, req.params.groupId, function () {
             Group.findOneAndUpdate(
                 {
                     _id: req.params.groupId
@@ -157,6 +170,8 @@ module.exports = function () {
                     }
                     res.json({});
                 });
-        }
-    };
+        }, function () {
+            res.status(401).json({error: 'You are not allowed to perform this action'})
+        });
+    }
 };

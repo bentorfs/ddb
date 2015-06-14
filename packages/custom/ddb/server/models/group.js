@@ -1,15 +1,13 @@
 'use strict';
 
-/**
- * Module dependencies.
- */
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 
 var GroupSchema = new Schema({
     name: {
-        type: String
+        type: String,
+        required: true
     },
     members: [
         {
@@ -24,7 +22,8 @@ var GroupSchema = new Schema({
         }
     ],
     creationDate: {
-        type: Date
+        type: Date,
+        required: true
     }
 });
 

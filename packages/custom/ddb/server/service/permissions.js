@@ -5,24 +5,58 @@ var mongoose = require('mongoose'),
     _ = require('lodash');
 
 module.exports = {
-    ifProfilePermission: function (user, profile, authorizedCallback, forbiddenCallback) {
-        if (JSON.stringify(profile.user) === JSON.stringify(user._id)) {
+    ifProfilePermission: function (requestUser, targetUserId, authorizedCallback, forbiddenCallback) {
+        if (targetUserId === requestUser._id) {
             authorizedCallback();
         } else {
             // See if there is a common group
-            Group.find({members: {'$all': [user._id, profile.user]}}, function (err, groups) {
+            Group.find({members: {'$all': [targetUserId, requestUser._id]}}, function (err, groups) {
                 if (err) {
                     console.error('Could not check profile permission, because of error: ' + err);
                     forbiddenCallback()
                 }
                 else if (!groups || groups.length === 0) {
-                    console.error('User ' + user.username + ' has no permission to see profile of user ' + profile.user);
+                    console.error('User ' + requestUser.username + ' has no permission to see profile of user ' + targetUserId);
                     forbiddenCallback()
                 } else {
                     authorizedCallback();
                 }
             });
         }
+    },
+    ifDailyAnalysisPermission: function (requestUser, targetUserId, authorizedCallback, forbiddenCallback) {
+        if (targetUserId === requestUser._id) {
+            authorizedCallback();
+        } else {
+            // See if there is a common group
+            Group.find({members: {'$all': [targetUserId, requestUser._id]}}, function (err, groups) {
+                if (err) {
+                    console.error('Could not check profile permission, because of error: ' + err);
+                    forbiddenCallback()
+                }
+                else if (!groups || groups.length === 0) {
+                    console.error('User ' + requestUser.username + ' has no permission to see profile of user ' + targetUserId);
+                    forbiddenCallback()
+                } else {
+                    authorizedCallback();
+                }
+            });
+        }
+    },
+    ifGroupPermission: function (requestUser, groupId, authorizedCallback, forbiddenCallback) {
+        // See if the user is a member
+        Group.find({'_id': groupId, members: requestUser._id}, function (err, groups) {
+            if (err) {
+                console.error('Could not check group permission, because of error: ' + err);
+                forbiddenCallback()
+            }
+            else if (!groups || groups.length === 0) {
+                console.error('User ' + requestUser.username + ' has no permission to see group ' + groupId);
+                forbiddenCallback()
+            } else {
+                authorizedCallback();
+            }
+        });
     }
 };
 

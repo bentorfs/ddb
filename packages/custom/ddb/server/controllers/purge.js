@@ -9,38 +9,35 @@ var mongoose = require('mongoose'),
     moment = require('moment');
 
 
-module.exports = function () {
-
-    return {
-        purgeUser: function (req, res) {
-            async.parallel(
-                {
-                    measurements: function (callback) {
-                        Measurement.remove({user: req.user}, function (err) {
-                            callback(err);
-                        });
-                    },
-                    games: function (callback) {
-                        DailyAnalysis.remove({user: req.user}, function (err) {
-                            callback(err);
-                        });
-                    },
-                    profile: function (callback) {
-                        Profile.remove({user: req.user}, function (err) {
-                            callback(err);
-                        });
-                    }
+module.exports = {
+    purgeUser: function (req, res) {
+        async.parallel(
+            {
+                measurements: function (callback) {
+                    Measurement.findAndModify({user: req.user}, {isDeleted: true}, function (err) {
+                        callback(err);
+                    });
                 },
-                function (error, result) {
-                    if (error) {
-                        console.error('Failed to purge: ' + error);
-                        return res.status(500).json({
-                            error: 'Could not purge data for user ' + JSON.stringify(req.user)
-                        });
-                    }
-                    res.json({});
+                dailyAnalysis: function (callback) {
+                    DailyAnalysis.remove({user: req.user}, function (err) {
+                        callback(err);
+                    });
+                },
+                profile: function (callback) {
+                    Profile.remove({user: req.user}, function (err) {
+                        callback(err);
+                    });
                 }
-            );
-        }
-    };
+            },
+            function (error, result) {
+                if (error) {
+                    console.error('Failed to purge: ' + error);
+                    return res.status(500).json({
+                        error: 'Could not purge data for user ' + JSON.stringify(req.user)
+                    });
+                }
+                res.json({});
+            }
+        );
+    }
 };

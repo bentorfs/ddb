@@ -1,8 +1,5 @@
 'use strict';
 
-/**
- * Module dependencies.
- */
 var mongoose = require('mongoose'),
     Profile = mongoose.model('Profile'),
     permissions = require('./../service/permissions'),
@@ -10,10 +7,9 @@ var mongoose = require('mongoose'),
     _ = require('lodash'),
     moment = require('moment');
 
-module.exports = function () {
-
-    return {
-        get: function (req, res) {
+module.exports = {
+    get: function (req, res) {
+        permissions.ifProfilePermission(req.user, req.params.userId, function () {
             Profile.findOne({user: req.params.userId}).exec(function (err, profile) {
                 if (err) {
                     console.error(err);
@@ -22,15 +18,13 @@ module.exports = function () {
                     });
                 }
                 if (profile) {
-                    permissions.ifProfilePermission(req.user, profile, function () {
-                        res.json([profile]);
-                    }, function () {
-                        res.status(401).json({error: 'You are not allowed to see this profile'})
-                    });
+                    res.json([profile]);
                 } else {
                     res.status(404).json({error: 'Profile does not exist'})
                 }
             });
-        }
-    };
+        }, function () {
+            res.status(401).json({error: 'You are not allowed to see this data'})
+        });
+    }
 };

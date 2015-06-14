@@ -9,7 +9,6 @@ angular.module('mean.ddb').controller('DdbMeasurementsController', ['$scope', 'G
         $scope.loadData = function () {
             Measurement.list().success(function (measurements) {
                 $scope.measurements = measurements;
-                $scope.selectedMeasurement = _.last($scope.measurements);
             });
         };
 
@@ -28,28 +27,28 @@ angular.module('mean.ddb').controller('DdbMeasurementsController', ['$scope', 'G
             }
         };
 
-        $scope.addPilsner = function (measurement, amount) {
+        $scope.addPilsner = function (amount) {
+            var measurement = _.last($scope.measurements);
             measurement.pilsner = measurement.pilsner + amount;
             $scope.save(measurement);
         };
 
-        $scope.addStrongbeer = function (measurement, amount) {
+        $scope.addStrongbeer = function (amount) {
+            var measurement = _.last($scope.measurements);
             measurement.strongbeer = measurement.strongbeer + amount;
             $scope.save(measurement);
         };
 
-        $scope.addWine = function (measurement, amount) {
+        $scope.addWine = function (amount) {
+            var measurement = _.last($scope.measurements);
             measurement.wine = measurement.wine + amount;
             $scope.save(measurement);
         };
 
-        $scope.addLiquor = function (measurement, amount) {
+        $scope.addLiquor = function (amount) {
+            var measurement = _.last($scope.measurements);
             measurement.liquor = measurement.liquor + amount;
             $scope.save(measurement);
-        };
-
-        $scope.selectMeasurement = function (measurement) {
-            $scope.selectedMeasurement = measurement;
         };
 
         $scope.isToday = function (date) {

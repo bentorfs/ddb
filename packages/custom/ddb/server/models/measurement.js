@@ -7,23 +7,33 @@ var mongoose = require('mongoose'),
 
 var MeasurementSchema = new Schema({
     date: {
-        type: Date
+        type: Date,
+        required: true
     },
     pilsner: {
-        type: Number
+        type: Number,
+        default: 0
     },
     strongbeer: {
-        type: Number
+        type: Number,
+        default: 0
     },
     wine: {
-        type: Number
+        type: Number,
+        default: 0
     },
     liquor: {
-        type: Number
+        type: Number,
+        default: 0
     },
     user: {
         type: Schema.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
     }
 });
 

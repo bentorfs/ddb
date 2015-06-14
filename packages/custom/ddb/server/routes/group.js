@@ -2,7 +2,7 @@
 
 module.exports = function (Group, app, auth) {
 
-    var group = require('../controllers/group')(Group);
+    var group = require('../controllers/group');
 
     app.route('/api/group')
         .get(auth.requiresLogin, group.listGroups)

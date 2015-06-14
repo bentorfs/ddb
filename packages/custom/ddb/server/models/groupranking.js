@@ -7,10 +7,12 @@ var mongoose = require('mongoose'),
 var GroupRankingSchema = new Schema({
     group: {
         type: Schema.ObjectId,
-        ref: 'Group'
+        ref: 'Group',
+        required: true
     },
     calculationDate: {
-        type: Date
+        type: Date,
+        required: true
     },
     rankingSuperCup: [
         {user: {type: Schema.ObjectId, ref: 'User'}, value: {type: Number}}

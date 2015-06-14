@@ -2,7 +2,7 @@
 
 module.exports = function (Measurements, app, auth) {
 
-    var measurements = require('../controllers/measurement')(Measurements);
+    var measurements = require('../controllers/measurement');
 
     app.route('/api/measurement')
         .get(auth.requiresLogin, measurements.all);

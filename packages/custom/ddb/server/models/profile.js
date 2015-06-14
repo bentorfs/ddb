@@ -1,8 +1,5 @@
 'use strict';
 
-/**
- * Module dependencies.
- */
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
@@ -10,7 +7,8 @@ var mongoose = require('mongoose'),
 var ProfileSchema = new Schema({
     user: {
         type: Schema.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
     },
     // Weekdays
     totAlcMon: {
