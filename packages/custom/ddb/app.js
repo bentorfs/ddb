@@ -13,7 +13,6 @@ Ddb.register(function (app, auth, database) {
     Ddb.routes(app, auth, database);
 
     Ddb.aggregateAsset('css', 'beerkeeper.css', {weight: -10});
-    Ddb.aggregateAsset('css', 'bootstrap.css', {weight: -10});
     Ddb.aggregateAsset('css', 'spinners.css', {weight: -10});
 
     Ddb.aggregateAsset('js', '../lib/lodash/lodash.min.js', {global: true, weight: -100});
