@@ -26,7 +26,8 @@
                             </tr>
                             <tr>
                                 <th>Heaviest binge</th>
-                                <td class="text-right">{{profile.highestBinge | number:2}} cl ({{profile.highestBingeDate |
+                                <td class="text-right">{{profile.highestBinge | number:2}} cl
+                                    ({{profile.highestBingeDate |
                                     date:'dd/MM/yy'}})
                                 </td>
                             </tr>
@@ -221,26 +222,28 @@
                         <h3 class="panel-title">Recent Activity</h3>
                     </div>
                     <div class="panel-body">
-                        <table class="table table-striped ">
-                            <thead>
-                            <th>Date</th>
-                            <th>Pilsner</th>
-                            <th>Strong Beer</th>
-                            <th>Wine</th>
-                            <th>Liquor</th>
-                            <th>Total Alcohol</th>
-                            </thead>
-                            <body>
-                            <tr ng-repeat="daily in dailyAnalyses | orderBy:'-date' | limitTo: 10">
-                                <th>{{daily.date | date:'EEE dd/MM/yy'}}</th>
-                                <td class="text-right">{{daily.todPilsner}} cl</td>
-                                <td class="text-right">{{daily.todStrongbeer}} cl</td>
-                                <td class="text-right">{{daily.todWine}} cl</td>
-                                <td class="text-right">{{daily.todLiquor}} cl</td>
-                                <td class="text-right"><strong>{{daily.todAlc | number:2}} cl</strong></td>
-                            </tr>
-                            </body>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-striped ">
+                                <thead>
+                                <th>Date</th>
+                                <th>Total Alcohol</th>
+                                <th>Pilsner</th>
+                                <th>Strong<br/>Beer</th>
+                                <th>Wine</th>
+                                <th>Liquor</th>
+                                </thead>
+                                <body>
+                                <tr ng-repeat="daily in dailyAnalyses | orderBy:'-date' | limitTo: 10">
+                                    <th>{{daily.date | date:'EEE dd/MM/yy'}}</th>
+                                    <td class="text-right"><em>{{daily.todAlc | number:2}} cl</em></td>
+                                    <td class="text-right">{{daily.todPilsner}} cl</td>
+                                    <td class="text-right">{{daily.todStrongbeer}} cl</td>
+                                    <td class="text-right">{{daily.todWine}} cl</td>
+                                    <td class="text-right">{{daily.todLiquor}} cl</td>
+                                </tr>
+                                </body>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
