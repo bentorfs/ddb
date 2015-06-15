@@ -6,7 +6,6 @@ var mongoose = require('mongoose'),
  * Generic require login routing middleware
  */
 exports.requiresLogin = function (req, res, next) {
-    console.info('Authorizing ' + req.user);
     if (!req.isAuthenticated()) {
         return res.status(401).send('User is not authorized');
     }

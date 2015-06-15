@@ -40,7 +40,7 @@ div.navbar-brand {
 }
 
 .navbar-collapse {
-    background-color: #000;
+    background-color: #000 !important;
 }
 
 .navbar {
@@ -62,11 +62,13 @@ div.navbar-brand {
     padding: 0 !important;
 }
 
-.page-header h1,
-.page-header h1 small {
+.page-header h1 {
     color: #FFF0E6;
     margin: 5px !important;
+}
 
+.page-header h1 small {
+    color: #FF6700;
 }
 
 tr.active {
@@ -85,15 +87,24 @@ tr.active {
 
 @media (max-width: 767px) {
     .navbar-nav .open .dropdown-menu {
-        background-color: #fff;
+        background-color: #fff !important;
     }
 }
 
-.beer-gradient {
+.jumbotron-gradient {
     background: linear-gradient(120deg, #000, #FF6700);
     color: #000 !important;
 }
 
+.jumbotron-gradient h2,
+.jumbotron-gradient label,
+.jumbotron-gradient p,
+.jumbotron-gradient a{
+    color: #FFF0E6 !important;
+}
+.jumbotron-gradient a {
+    text-decoration: underline;
+}
 
 .panel-danger,
 .panel-danger .panel-heading {
@@ -105,7 +116,7 @@ tr.active {
 
 .panel-primary,
 .panel-primary .panel-body {
-   background-color: rgb(169, 68, 0);
+    background-color: rgb(169, 68, 0);
 }
 
 .panel {

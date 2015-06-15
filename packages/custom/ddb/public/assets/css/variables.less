@@ -7,12 +7,12 @@
 @gray-dark: lighten(@gray-base, 5%);
 @gray: lighten(@gray-base, 10%);
 @gray-light: lighten(@gray-base, 20%);
-@gray-lighter: #FFFAF6;
+@gray-lighter: rgb(255, 240, 230);
 @brand-primary: rgb(255, 103, 0);
 @brand-success: rgb(255, 103, 0);
 @brand-info: rgb(255, 103, 0);
 @brand-warning: rgb(255, 103, 0);
-@brand-danger: #000;
+@brand-danger: rgb(0, 0, 0);
 
 //== Scaffolding
 
@@ -87,7 +87,7 @@
 @border-radius-small: 3px;
 
 //** Global color for active items (e.g., navs or dropdowns).
-@component-active-color: #fff;
+@component-active-color: rgb(255, 255, 255);
 
 //** Global background color for active items (e.g., navs or dropdowns).
 @component-active-bg: @brand-primary;
@@ -110,33 +110,33 @@
 @table-bg: rgba(0, 0, 0, 0);
 
 //** Background color used for `.table-striped`.
-@table-bg-accent: #FFF0E6;
+@table-bg-accent: #fff;
 
 //** Background color used for `.table-hover`.
 @table-bg-hover: @brand-warning;
 @table-bg-active: @table-bg-hover;
 
 //** Border color for table and cell borders.
-@table-border-color: #FFFAF6;
+@table-border-color: rgb(255, 250, 246);
 
 //== Buttons
 @btn-font-weight: normal;
 @btn-default-color: rgb(0, 0, 0);
-@btn-default-bg: #fff;
-@btn-default-border: #000;
+@btn-default-bg: rgb(255, 255, 255);
+@btn-default-border: rgb(0, 0, 0);
 @btn-primary-color: @brand-warning;
-@btn-primary-bg: #000;
+@btn-primary-bg: rgb(0, 0, 0);
 @btn-primary-border: @brand-warning;
 @btn-success-color: rgb(0, 0, 0);
 @btn-success-bg: @brand-success;
 @btn-success-border: rgb(231, 175, 7);
 @btn-info-color: rgb(255, 103, 0);
-@btn-info-bg: #fff;
+@btn-info-bg: rgb(255, 255, 255);
 @btn-info-border: rgb(231, 175, 7);
 @btn-warning-color: rgb(255, 255, 255);
 @btn-warning-bg: @brand-warning;
 @btn-warning-border: darken(@btn-warning-bg, 5%);
-@btn-danger-color: #fff;
+@btn-danger-color: rgb(255, 255, 255);
 @btn-danger-bg: @brand-danger;
 @btn-danger-border: darken(@btn-danger-bg, 5%);
 @btn-link-disabled-color: @gray-light;
@@ -144,7 +144,7 @@
 //== Forms
 
 //** `<input>` background color
-@input-bg: #FFFAF6;
+@input-bg: rgb(255, 250, 246);
 
 //** `<input disabled>` background color
 @input-bg-disabled: @gray-lighter;
@@ -327,9 +327,9 @@
 @navbar-default-toggle-icon-bar-bg: rgb(136, 136, 136);
 @navbar-default-toggle-border-color: rgb(221, 221, 221);
 @navbar-inverse-color: lighten(@gray-light, 15%);
-@navbar-inverse-bg: rgb(34, 34, 34);
+@navbar-inverse-bg: #000;
 @navbar-inverse-border: darken(@navbar-inverse-bg, 10%);
-@navbar-inverse-link-color: lighten(@gray-light, 15%);
+@navbar-inverse-link-color: @gray-lighter;
 @navbar-inverse-link-hover-color: rgb(255, 255, 255);
 @navbar-inverse-link-hover-bg: rgba(0, 0, 0, 0);
 @navbar-inverse-link-active-color: @navbar-inverse-link-hover-color;
@@ -391,7 +391,7 @@
 //== Jumbotron
 @jumbotron-padding: 30px;
 @jumbotron-color: inherit;
-@jumbotron-bg: #FFFAF6;
+@jumbotron-bg: rgb(255, 250, 246);
 @jumbotron-heading-color: inherit;
 @jumbotron-font-size: ceil((@font-size-base * 1.5));
 
@@ -402,11 +402,11 @@
 @state-info-text: @brand-info;
 @state-info-bg: @gray-lighter;
 @state-info-border: @brand-info;
-@state-warning-text: #fff;
+@state-warning-text: rgb(255, 255, 255);
 @state-warning-bg: @brand-warning;
 @state-warning-border: darken(spin(@state-warning-bg, -10), 5%);
 @state-danger-text: rgb(255, 255, 255);
-@state-danger-bg: #000;
+@state-danger-bg: rgb(0, 0, 0);
 @state-danger-border: darken(spin(@state-danger-bg, -10), 5%);
 
 //== Tooltips
@@ -462,7 +462,7 @@
 //== Labels
 
 //** Default label background color
-@label-default-bg: #000;
+@label-default-bg: rgb(0, 0, 0);
 
 //** Primary label background color
 @label-primary-bg: @brand-primary;
@@ -610,13 +610,13 @@
 
 //** Border color for elements within panels
 @panel-inner-border: rgb(0, 0, 0);
-@panel-footer-bg: FFFAF6;
+@panel-footer-bg: rgb(255, 250, 246);
 @panel-default-text: @gray-dark;
-@panel-default-border: #000;
-@panel-default-heading-bg: FFFAF6;
+@panel-default-border: rgb(0, 0, 0);
+@panel-default-heading-bg: rgb(255, 250, 246);
 @panel-primary-text: @brand-warning;
 @panel-primary-border: @brand-warning;
-@panel-primary-heading-bg: #000;
+@panel-primary-heading-bg: rgb(0, 0, 0);
 @panel-success-text: @state-success-text;
 @panel-success-border: @state-success-border;
 @panel-success-heading-bg: @state-success-bg;

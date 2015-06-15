@@ -22,7 +22,7 @@ module.exports = {
             async.parallel(
                 {
                     measurements: function (callback) {
-                        Measurement.find({user: user}).sort('date').exec(function (err, measurements) {
+                        Measurement.find({user: user, isDeleted: false}).sort('date').exec(function (err, measurements) {
                             if (err) {
                                 console.error('Could not load measurement to update daily analyses: ' + err);
                             }

@@ -1,13 +1,13 @@
 <div data-ng-controller="DdbHomeController">
 
-    <div class="jumbotron beer-gradient" data-ng-controller="LoginCtrl as login">
+    <div class="jumbotron jumbotron-gradient" data-ng-controller="LoginCtrl as login">
         <section class="container" style="background-color: transparent">
 
             <div clas="row">
                 <div class="col-md-6 hidden-xs">
                     <object type="image/svg+xml" data="ddb/assets/img/logo.svg" style="width: 30vw"/>
                 </div>
-                <div class="col-md-6 text-right">
+                <div class="col-md-4 col-md-offset-2">
                     <div class="alert alert-danger animated fadeIn" ng-show="login.loginError">
                         {{login.loginError}}
                     </div>
@@ -27,12 +27,13 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <button type="submit" class="btn btn-warning">Login</button>
                             </div>
-                            <div class="col-md-6 text-right">
-                                <p>Not registered yet?
-                                    <a ui-sref='auth.register'>Sign up</a>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p>Not registered yet? <a ui-sref='auth.register'>Sign up now</a>
                                 </p>
                             </div>
                         </div>

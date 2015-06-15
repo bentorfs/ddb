@@ -4,7 +4,7 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
-
+//mongoose.set('debug', true);
 var MeasurementSchema = new Schema({
     date: {
         type: Date,
@@ -36,6 +36,6 @@ var MeasurementSchema = new Schema({
         default: false
     }
 });
-
+MeasurementSchema.index({date: 1, user: 1, isDeleted: 1}, {unique: true});
 
 mongoose.model('Measurement', MeasurementSchema);
