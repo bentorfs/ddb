@@ -1,18 +1,20 @@
 body {
-    background-color: #FFF4E6;
+    /*background-color: #fff !important;*/
+    background: linear-gradient(120deg, #000, #FF6700);
+    /*background: linear-gradient(120deg, #fff, #FF6700);*/
+}
+
+.container {
+    /*opacity: 0.9;*/
+    /*background: linear-gradient(120deg, #fff, #FF6700);*/
+    background-color: rgba(0, 0, 0, 0.5)
 }
 
 div.navbar-brand {
-    background-color: #222 !important;
+    background-color: #000 !important;
     height: 53px !important;
     font-size: 14pt;
 }
-
-/*a.logo {*/
-    /*color: #FFA539;*/
-    /*text-decoration: none;*/
-    /*font-weight: bold;*/
-/*}*/
 
 .navbar-nav {
     margin: 0;
@@ -24,8 +26,8 @@ div.navbar-brand {
 }
 
 .navbar-nav > li > a {
-    color: #fff !important;
-    background-color: #222 !important;
+    color: #FFF0E6 !important;
+    background-color: #000 !important;
     border-bottom: 3px solid black !important;
 }
 
@@ -35,6 +37,10 @@ div.navbar-brand {
 
 .navbar-nav > li > a.active {
     border-bottom: 3px solid #FF7400 !important;
+}
+
+.navbar-collapse {
+    background-color: #000;
 }
 
 .navbar {
@@ -50,7 +56,17 @@ div.navbar-brand {
 }
 
 .page-header {
-    border-bottom: 1px solid #eee !important;
+    /*border: 1px solid #FF6700 !important;*/
+    border-bottom: 3px solid #FF6700 !important;
+    /*background-color: #000;*/
+    padding: 0 !important;
+}
+
+.page-header h1,
+.page-header h1 small {
+    color: #FFF0E6;
+    margin: 5px !important;
+
 }
 
 tr.active {
@@ -74,36 +90,24 @@ tr.active {
 }
 
 .beer-gradient {
-    background: linear-gradient(120deg, #FFD8AA, #FFD8AA);
+    background: linear-gradient(120deg, #000, #FF6700);
     color: #000 !important;
 }
 
-.beer-gradient input {
-    background-color: #FFEFDC;
-    color: #000;
-    border-color: #FFA539;
+
+.panel-danger,
+.panel-danger .panel-heading {
+    border-top: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+    border-bottom: 3px solid #FF6700 !important;
 }
 
-.beer-gradient a {
-    color: #874E00;
+.panel-primary,
+.panel-primary .panel-body {
+   background-color: rgb(169, 68, 0);
 }
 
-.beer-gradient button {
-    color: #000 !important;
-    border-color: #FFB45B;
-    background-color: #FFEFDC;
-    font-weight: bold;
-}
-
-.form-control::-webkit-input-placeholder {
-    color: #B06600;
-}
-.form-control:-moz-placeholder {
-    color: #B06600;
-}
-.form-control::-moz-placeholder {
-    color: #B06600;
-}
-.form-control:-ms-input-placeholder {
-    color: #B06600;
+.panel {
+    background-color: #FFF0E6 !important;
 }

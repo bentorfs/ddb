@@ -1,7 +1,7 @@
 <div data-ng-controller="RegisterCtrl as reg">
 
     <div class="jumbotron beer-gradient">
-        <section class="container">
+        <section class="container text-right" style="background-color: transparent">
             <div ng-repeat="error in reg.registerError">
                 <div class="alert alert-danger animated fadeIn">{{error.msg}}</div>
             </div>
@@ -26,7 +26,7 @@
 
                 <div class="form-group">
                     <label for="username">Display Name</label>
-                    <input required id="username" type="text" name="username" placeholder="Username"
+                    <input required id="username" type="text" name="username" placeholder="Display name"
                            ng-model="reg.user.username" class="form-control">
                 </div>
 

@@ -1,15 +1,13 @@
 <div data-ng-controller="LoginCtrl as login">
 
     <div class="jumbotron beer-gradient">
-        <section class="container">
+        <section class="container" style="background-color: transparent">
 
             <div clas="row">
-                <div class="col-md-6">
-                    <h1>Beerkeeper</h1>
-
-                    <p>The social drinking network</p>
+                <div class="col-md-6 hidden-xs">
+                    <object type="image/svg+xml" data="ddb/assets/img/logo.svg" style="width: 30vw"/>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 text-right">
                     <div class="alert alert-danger animated fadeIn" ng-show="login.loginError">
                         {{login.loginError}}
                     </div>

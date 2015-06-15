@@ -1,8 +1,44 @@
 <div data-ng-controller="DdbHomeController">
 
-    <div class="jumbotron beer-gradient">
-        <section class="container">
-            <object type="image/svg+xml" data="ddb/assets/img/logo.svg" style="width: 30vw"/>
+    <div class="jumbotron beer-gradient" data-ng-controller="LoginCtrl as login">
+        <section class="container" style="background-color: transparent">
+
+            <div clas="row">
+                <div class="col-md-6 hidden-xs">
+                    <object type="image/svg+xml" data="ddb/assets/img/logo.svg" style="width: 30vw"/>
+                </div>
+                <div class="col-md-6 text-right">
+                    <div class="alert alert-danger animated fadeIn" ng-show="login.loginError">
+                        {{login.loginError}}
+                    </div>
+                    <h2>Login</h2>
+
+                    <form id="login_form" ng-submit="login.login()">
+                        <div class="form-group">
+                            <label for="email_block">E-mail address</label>
+                            <input required id="email_block" type="email" name="email" placeholder="E-mail Address"
+                                   ng-model="login.user.email" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="password_block">Password</label>
+                            <input required id="password_block" name="password" type="{{login.input.type}}"
+                                   placeholder="{{login.input.placeholder}}" ng-model="login.user.password"
+                                   class="form-control">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-warning">Login</button>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <p>Not registered yet?
+                                    <a ui-sref='auth.register'>Sign up</a>
+                                </p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
         </section>
     </div>
