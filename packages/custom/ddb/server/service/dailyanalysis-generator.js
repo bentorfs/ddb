@@ -81,6 +81,11 @@ function getDailyAnalyses(measurements, user) {
             date: measurement.date,
             dayOfWeek: moment(measurement.date).day(),
 
+            todPilsner: measurement.pilsner,
+            todStrongbeer: measurement.strongbeer,
+            todWine: measurement.wine,
+            todLiquor: measurement.liquor,
+
             todAlcPilsner: measurement.pilsner * 0.055,
             todAlcStrongbeer: measurement.strongbeer * 0.075,
             todAlcWine: measurement.wine * 0.125,

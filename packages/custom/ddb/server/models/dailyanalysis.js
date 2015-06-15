@@ -16,6 +16,23 @@ var DailyAnalysisSchema = new Schema({
         type: Number,
         required: true
     },
+    // Daily drinks
+    todPilsner: {
+        type: Number,
+        required: true
+    },
+    todStrongbeer: {
+        type: Number,
+        required: true
+    },
+    todWine: {
+        type: Number,
+        required: true
+    },
+    todLiquor: {
+        type: Number,
+        required: true
+    },
     // Daily alcohol content
     todAlcPilsner: {
         type: Number,
