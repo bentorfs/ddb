@@ -30,11 +30,11 @@ div.navbar-brand {
 }
 
 .navbar-nav > li > a:hover {
-    border-bottom: 3px solid #F19700 !important;
+    border-bottom: 3px solid #FF7400 !important;
 }
 
 .navbar-nav > li > a.active {
-    border-bottom: 3px solid #F19700 !important;
+    border-bottom: 3px solid #FF7400 !important;
 }
 
 .navbar {

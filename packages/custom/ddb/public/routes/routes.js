@@ -36,6 +36,3 @@ angular.module('mean.ddb')
         $viewPathProvider.override('users/views/register.html', 'ddb/views/register.html');
         $viewPathProvider.override('users/views/index.html', 'ddb/views/authenticationparent.html');
     }]);
-console.log(Chart.defaults.global);
-Chart.defaults.global.colours = ['#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000']
-console.log(Chart.defaults.global.colours);

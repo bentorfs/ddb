@@ -2,6 +2,7 @@
 
 angular.module('mean.ddb').factory('Profile', ['$http',
     function ($http) {
+
         var dao = {};
 
         dao.get = function (userId) {
