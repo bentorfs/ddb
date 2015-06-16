@@ -28,7 +28,8 @@ module.exports = function (MeanUser, app, auth, database, passport) {
         .post(users.resetpassword);
 
     // Setting up the userId param
-    app.param('userId', users.user);
+    // ben: removing this because it does not work properly if the user is not logged in + why the hell is it here anyway?
+    //app.param('userId', users.user);
 
     // AngularJS route to check for authentication
     app.route('/api/loggedin')
