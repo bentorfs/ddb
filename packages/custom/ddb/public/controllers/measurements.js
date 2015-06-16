@@ -1,6 +1,5 @@
 'use strict';
 
-/* jshint -W098 */
 angular.module('mean.ddb').controller('DdbMeasurementsController', ['$scope', 'Global', 'Measurement', 'MeanUser',
     function ($scope, Global, Measurement, MeanUser) {
 

@@ -20,6 +20,7 @@ module.exports = {
                 error: 'Cannot add measurements on this date'
             });
         }
+        upsertData.date = dateToUpdate.valueOf();
 
         Measurement.findOneAndUpdate({date: dateToUpdate.valueOf(), user: req.user, isDeleted: false}, upsertData, {
             upsert: true,
@@ -31,7 +32,7 @@ module.exports = {
                     error: 'Cannot update the measurement'
                 });
             }
-            res.send(updatedMeasurement);
+            res.json(updatedMeasurement);
             rebuild.rebuildUser(req.user);
         });
     },
