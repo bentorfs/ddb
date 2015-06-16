@@ -16,11 +16,15 @@ module.exports = {
     rebuildEverything: function () {
         rebuildAllDailyAnalyses();
     },
-    rebuildUser: function (user) {
+    rebuildUser: function (user, callback) {
         dailyanalysisGenerator.processUser(user, function () {
             profileGenerator.processUser(user, function () {
                 dailygroupanalysisGenerator.processUser(user, function () {
-                    grouprankingGenerator.processUser(user);
+                    grouprankingGenerator.processUser(user, function () {
+                        if (callback) {
+                            callback();
+                        }
+                    });
                 });
             });
         });

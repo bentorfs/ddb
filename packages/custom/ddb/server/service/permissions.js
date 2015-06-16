@@ -31,11 +31,11 @@ module.exports = {
             // See if there is a common group
             Group.find({members: {'$all': [targetUserId, requestUser._id]}}, function (err, groups) {
                 if (err) {
-                    console.error('Could not check profile permission, because of error: ' + err);
+                    console.error('Could not check daily analyses permission, because of error: ' + err);
                     forbiddenCallback()
                 }
                 else if (!groups || groups.length === 0) {
-                    console.error('User ' + requestUser.username + ' has no permission to see profile of user ' + targetUserId);
+                    console.error('User ' + requestUser.username + ' has no permission to see daily analyses of user ' + targetUserId);
                     forbiddenCallback()
                 } else {
                     authorizedCallback();

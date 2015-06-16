@@ -8,7 +8,7 @@ var expect = require('expect.js'),
     _ = require('lodash'),
     moment = require('moment');
 
-var _user1, _user2;
+var _user1;
 
 describe('<Unit Test>', function () {
     describe('Measurements Controller:', function () {
@@ -27,21 +27,8 @@ describe('<Unit Test>', function () {
                 _user1 = new User(user1);
                 _user1.save(function (err) {
                     expect(err).to.be(null);
+                    done();
                 });
-
-                var user2 = {
-                    name: 'Full name',
-                    email: 'test2@test.com',
-                    username: 'test2',
-                    password: 'password',
-                    provider: 'local'
-                };
-                _user2 = new User(user2);
-                _user2.save(function (err) {
-                    expect(err).to.be(null);
-                });
-
-                done();
             });
         });
 
@@ -143,7 +130,7 @@ describe('<Unit Test>', function () {
                 };
                 var res = {
                     status: function (code) {
-                        expect(code).to.eql(403);
+                        expect(code).to.eql(400);
                         done();
                     },
                     json: function (data) {
@@ -167,7 +154,7 @@ describe('<Unit Test>', function () {
                 };
                 var res = {
                     status: function (code) {
-                        expect(code).to.eql(403);
+                        expect(code).to.eql(400);
                         done();
                     },
                     json: function (data) {

@@ -6,12 +6,14 @@ var mongoose = require('mongoose'),
 
 var DailyGroupAnalysisSchema = new Schema({
 
-    _id: {
-        date: Date,
-        group: {
-            type: Schema.ObjectId,
-            ref: 'Group'
-        }
+    date: {
+        type: Date,
+        required: true
+    },
+    group: {
+        type: Schema.ObjectId,
+        ref: 'Group',
+        required: true
     },
     todAvgAlc: {
         type: Number,

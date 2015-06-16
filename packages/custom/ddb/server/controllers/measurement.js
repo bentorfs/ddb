@@ -16,7 +16,7 @@ module.exports = {
 
         var dateToUpdate = moment.utc(measurement.date).startOf('day');
         if (dateToUpdate < moment.utc().subtract(60, 'days') || dateToUpdate > moment.utc().add(3, 'days')) {
-            res.status(403);
+            res.status(400);
             res.json({
                 error: 'Cannot add measurements on this date'
             });
@@ -34,8 +34,9 @@ module.exports = {
                     error: 'Cannot update the measurement'
                 });
             }
-            res.json(updatedMeasurement);
-            rebuild.rebuildUser(req.user);
+            rebuild.rebuildUser(req.user, function () {
+                res.json(updatedMeasurement);
+            });
         });
     },
     all: function (req, res) {
@@ -83,11 +84,12 @@ module.exports = {
                                 error: 'Cannot list the measurements'
                             });
                         } else {
-                            res.json(measurements);
+                            rebuild.rebuildUser(req.user, function () {
+                                res.json(measurements);
+                            });
                         }
                     });
                 });
-                rebuild.rebuildUser(req.user);
             } else {
                 res.json(measurements);
             }

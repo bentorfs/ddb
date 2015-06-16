@@ -23,7 +23,7 @@ module.exports = {
     createGroup: function (req, res) {
         var group = new Group(req.body);
         if (!group.name) {
-            res.status(403);
+            res.status(400);
             res.json({
                 error: 'Invalid group data'
             });
@@ -114,7 +114,7 @@ module.exports = {
                     error: 'Cannot accept the invitation'
                 });
             }
-            res.json({});
+            res.status(200).end();
         });
     },
     leaveGroup: function (req, res) {
@@ -134,7 +134,7 @@ module.exports = {
                         error: 'Cannot leave the group'
                     });
                 }
-                res.json({});
+                res.status(200).end();
             });
     },
     addInvitation: function (req, res) {
@@ -153,7 +153,7 @@ module.exports = {
                             error: 'Cannot add the invitation'
                         });
                     }
-                    res.json({});
+                    res.status(200).end();
                 });
         }, function () {
             res.status(401).json({error: 'You are not allowed to perform this action'})
@@ -175,7 +175,7 @@ module.exports = {
                             error: 'Cannot reject the invitation'
                         });
                     }
-                    res.json({});
+                    res.status(200).end();
                 });
         }, function () {
             res.status(401).json({error: 'You are not allowed to perform this action'})

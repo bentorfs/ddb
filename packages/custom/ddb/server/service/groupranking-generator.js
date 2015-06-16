@@ -14,19 +14,24 @@ module.exports = {
     processGroup: processGroup
 };
 
-function processUser(user) {
+function processUser(user, callback) {
     Group.find({members: user}).exec(function (err, groups) {
         if (err) {
             console.error('Could not load groups of user: ' + err);
             return;
         }
-        _.forEach(groups, function (group) {
-            processGroup(group);
-        });
+        if (groups.length > 0) {
+            var counter = _.after(groups.length, callback);
+            _.forEach(groups, function (group) {
+                processGroup(group, counter);
+            });
+        } else {
+            callback();
+        }
     });
 }
 
-function processGroup(group) {
+function processGroup(group, callback) {
     Profile.find({user: {'$in': group.members}}).populate('user').exec(function (err, profiles) {
         if (err) {
             console.error('Could not load profiles of group members: ' + err);
@@ -45,6 +50,9 @@ function processGroup(group) {
                 console.error('Could not update group ranking: ' + err);
             }
             console.info('Updated rankings for group ' + group.name);
+            if (callback) {
+                callback();
+            }
         });
     });
 }

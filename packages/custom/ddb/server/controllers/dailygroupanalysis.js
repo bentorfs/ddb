@@ -2,7 +2,7 @@
 
 var mongoose = require('mongoose'),
     User = mongoose.model('User'),
-    DailyAnalysis = mongoose.model('DailyAnalysis'),
+    DailyGroupAnalysis = mongoose.model('DailyGroupAnalysis'),
     ObjectId = mongoose.Types.ObjectId,
     permissions = require('./../service/permissions'),
     _ = require('lodash'),
@@ -10,15 +10,15 @@ var mongoose = require('mongoose'),
 
 module.exports = {
     all: function (req, res) {
-        permissions.ifDailyAnalysisPermission(req.user, req.params.userId, function () {
-            DailyAnalysis.find({user: req.params.userId}).sort('date').exec(function (err, analyses) {
+        permissions.ifGroupPermission(req.user, req.params.groupId, function () {
+            DailyGroupAnalysis.find({'group': req.params.groupId}).sort('date').exec(function (err, groupanalyses) {
                 if (err) {
                     console.error(err);
                     return res.status(500).json({
-                        error: 'Cannot list the daily analysis'
+                        error: 'Cannot list the daily group analysis'
                     });
                 }
-                res.json(analyses);
+                res.json(groupanalyses);
             });
         }, function () {
             res.status(401).json({error: 'You are not allowed to see this data'})

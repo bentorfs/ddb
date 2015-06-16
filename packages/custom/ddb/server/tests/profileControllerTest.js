@@ -1,0 +1,155 @@
+'use strict';
+
+var expect = require('expect.js'),
+    mongoose = require('mongoose'),
+    User = mongoose.model('User'),
+    Measurement = mongoose.model('Measurement'),
+    measurementCtrl = require('../controllers/measurement'),
+    dailyAnalysisCtrl = require('../controllers/dailyanalysis'),
+    profileCtrl = require('../controllers/profile'),
+    _ = require('lodash'),
+    moment = require('moment');
+
+var _user1;
+
+function insertMeasurement(userId, measurement, callback) {
+    var req = {
+        user: {
+            _id: userId
+        },
+        body: measurement
+    };
+    var res = {
+        status: function (code) {
+            expect(code).to.not.eql(500);
+        },
+        json: function (data) {
+            callback();
+        }
+    };
+    measurementCtrl.update(req, res);
+}
+
+describe('<Unit Test>', function () {
+    describe('Daily Analysis Generator:', function () {
+
+        beforeEach(function (done) {
+            User.find({}).remove(function (err) {
+                expect(err).to.be(null);
+                var user1 = {
+                    name: 'Full name',
+                    email: 'test1@test.com',
+                    username: 'test1',
+                    password: 'password',
+                    provider: 'local'
+                };
+                _user1 = new User(user1);
+                _user1.save(function (err) {
+                    expect(err).to.be(null);
+                });
+                done();
+            });
+
+        });
+
+        describe('Profile generation', function () {
+            it('Generates one profile for every user', function (done) {
+                var afterInsert = _.after(2, function () {
+
+                    var req = {
+                        user: {
+                            _id: _user1._id
+                        },
+                        params: {
+                            userId: _user1._id
+                        }
+
+                    };
+                    var res = {
+                        status: function (code) {
+                            expect(code).to.eql(200);
+                        },
+                        json: function (data) {
+                            expect(data.length).to.eql(1);
+                            expect(data[0].highestBinge).to.eql(137);
+                            expect(data[0].drinkingDayRate).to.eql(1);
+                            expect(data[0].drinkingDays).to.eql(2);
+                            expect(data[0].activeDays).to.eql(2);
+                            expect(Math.round(data[0].consistencyFactor * 100) / 100).to.eql(0.33);
+                            expect(data[0].avgAlc).to.eql(102.75);
+                            expect(data[0].avgAlcLiquor).to.eql(64.5);
+                            expect(data[0].avgAlcWine).to.eql(18.75);
+                            expect(data[0].avgAlcStrongbeer).to.eql(11.25);
+                            expect(data[0].avgAlcPilsner).to.eql(8.25);
+                            expect(data[0].avgLiquor).to.eql(150);
+                            expect(data[0].avgWine).to.eql(150);
+                            expect(data[0].avgStrongbeer).to.eql(150);
+                            expect(data[0].avgPilsner).to.eql(150);
+                            expect(data[0].totAlc).to.eql(205.5);
+                            expect(data[0].totAlcLiquor).to.eql(129);
+                            expect(data[0].totAlcWine).to.eql(37.5);
+                            expect(data[0].totAlcStrongbeer).to.eql(22.5);
+                            expect(data[0].totAlcPilsner).to.eql(16.5);
+                            expect(data[0].totLiquor).to.eql(300);
+                            expect(data[0].totWine).to.eql(300);
+                            expect(data[0].totStrongbeer).to.eql(300);
+                            expect(data[0].totPilsner).to.eql(300);
+                            done();
+                        }
+                    };
+                    profileCtrl.get(req, res);
+
+                });
+                // Two measurements
+                insertMeasurement(_user1._id, {
+                    pilsner: 100,
+                    strongbeer: 100,
+                    wine: 100,
+                    liquor: 100,
+                    date: moment.utc().valueOf()
+                }, afterInsert);
+
+                insertMeasurement(_user1._id, {
+                    pilsner: 200,
+                    strongbeer: 200,
+                    wine: 200,
+                    liquor: 200,
+                    date: moment.utc().subtract(1, 'days').valueOf()
+                }, afterInsert);
+            });
+
+            it('Will not retrieve the profile if the users do not share a group', function (done) {
+                var user2 = {
+                    name: 'Full name',
+                    email: 'test2@test.com',
+                    username: 'test2',
+                    password: 'password',
+                    provider: 'local'
+                };
+                var _user2 = new User(user2);
+                _user2.save(function (err) {
+                    expect(err).to.be(null);
+
+                    var req = {
+                        user: {
+                            _id: _user2._id
+                        },
+                        params: {
+                            userId: _user1._id
+                        }
+
+                    };
+                    var res = {
+                        status: function (code) {
+                            expect(code).to.eql(401);
+                            done();
+                        }
+                    };
+                    profileCtrl.get(req, res);
+                });
+
+            });
+        });
+
+    });
+});

@@ -15,7 +15,7 @@ module.exports = {
                 console.error(err);
             }
             rebuild.rebuildUser(req.user);
-            res.json({});
+            res.status(200).end();
         });
     }
 };
