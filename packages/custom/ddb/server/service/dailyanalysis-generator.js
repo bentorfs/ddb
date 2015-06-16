@@ -151,14 +151,14 @@ function calculateLonerFactor(dailyAnalyses, dailyGroupAnalyses) {
     _.forEach(dailyAnalyses, function (dailyAnalysis) {
 
         var groupAnalysesForThisDay = _.filter(dailyGroupAnalyses, function (groupAnalysis) {
-            var result = _.isEqual(dailyAnalysis.date, groupAnalysis._id.date);
+            var result = _.isEqual(dailyAnalysis.date, groupAnalysis.date);
             return result;
         });
 
         _.forEach(groupAnalysesForThisDay, function (groupAnalysis) {
             dailyAnalysis.groups.push(
                 {
-                    group: groupAnalysis._id.group,
+                    group: groupAnalysis.group,
                     lonerFactor: dailyAnalysis.todAlc - groupAnalysis.todAvgAlc
                 }
             );
