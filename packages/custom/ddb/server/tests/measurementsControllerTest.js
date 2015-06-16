@@ -131,6 +131,54 @@ describe('<Unit Test>', function () {
                 measurementCtrl.update(req, res);
             });
 
+            it('It is not possible to create measurements more than 60 days in the past', function (done) {
+                var testDate = moment.utc().subtract(65, 'days');
+                var req = {
+                    user: {
+                        _id: _user1._id
+                    },
+                    body: {
+                        date: testDate.valueOf()
+                    }
+                };
+                var res = {
+                    status: function (code) {
+                        expect(code).to.eql(403);
+                        done();
+                    },
+                    json: function (data) {
+                        expect(data).to.eql({
+                            error: 'Cannot add measurements on this date'
+                        });
+                    }
+                };
+                measurementCtrl.update(req, res);
+            });
+
+            it('It is not possible to create measurements more than 3 days in the future', function (done) {
+                var testDate = moment.utc().add(4, 'days');
+                var req = {
+                    user: {
+                        _id: _user1._id
+                    },
+                    body: {
+                        date: testDate.valueOf()
+                    }
+                };
+                var res = {
+                    status: function (code) {
+                        expect(code).to.eql(403);
+                        done();
+                    },
+                    json: function (data) {
+                        expect(data).to.eql({
+                            error: 'Cannot add measurements on this date'
+                        });
+                    }
+                };
+                measurementCtrl.update(req, res);
+            });
+
         });
 
     });

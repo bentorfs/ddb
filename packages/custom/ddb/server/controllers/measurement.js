@@ -15,10 +15,12 @@ module.exports = {
         delete upsertData.__v;
 
         var dateToUpdate = moment.utc(measurement.date).startOf('day');
-        if (dateToUpdate < moment.utc('2015-01-01 00:00:00', 'YYYY-MM-DD hh:mm:ss')) {
-            return res.status(403).json({
+        if (dateToUpdate < moment.utc().subtract(60, 'days') || dateToUpdate > moment.utc().add(3, 'days')) {
+            res.status(403);
+            res.json({
                 error: 'Cannot add measurements on this date'
             });
+            return;
         }
         upsertData.date = dateToUpdate.valueOf();
 

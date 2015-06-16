@@ -22,6 +22,13 @@ module.exports = {
     },
     createGroup: function (req, res) {
         var group = new Group(req.body);
+        if (!group.name) {
+            res.status(403);
+            res.json({
+                error: 'Invalid group data'
+            });
+            return;
+        }
         group.members = [req.user._id];
         group.creationDate = moment.utc().valueOf();
         group.save(function (err) {
