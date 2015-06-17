@@ -13,12 +13,12 @@ var DrinkSchema = new Schema({
         type: Number,
         default: 0
     },
-    categories: [{
+   /* categories: [{
         type: String
     }],
     tags: [{
         type: String
-    }],
+    }],*/
     brewery: {
         type: String
     },

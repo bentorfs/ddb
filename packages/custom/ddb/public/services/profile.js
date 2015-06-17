@@ -5,9 +5,16 @@ angular.module('mean.ddb').factory('Profile', ['$http',
 
         var dao = {};
 
-        dao.get = function (userId) {
+        dao.getUser = function (userId) {
             return $http({
                 url: '/api/profile/' + userId,
+                method: 'GET'
+            });
+        };
+
+        dao.getFrequentDrinks = function (userId) {
+            return $http({
+                url: '/api/profile/' + userId + '/drinks/frequent',
                 method: 'GET'
             });
         };

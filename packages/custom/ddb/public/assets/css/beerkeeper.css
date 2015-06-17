@@ -1,12 +1,8 @@
 body {
-    /*background-color: #fff !important;*/
     background: linear-gradient(120deg, #000, #FF6700);
-    /*background: linear-gradient(120deg, #fff, #FF6700);*/
 }
 
 .container {
-    /*opacity: 0.9;*/
-    /*background: linear-gradient(120deg, #fff, #FF6700);*/
     background-color: rgba(0, 0, 0, 0.5)
 }
 
@@ -56,9 +52,7 @@ div.navbar-brand {
 }
 
 .page-header {
-    /*border: 1px solid #FF6700 !important;*/
     border-bottom: 3px solid #FF6700 !important;
-    /*background-color: #000;*/
     padding: 0 !important;
 }
 
@@ -91,6 +85,16 @@ tr.active {
     }
 }
 
+@media (max-width: 992px) {
+    .col-border {
+        border-right: 0 !important;
+    }
+}
+
+.col-border {
+    border-right: 1px dotted #FF6700;
+}
+
 .jumbotron-gradient {
     background: linear-gradient(120deg, #000, #FF6700);
     color: #000 !important;
@@ -99,9 +103,10 @@ tr.active {
 .jumbotron-gradient h2,
 .jumbotron-gradient label,
 .jumbotron-gradient p,
-.jumbotron-gradient a{
+.jumbotron-gradient a {
     color: #FFF0E6 !important;
 }
+
 .jumbotron-gradient a {
     text-decoration: underline;
 }
@@ -117,8 +122,29 @@ tr.active {
 .panel-primary,
 .panel-primary .panel-body {
     background-color: rgb(169, 68, 0);
+    color: #FFF0E6;
+}
+
+.panel-primary .panel-body a {
+    color: #fff;
+    font-weight: bold;
+}
+
+.panel-primary .panel-body h1, h2, h3, h4, h5 {
+    color: #FFF0E6 !important;
 }
 
 .panel {
     background-color: #FFF0E6 !important;
+}
+
+.btn-danger.active,
+.btn-danger:hover {
+    background-color: #ff6700;
+    color: #fff;
+    border: 1px solid #ff6700;
+}
+
+.btn-collection button {
+    margin: 5px;
 }

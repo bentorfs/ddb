@@ -206,6 +206,10 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
             return deferred.promise;
         };
 
+        MeanUserKlass.prototype.get = function () {
+            return this.user;
+        };
+
         //Temporary code
         var tokenWatch = $rootScope.$watch(function () {
             return $cookies.get('token');

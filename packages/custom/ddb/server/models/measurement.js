@@ -10,7 +10,7 @@ var MeasurementSchema = new Schema({
         type: Date,
         required: true
     },
-    drinks: [
+    consumptions: [
         {
             drink: {
                 type: Schema.ObjectId,

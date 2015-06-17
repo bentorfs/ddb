@@ -4,13 +4,15 @@ var expect = require('expect.js'),
     mongoose = require('mongoose'),
     User = mongoose.model('User'),
     Measurement = mongoose.model('Measurement'),
+    Drink = mongoose.model('Drink'),
     measurementCtrl = require('../controllers/measurement'),
-    dailyAnalysisCtrl = require('../controllers/dailyanalysis'),
+    drinkCtrl = require('../controllers/drink'),
     profileCtrl = require('../controllers/profile'),
     _ = require('lodash'),
     moment = require('moment');
 
 var _user1;
+var _drink1, _drink2;
 
 function insertMeasurement(userId, measurement, callback) {
     var req = {
@@ -34,6 +36,8 @@ describe('<Unit Test>', function () {
     describe('Daily Analysis Generator:', function () {
 
         beforeEach(function (done) {
+            var counter = _.after(3, done);
+            // Add a user and two drinks
             User.find({}).remove(function (err) {
                 expect(err).to.be(null);
                 var user1 = {
@@ -46,16 +50,49 @@ describe('<Unit Test>', function () {
                 _user1 = new User(user1);
                 _user1.save(function (err) {
                     expect(err).to.be(null);
+                    counter();
                 });
-                done();
             });
 
+            Drink.find({}).remove(function (err) {
+                expect(err).to.be(null);
+
+                drinkCtrl.add({
+                    user: {
+                        _id: _user1._id
+                    },
+                    body: {
+                        name: 'Drank1',
+                        alcoholContent: 0.05
+                    }
+                }, {
+                    json: function (data) {
+                        _drink1 = data;
+                        counter();
+                    }
+                });
+
+                drinkCtrl.add({
+                    user: {
+                        _id: _user1._id
+                    },
+                    body: {
+                        name: 'Drank2',
+                        alcoholContent: 0.10
+                    }
+                }, {
+                    json: function (data) {
+                        _drink2 = data;
+                        counter();
+                    }
+                });
+
+            });
         });
 
         describe('Profile generation', function () {
             it('Generates one profile for every user', function (done) {
                 var afterInsert = _.after(2, function () {
-
                     var req = {
                         user: {
                             _id: _user1._id
@@ -97,7 +134,7 @@ describe('<Unit Test>', function () {
                             done();
                         }
                     };
-                    profileCtrl.get(req, res);
+                    profileCtrl.getUser(req, res);
 
                 });
                 // Two measurements
@@ -145,11 +182,60 @@ describe('<Unit Test>', function () {
                             done();
                         }
                     };
-                    profileCtrl.get(req, res);
+                    profileCtrl.getUser(req, res);
                 });
 
             });
         });
 
+        describe('Frequent Drinks Calculation', function () {
+            it('Returns a sorted list of the drinks the user most frequently measures', function (done) {
+                var afterInsert = _.after(3, function () {
+                    profileCtrl.getFrequentDrinks({
+                        user: {
+                            _id: _user1._id
+                        },
+                        params: {
+                            userId: _user1._id
+                        }
+
+                    }, {
+                        json: function (data) {
+                            expect(data.length).to.eql(2);
+                            expect(data[0].drink._id).to.eql(_drink1._id);
+                            expect(data[0].nbDays).to.eql(3);
+                            expect(data[1].drink._id).to.eql(_drink2._id);
+                            expect(data[1].nbDays).to.eql(2);
+                            done();
+                        }
+                    });
+
+                });
+                insertMeasurement(_user1._id, {
+                    consumptions: [
+                        {drink: _drink1._id, amount: 50},
+                        {drink: _drink2._id, amount: 100}
+                    ],
+                    date: moment.utc().valueOf()
+                }, afterInsert);
+
+                insertMeasurement(_user1._id, {
+                    consumptions: [
+                        {drink: _drink1._id, amount: 50}
+                    ],
+                    date: moment.utc().subtract(1, 'days').valueOf()
+                }, afterInsert);
+
+                insertMeasurement(_user1._id, {
+                    consumptions: [
+                        {drink: _drink1._id, amount: 50},
+                        {drink: _drink2._id, amount: 50}
+                    ],
+                    date: moment.utc().subtract(2, 'days').valueOf()
+                }, afterInsert);
+            });
+
+
+        });
     });
 });

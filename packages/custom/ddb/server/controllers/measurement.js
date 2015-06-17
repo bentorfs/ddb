@@ -39,6 +39,90 @@ module.exports = {
             });
         });
     },
+    addConsumption: function (req, res) {
+        var newConsumption = req.body;
+        newConsumption.drinkDate = moment.utc();
+        var dateToUpdate = moment.utc(parseInt(req.params.date, 10)).startOf('day');
+        Measurement.findOneAndUpdate({
+            date: dateToUpdate.valueOf(),
+            user: req.user,
+            isDeleted: false
+        }, {
+            '$push': {consumptions: newConsumption},
+            lastModifiedDate: moment.utc().valueOf()
+        }, {
+            new: true
+        }, function (err, updatedMeasurement) {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({
+                    error: 'Cannot update the measurement'
+                });
+            }
+            rebuild.rebuildUser(req.user, _.noop);
+            res.json(updatedMeasurement);
+        });
+    },
+    removeConsumption: function (req, res) {
+        var dateToUpdate = moment.utc(parseInt(req.params.date, 10)).startOf('day');
+        Measurement.findOneAndUpdate({
+            date: dateToUpdate.valueOf(),
+            user: req.user,
+            isDeleted: false
+        }, {
+            '$pull': {
+                consumptions: {
+                    date: req.query.date,
+                    amount: req.query.amount,
+                    drink: req.query.drink
+                }
+            },
+            lastModifiedDate: moment.utc().valueOf()
+        }, {
+            new: true
+        }, function (err, updatedMeasurement) {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({
+                    error: 'Cannot update the measurement'
+                });
+            }
+            rebuild.rebuildUser(req.user, _.noop);
+            res.json(updatedMeasurement);
+        });
+    },
+    get: function (req, res) {
+        var dateToGet = moment.utc(parseInt(req.params.date, 10)).startOf('day');
+        if (dateToGet > moment.utc().add(3, 'days')) {
+            res.status(400);
+            res.json({
+                error: 'Cannot add measurements on this date'
+            });
+            return;
+        }
+        var upsert = true;
+        if (dateToGet < moment.utc().subtract(60, 'days')) {
+            // Only get, don't create
+            upsert = false;
+        }
+
+        var upsertData = {
+            date: dateToGet.valueOf()
+        };
+
+        Measurement.findOneAndUpdate({date: dateToGet.valueOf(), user: req.user, isDeleted: false}, upsertData, {
+            upsert: true,
+            new: true
+        }).populate('consumptions.drink').exec(function (err, measurement) {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({
+                    error: 'Cannot get the measurement'
+                });
+            }
+            res.json(measurement);
+        });
+    },
     all: function (req, res) {
         var user = req.user;
 

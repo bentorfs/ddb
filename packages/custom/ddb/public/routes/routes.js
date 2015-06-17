@@ -2,9 +2,9 @@
 
 angular.module('mean.ddb').config(['$stateProvider',
     function ($stateProvider) {
-        $stateProvider.state('news', {
-            url: '/ddb/news',
-            templateUrl: 'ddb/views/news.html'
+        $stateProvider.state('dashboard', {
+            url: '/ddb/dashboard',
+            templateUrl: 'ddb/views/dashboard.html'
         });
         $stateProvider.state('measurements', {
             url: '/ddb/measurements',
