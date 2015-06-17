@@ -215,10 +215,6 @@ describe('<Unit Test>', function () {
                 var res = {
                     status: function (code) {
                         expect(code).to.eql(401);
-                        return this;
-                    },
-                    json: function (data) {
-                        expect(data).to.eql({error: 'You are not allowed to see this data'});
                         done();
                     }
                 };

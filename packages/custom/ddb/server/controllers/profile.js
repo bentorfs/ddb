@@ -24,7 +24,7 @@ module.exports = {
                 }
             });
         }, function () {
-            res.status(401).json({error: 'You are not allowed to see this data'})
+            res.status(401);
         });
     }
 };

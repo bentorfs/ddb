@@ -10,6 +10,23 @@ var MeasurementSchema = new Schema({
         type: Date,
         required: true
     },
+    drinks: [
+        {
+            drink: {
+                type: Schema.ObjectId,
+                ref: 'Drink',
+                required: true
+            },
+            amount: {
+                type: Number,
+                default: 0
+            },
+            creationDate: {
+                type: Date,
+                required: true
+            }
+        }
+    ],
     pilsner: {
         type: Number,
         default: 0
@@ -34,8 +51,21 @@ var MeasurementSchema = new Schema({
     isDeleted: {
         type: Boolean,
         default: false
+    },
+    lastModifiedDate: {
+        type: Date
     }
 });
+
+MeasurementSchema.methods = {
+
+    //getTotalAlcohol: function () {
+    //    return pilsner
+    //}
+
+};
+
+
 MeasurementSchema.index({date: 1, user: 1, isDeleted: 1}, {unique: true});
 
 mongoose.model('Measurement', MeasurementSchema);

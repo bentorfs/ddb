@@ -54,7 +54,7 @@ module.exports = {
                 res.json(doc);
             });
         }, function () {
-            res.status(401).json({error: 'You are not allowed to see this data'})
+            res.status(401);
         });
     },
     getRanking: function (req, res) {
@@ -89,7 +89,7 @@ module.exports = {
                     res.json(ranking);
                 });
         }, function () {
-            res.status(401).json({error: 'You are not allowed to see this data'})
+            res.status(401);
         });
     },
     listInvitations: function (req, res) {
@@ -156,7 +156,7 @@ module.exports = {
                     res.status(200).end();
                 });
         }, function () {
-            res.status(401).json({error: 'You are not allowed to perform this action'})
+            res.status(401);
         });
     },
     removeInvitation: function (req, res) {
@@ -178,7 +178,7 @@ module.exports = {
                     res.status(200).end();
                 });
         }, function () {
-            res.status(401).json({error: 'You are not allowed to perform this action'})
+            res.status(401);
         });
     }
 };
