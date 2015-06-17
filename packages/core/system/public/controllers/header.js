@@ -52,8 +52,6 @@ angular.module('mean.system').controller('HeaderController', ['$scope', '$rootSc
         $scope.isCollapsed = false;
 
         $rootScope.$on('loggedin', function () {
-            queryMenu('main', defaultMainMenu);
-
             vm.hdrvars = {
                 authenticated: MeanUser.loggedin,
                 user: MeanUser.user,

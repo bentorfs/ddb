@@ -74,7 +74,7 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
                     $location.path(destination.replace(/^"|"$/g, ''));
                     $cookieStore.remove('redirect');
                 } else {
-                    $location.url('/ddb/news');
+                    $location.url('/ddb/dashboard');
                 }
             } else if (response) {
                 this.user = response;
