@@ -137,5 +137,60 @@ describe('<Unit Test>', function () {
             });
         });
 
+        describe('Searching', function () {
+
+            function addDrink(userId, drink, callback) {
+                var req = {
+                    user: {
+                        _id: userId
+                    },
+                    body: drink
+                };
+                var res = {
+                    json: function (data) {
+                        callback();
+                    }
+                };
+                drinkCtrl.add(req, res);
+            }
+
+
+            it('Can add some drink with different names', function (done) {
+                var counter = _.after(3, done);
+
+                addDrink(_user1._id, {
+                    name: 'Orval',
+                    alcoholContent: 0.05
+                }, counter);
+                addDrink(_user1._id, {
+                    name: 'Westmalle',
+                    alcoholContent: 0.10
+                }, counter);
+                addDrink(_user1._id, {
+                    name: 'Oostmalle',
+                    alcoholContent: 0.20
+                }, counter);
+            });
+
+            it('Can search the drinks by name, case insensitive', function (done) {
+                var req = {
+                    user: {
+                        _id: _user1._id
+                    },
+                    query: {
+                        name: 'Mal'
+                    }
+                };
+                var res = {
+                    json: function (data) {
+                        expect(data.length).to.eql(2);
+                        done();
+                    }
+                };
+                drinkCtrl.list(req, res);
+            });
+
+        });
+
     });
 });

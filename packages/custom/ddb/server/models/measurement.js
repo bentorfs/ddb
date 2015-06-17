@@ -21,9 +21,8 @@ var MeasurementSchema = new Schema({
                 type: Number,
                 default: 0
             },
-            creationDate: {
-                type: Date,
-                required: true
+            drinkDate: {
+                type: Date
             }
         }
     ],

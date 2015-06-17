@@ -7,7 +7,11 @@ var mongoose = require('mongoose'),
 
 module.exports = {
     list: function (req, res) {
-        Drink.find().exec(function (err, drinks) {
+        var search = {};
+        if (req.query && req.query.name) {
+            search.name = {$regex: req.query.name, $options: 'i'};
+        }
+        Drink.find(search).exec(function (err, drinks) {
             if (err) {
                 console.error(err);
                 return res.status(500).json({
@@ -46,8 +50,13 @@ module.exports = {
                     error: 'Cannot update the drink'
                 });
             }
-            console.info('Updated drink ' + updatedDrink._id);
-            res.json(updatedDrink);
+            if (updatedDrink) {
+                console.info('Updated drink ' + updatedDrink._id);
+                res.json(updatedDrink);
+            } else {
+                res.status(404);
+            }
+
         });
     },
     add: function (req, res) {

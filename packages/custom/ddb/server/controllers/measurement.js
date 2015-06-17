@@ -8,13 +8,12 @@ var mongoose = require('mongoose'),
 
 module.exports = {
     update: function (req, res) {
-        var measurement = new Measurement(req.body);
-        measurement.user = req.user;
-        var upsertData = measurement.toObject();
+        var upsertData = req.body;
+        upsertData.user = req.user;
         delete upsertData._id;
         delete upsertData.__v;
 
-        var dateToUpdate = moment.utc(measurement.date).startOf('day');
+        var dateToUpdate = moment.utc(upsertData.date).startOf('day');
         if (dateToUpdate < moment.utc().subtract(60, 'days') || dateToUpdate > moment.utc().add(3, 'days')) {
             res.status(400);
             res.json({
@@ -23,6 +22,7 @@ module.exports = {
             return;
         }
         upsertData.date = dateToUpdate.valueOf();
+        upsertData.lastModifiedDate = moment.utc().valueOf();
 
         Measurement.findOneAndUpdate({date: dateToUpdate.valueOf(), user: req.user, isDeleted: false}, upsertData, {
             upsert: true,
@@ -101,11 +101,13 @@ function getEmptyMeasurement(user, date) {
     return {
         user: user._id,
         date: date.valueOf(),
+        drinks: [],
         pilsner: 0,
         strongbeer: 0,
         wine: 0,
         liquor: 0,
-        isDeleted: false
+        isDeleted: false,
+        lastModifiedDate: moment.utc().valueOf()
     };
 }
 
