@@ -1,0 +1,107 @@
+<div>
+    <div class="row">
+        <div class="col-md-6 col-border" style="min-height: 150px">
+
+            <h3>Search a drink</h3>
+
+            <div class="form-group">
+                <input type="text" ng-model="selectedDrink" placeholder="Search a drink"
+                       typeahead="drink as drink.name for drink in getDrinks($viewValue)"
+                       typeahead-loading="loadingDrinks"
+                       class="form-control input-lg"
+                       typeahead-template-url="ddb/views/templates/select-drink.html"
+                       typeahead-editable="false" typeahead-min-length="2"
+                       typeahead-on-select="onDrinkSelect()">
+                <i ng-show="loadingDrinks" class="glyphicon glyphicon-refresh"></i>
+            </div>
+
+            <div ng-show="newDrinkName && !loadingDrinks && !selectedDrink">
+                Sorry, we can't find your drink.
+                <a href="#" ng-click="showAdd = true">
+                    Click to add it to our database!
+                </a>
+            </div>
+
+            <form class="form-horizontal" name="newDrinkForm" style="margin-top: 30px"
+                  ng-show="showAdd">
+
+                <div class="form-group">
+                    <label class="col-sm-4 control-label" for="newDrinkName">Name</label>
+
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="newDrinkName" ng-model="newDrinkName"
+                               placeholder="Name" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label" for="newDrinkAlcoholContent">
+                        Alcohol Content
+                    </label>
+
+                    <div class="col-sm-8">
+                        <input type="number" class="form-control" id="newDrinkAlcoholContent"
+                               ng-model="newDrinkAlcoholContent"
+                               placeholder="Alcohol % " required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-4 col-sm-8">
+                        <button ng-click="addNewDrink()" class="btn btn-default"
+                                ng-disabled="!newDrinkForm.$valid">
+                            Add new drink
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <h3>Or select a favorite</h3>
+
+            <div class="form-group btn-collection">
+                <button type="button" class="btn btn-lg btn-danger"
+                        ng-repeat="frequentDrink in frequentDrinks | limitTo: 5"
+                        ng-class="{active: selectedDrink._id === frequentDrink.drink._id}"
+                        ng-click="selectDrink(frequentDrink.drink)"
+                        scroll-to="select-amount" offset="55">
+                    {{frequentDrink.drink.name}}
+                </button>
+                <div class="alert alert-danger" role="alert" ng-hide="frequentDrinks.length">
+                    It seems like you didn't track any drinks yet, so we don't know what you like!
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="border-top: 1px dotted #FF6700" id="select-amount">
+        <div class="col-md-6">
+            <h3>How much are you having?</h3>
+
+            <div class="form-group">
+                <input type="number" ng-model="selectedAmount" placeholder="How many centiliters?"
+                       class="form-control input-lg">
+            </div>
+        </div>
+        <div class="col-md-6" style="border-left: 1px dotted #FF6700">
+            <h3>Or choose a standard size</h3>
+
+            <div class="form-group btn-collection">
+                <button type="button" class="btn btn-lg btn-danger"
+                        ng-repeat="size in sizes"
+                        ng-click="setAmount(size)"
+                        ng-class="{active: getAmount() === size}">
+                    {{size}} cl
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <button type="button" class="btn btn-lg btn-block btn-primary"
+                        ng-disabled="!selectedDrink || !selectedAmount"
+                        ng-click="addConsumption()">
+                    Track it!
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

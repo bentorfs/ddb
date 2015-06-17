@@ -9,6 +9,6 @@ module.exports = function (Drink, app, auth) {
         .put(auth.requiresLogin, drink.update);
 
     app.route('/api/drink')
-        .get(auth.requiresLogin, drink.list)
-        .post(auth.requiresLogin, drink.add);
+        .get(drink.list)
+        .post(drink.add);
 };

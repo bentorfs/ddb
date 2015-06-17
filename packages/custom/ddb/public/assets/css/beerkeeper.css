@@ -148,3 +148,17 @@ tr.active {
 .btn-collection button {
     margin: 5px;
 }
+
+.dropdown-menu {
+    width: 90%;
+}
+
+.dropdown-menu > li > a {
+    padding-top: 5px;
+    min-height: 30px;
+}
+
+.close {
+    color: #FF6700 !important;
+    opacity: 0.8 !important;
+}

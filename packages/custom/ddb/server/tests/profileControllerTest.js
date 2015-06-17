@@ -63,7 +63,7 @@ describe('<Unit Test>', function () {
                     },
                     body: {
                         name: 'Drank1',
-                        alcoholContent: 0.05
+                        alc: 0.05
                     }
                 }, {
                     json: function (data) {
@@ -78,7 +78,7 @@ describe('<Unit Test>', function () {
                     },
                     body: {
                         name: 'Drank2',
-                        alcoholContent: 0.10
+                        alc: 0.10
                     }
                 }, {
                     json: function (data) {

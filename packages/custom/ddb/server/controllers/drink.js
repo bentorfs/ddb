@@ -11,7 +11,7 @@ module.exports = {
         if (req.query && req.query.name) {
             search.name = {$regex: req.query.name, $options: 'i'};
         }
-        Drink.find(search).exec(function (err, drinks) {
+        Drink.find(search).limit(20).exec(function (err, drinks) {
             if (err) {
                 console.error(err);
                 return res.status(500).json({
@@ -38,8 +38,6 @@ module.exports = {
         delete upsertData.__v;
         delete upsertData.creationDate;
         upsertData.lastModifiedDate = moment.utc().valueOf();
-        upsertData.tags = [];
-        upsertData.categories = [];
 
         Drink.findOneAndUpdate({'_id': req.params.drinkId}, upsertData, {
             new: true
@@ -63,8 +61,6 @@ module.exports = {
         var newDrink = new Drink(req.body);
         newDrink.creationDate = moment.utc().valueOf();
         newDrink.lastModifiedDate = moment.utc().valueOf();
-        newDrink.tags = [];
-        newDrink.categories = [];
         newDrink.save(function (err, drink) {
             if (err) {
                 console.error(err);

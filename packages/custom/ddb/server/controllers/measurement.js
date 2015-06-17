@@ -65,6 +65,9 @@ module.exports = {
     },
     removeConsumption: function (req, res) {
         var dateToUpdate = moment.utc(parseInt(req.params.date, 10)).startOf('day');
+
+        console.log(req.query.date);
+
         Measurement.findOneAndUpdate({
             date: dateToUpdate.valueOf(),
             user: req.user,

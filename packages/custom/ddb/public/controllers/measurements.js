@@ -1,57 +1,57 @@
 'use strict';
 
-angular.module('mean.ddb').controller('DdbMeasurementsController', ['$scope', 'Global', 'Measurement', 'MeanUser',
-    function ($scope, Global, Measurement, MeanUser) {
-
-        $scope.user = MeanUser;
+angular.module('mean.ddb').controller('DdbMeasurementsController', ['$rootScope', '$scope', 'smoothScroll', 'Global', 'Measurement', 'MeanUser',
+    function ($rootScope, $scope, smoothScroll, Global, Measurement, MeanUser) {
 
         $scope.loadData = function () {
-            Measurement.list().success(function (measurements) {
-                $scope.measurements = measurements;
-            });
-        };
-
-        $scope.status = {};
-        $scope.save = function (measurement) {
-            if ($scope.isValid(measurement)) {
-                $scope.status[measurement.date] = 'saving';
-                Measurement.update(measurement).success(function (response) {
-                    console.log('saved');
-                    $scope.status[measurement.date] = 'saved';
-                }).error(function () {
-                    $scope.status[measurement.date] = 'failed';
+            if ($scope.user._id) {
+                Measurement.get($scope.date).success(function (data) {
+                    $scope.measurement = data;
                 });
-            } else {
-                $scope.status[measurement.date] = 'failed';
             }
         };
 
-        $scope.addPilsner = function (amount) {
-            var measurement = _.last($scope.measurements);
-            measurement.pilsner = measurement.pilsner + amount;
-            $scope.save(measurement);
+        $scope.removeConsumption = function (consumption) {
+            Measurement.removeConsumption($scope.date, consumption
+            ).success(function (data) {
+                    $scope.loadData();
+                });
         };
 
-        $scope.addStrongbeer = function (amount) {
-            var measurement = _.last($scope.measurements);
-            measurement.strongbeer = measurement.strongbeer + amount;
-            $scope.save(measurement);
+        $scope.goToNextDay = function () {
+            $scope.date = $scope.nextDay;
+            $scope.setDays();
+            $scope.loadData();
         };
 
-        $scope.addWine = function (amount) {
-            var measurement = _.last($scope.measurements);
-            measurement.wine = measurement.wine + amount;
-            $scope.save(measurement);
+        $scope.goToPrevDay = function () {
+            $scope.date = $scope.prevDay;
+            $scope.setDays();
+            $scope.loadData();
         };
 
-        $scope.addLiquor = function (amount) {
-            var measurement = _.last($scope.measurements);
-            measurement.liquor = measurement.liquor + amount;
-            $scope.save(measurement);
+        $scope.setDays = function () {
+            $scope.nextDay = moment($scope.date).add(1, 'days').valueOf();
+            $scope.prevDay = moment($scope.date).subtract(1, 'days').valueOf();
+            $scope.status = null;
         };
 
-        $scope.isToday = function (date) {
-            return moment.utc(date, 'YYYY-MM-DD hh:mm:ss').startOf('day').valueOf() === moment.utc().startOf('day').valueOf();
+        $scope.save = function (measurement) {
+            if ($scope.isValid(measurement)) {
+                $scope.status = 'saving';
+                Measurement.update(measurement).success(function (response) {
+                    $scope.status = 'saved';
+                }).error(function () {
+                    $scope.status = 'failed';
+                });
+            } else {
+                $scope.status = 'failed';
+            }
+        };
+
+        $scope.onDrinkTracked = function () {
+            $scope.loadData();
+            smoothScroll(document.getElementById('track-more'), {offset: 55});
         };
 
         $scope.isValid = function (measurement) {
@@ -62,18 +62,14 @@ angular.module('mean.ddb').controller('DdbMeasurementsController', ['$scope', 'G
             return (measurement.pilsner >= 0) && (measurement.strongbeer >= 0) && (measurement.wine >= 0) && (measurement.liquor >= 0);
         };
 
+        $scope.user = MeanUser.get();
+        $rootScope.$on('loggedin', function () {
+            $scope.user = MeanUser.get();
+            $scope.loadData();
+        });
+        $scope.date = moment().subtract(1, 'days').valueOf();
+        $scope.today = moment().valueOf();
+        $scope.setDays();
         $scope.loadData();
     }
 ]);
-
-
-angular.module('mean.ddb').filter('startFrom', function () {
-    return function (input, start) {
-        if (input) {
-            start = +start; //parse to int
-            return input.slice(start);
-        } else {
-            return [];
-        }
-    }
-});

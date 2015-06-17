@@ -9,16 +9,16 @@ var DrinkSchema = new Schema({
         type: String,
         required: true
     },
-    alcoholContent: {
+    alc: {
         type: Number,
         default: 0
     },
-   /* categories: [{
-        type: String
-    }],
     tags: [{
         type: String
-    }],*/
+    }],
+    type: {
+        type: String
+    },
     brewery: {
         type: String
     },

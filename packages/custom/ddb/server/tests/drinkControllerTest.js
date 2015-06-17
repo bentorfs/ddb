@@ -62,14 +62,14 @@ describe('<Unit Test>', function () {
                     },
                     body: {
                         name: 'TestBier',
-                        alcoholContent: 0.05
+                        alc: 0.05
                     }
                 };
                 var res = {
                     json: function (data) {
                         drinkId = data._id;
                         lastModifiedDate = data.lastModifiedDate;
-                        expect(data.alcoholContent).to.eql(0.05);
+                        expect(data.alc).to.eql(0.05);
                         expect(data.name).to.be.eql('TestBier');
                         expect(data._id).to.not.be.null;
                         expect(data.creationDate).to.not.be.null;
@@ -105,12 +105,12 @@ describe('<Unit Test>', function () {
                     },
                     body: {
                         name: 'TestBier',
-                        alcoholContent: 0.10
+                        alc: 0.10
                     }
                 };
                 var res = {
                     json: function (data) {
-                        expect(data.alcoholContent).to.eql(0.10);
+                        expect(data.alc).to.eql(0.10);
                         expect(data.lastModifiedDate).to.not.eql(lastModifiedDate);
                         done();
                     }
@@ -129,7 +129,7 @@ describe('<Unit Test>', function () {
                 };
                 var res = {
                     json: function (data) {
-                        expect(data.alcoholContent).to.eql(0.10);
+                        expect(data.alc).to.eql(0.10);
                         done();
                     }
                 };
@@ -160,15 +160,15 @@ describe('<Unit Test>', function () {
 
                 addDrink(_user1._id, {
                     name: 'Orval',
-                    alcoholContent: 0.05
+                    alc: 0.05
                 }, counter);
                 addDrink(_user1._id, {
                     name: 'Westmalle',
-                    alcoholContent: 0.10
+                    alc: 0.10
                 }, counter);
                 addDrink(_user1._id, {
                     name: 'Oostmalle',
-                    alcoholContent: 0.20
+                    alc: 0.20
                 }, counter);
             });
 
