@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$stateParams', '$state', '$filter', '$rootScope', 'Group', 'DailyAnalysis', '$q',
-    function ($scope, $stateParams, $state, $filter, $rootScope, Group, DailyAnalysis, $q) {
+angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$stateParams', '$state', '$filter', '$rootScope', 'Group', 'Profile', '$q',
+    function ($scope, $stateParams, $state, $filter, $rootScope, Group, Profile, $q) {
 
         $scope.usersToInvite = [];
         $scope.inviteUsers = function () {
@@ -66,11 +66,11 @@ angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$statePa
             _.forEach($scope.group.members, function (member) {
                 var dataForMember = [];
                 var i = 0;
-                _.forEach($scope.dailyAnalyses[member.username].data, function (analysis) {
-                    var date = moment.utc(analysis.date, 'YYYY-MM-DD hh:mm:ss');
+                _.forEach($scope.groupProfiles[member.username].data.series, function (serie) {
+                    var date = moment.utc(serie.date, 'YYYY-MM-DD hh:mm:ss');
                     if (date >= fromDate && date < today) {
                         i++;
-                        dataForMember.push($filter('number')(analysis.spreadAverage, 2));
+                        dataForMember.push($filter('number')(serie.spreadAlc, 2));
                     }
                 });
                 if (i > maxLength) {
@@ -93,14 +93,14 @@ angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$statePa
         };
 
         $scope.loadTrendData = function () {
-            $scope.dailyAnalyses = {};
+            $scope.groupProfiles = {};
             var promises = {};
             _.forEach($scope.group.members, function (member) {
-                promises[member.username] = DailyAnalysis.get(member._id)
+                promises[member.username] = Profile.getUser(member._id)
             });
 
             $q.all(promises).then(function (result) {
-                $scope.dailyAnalyses = result;
+                $scope.groupProfiles = result;
                 $scope.drawGroupChart(30);
             });
         };

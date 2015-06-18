@@ -34,14 +34,12 @@ angular.module('mean.ddb').factory('Measurement', ['$http',
             });
         };
 
-        dao.removeConsumption = function (date, consumption) {
+        dao.removeConsumption = function (date, consumptionId) {
             return $http({
                 url: '/api/measurement/' + date + '/consumptions',
                 method: 'DELETE',
                 params: {
-                    date: consumption.drinkDate,
-                    amount: consumption.amount,
-                    drink: consumption.drink._id
+                    consumptionId: consumptionId
                 }
             });
         };

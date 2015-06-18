@@ -156,9 +156,15 @@ tr.active {
 .dropdown-menu > li > a {
     padding-top: 5px;
     min-height: 30px;
+    font-weight: normal !important;
 }
 
 .close {
     color: #FF6700 !important;
     opacity: 0.8 !important;
+}
+
+.tooltip-inner {
+    max-width: 200px;
+    width: 200px;
 }

@@ -61,8 +61,8 @@ describe('<Unit Test>', function () {
                         },
                         params: {
                             userId: _user1._id
-                        }
-
+                        },
+                        query: {}
                     };
                     var res = {
                         status: function (code) {
@@ -79,7 +79,6 @@ describe('<Unit Test>', function () {
                             expect(data[0].todAlcWine).to.eql(12.5);
                             expect(data[0].todAlcLiquor).to.eql(43);
                             expect(data[0].todAlc).to.eql(68.5);
-                            expect(Math.round(data[0].spreadAverage)).to.eql(10);
 
                             expect(data[1].todPilsner).to.eql(100);
                             expect(data[1].todStrongbeer).to.eql(100);
@@ -90,7 +89,6 @@ describe('<Unit Test>', function () {
                             expect(data[1].todAlcWine).to.eql(12.5);
                             expect(data[1].todAlcLiquor).to.eql(43);
                             expect(data[1].todAlc).to.eql(68.5);
-                            expect(Math.round(data[1].spreadAverage)).to.eql(20);
                             done();
                         }
                     };
@@ -123,8 +121,8 @@ describe('<Unit Test>', function () {
                         },
                         params: {
                             userId: _user1._id
-                        }
-
+                        },
+                        query: {}
                     };
                     var res = {
                         status: function (code) {
@@ -173,8 +171,8 @@ describe('<Unit Test>', function () {
                         },
                         params: {
                             userId: _user1._id
-                        }
-
+                        },
+                        query: {}
                     };
                     var res = {
                         status: function (code) {

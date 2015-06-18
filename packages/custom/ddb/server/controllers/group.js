@@ -38,8 +38,9 @@ module.exports = {
                     error: 'Could not create group'
                 });
             }
-            grouprankingGenerator.processGroup(group);
-            res.json(group);
+            grouprankingGenerator.processGroup(group, function () {
+                res.json(group);
+            });
         });
     },
     getGroup: function (req, res) {
@@ -105,17 +106,21 @@ module.exports = {
     },
     approveInvitation: function (req, res) {
         Group.findOneAndUpdate({_id: req.params.groupId}, {
-            '$pull': {invitations: req.user._id},
-            '$addToSet': {members: req.user._id}
-        }, function (err) {
-            if (err) {
-                console.error(err);
-                return res.status(500).json({
-                    error: 'Cannot accept the invitation'
+                '$pull': {invitations: req.user._id},
+                '$addToSet': {members: req.user._id}
+            },
+            {new: true},
+            function (err, group) {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).json({
+                        error: 'Cannot accept the invitation'
+                    });
+                }
+                grouprankingGenerator.processGroup(group, function () {
+                    res.status(200).end();
                 });
-            }
-            res.status(200).end();
-        });
+            });
     },
     leaveGroup: function (req, res) {
         // This is both for leaving a group, and rejecting an invitation to it
@@ -127,14 +132,17 @@ module.exports = {
                 '$pull': {invitations: req.user._id, members: req.user._id}
 
             },
-            function (err) {
+            {new: true},
+            function (err, group) {
                 if (err) {
                     console.error(err);
                     return res.status(500).json({
                         error: 'Cannot leave the group'
                     });
                 }
-                res.status(200).end();
+                grouprankingGenerator.processGroup(group, function () {
+                    res.status(200).end();
+                });
             });
     },
     addInvitation: function (req, res) {

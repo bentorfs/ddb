@@ -20,7 +20,7 @@ module.exports = {
                     });
                 }
                 if (profile) {
-                    res.json([profile]);
+                    res.json(profile);
                 } else {
                     res.status(404).json({error: 'Profile does not exist'})
                 }

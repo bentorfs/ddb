@@ -5,6 +5,7 @@ angular.module('mean.ddb').directive('trophyRanking', function () {
         restrict: 'E',
         scope: {
             trophyName: '@',
+            trophyDescription: '@',
             ranking: '='
         },
         templateUrl: 'ddb/views/templates/trophy-ranking.html',

@@ -33,7 +33,7 @@ function insertMeasurement(userId, measurement, callback) {
 }
 
 describe('<Unit Test>', function () {
-    describe('Daily Analysis Generator:', function () {
+    describe('Profile Generator:', function () {
 
         beforeEach(function (done) {
             var counter = _.after(3, done);
@@ -63,7 +63,8 @@ describe('<Unit Test>', function () {
                     },
                     body: {
                         name: 'Drank1',
-                        alc: 0.05
+                        alc: 0.05,
+                        type: 'beer'
                     }
                 }, {
                     json: function (data) {
@@ -78,7 +79,8 @@ describe('<Unit Test>', function () {
                     },
                     body: {
                         name: 'Drank2',
-                        alc: 0.10
+                        alc: 0.10,
+                        type: 'beer'
                     }
                 }, {
                     json: function (data) {
@@ -107,30 +109,34 @@ describe('<Unit Test>', function () {
                             expect(code).to.eql(200);
                         },
                         json: function (data) {
-                            expect(data.length).to.eql(1);
-                            expect(data[0].highestBinge).to.eql(137);
-                            expect(data[0].drinkingDayRate).to.eql(1);
-                            expect(data[0].drinkingDays).to.eql(2);
-                            expect(data[0].activeDays).to.eql(2);
-                            expect(Math.round(data[0].consistencyFactor * 100) / 100).to.eql(0.33);
-                            expect(data[0].avgAlc).to.eql(102.75);
-                            expect(data[0].avgAlcLiquor).to.eql(64.5);
-                            expect(data[0].avgAlcWine).to.eql(18.75);
-                            expect(data[0].avgAlcStrongbeer).to.eql(11.25);
-                            expect(data[0].avgAlcPilsner).to.eql(8.25);
-                            expect(data[0].avgLiquor).to.eql(150);
-                            expect(data[0].avgWine).to.eql(150);
-                            expect(data[0].avgStrongbeer).to.eql(150);
-                            expect(data[0].avgPilsner).to.eql(150);
-                            expect(data[0].totAlc).to.eql(205.5);
-                            expect(data[0].totAlcLiquor).to.eql(129);
-                            expect(data[0].totAlcWine).to.eql(37.5);
-                            expect(data[0].totAlcStrongbeer).to.eql(22.5);
-                            expect(data[0].totAlcPilsner).to.eql(16.5);
-                            expect(data[0].totLiquor).to.eql(300);
-                            expect(data[0].totWine).to.eql(300);
-                            expect(data[0].totStrongbeer).to.eql(300);
-                            expect(data[0].totPilsner).to.eql(300);
+                            expect(data.highestBinge).to.eql(137);
+                            expect(data.drinkingDayRate).to.eql(1);
+                            expect(data.drinkingDays).to.eql(2);
+                            expect(data.activeDays).to.eql(2);
+                            expect(Math.round(data.consistencyFactor * 100) / 100).to.eql(0.33);
+                            expect(data.avgAlc).to.eql(102.75);
+                            expect(data.avgAlcLiquor).to.eql(64.5);
+                            expect(data.avgAlcWine).to.eql(18.75);
+                            expect(data.avgAlcStrongbeer).to.eql(11.25);
+                            expect(data.avgAlcPilsner).to.eql(8.25);
+                            expect(data.avgLiquor).to.eql(150);
+                            expect(data.avgWine).to.eql(150);
+                            expect(data.avgStrongbeer).to.eql(150);
+                            expect(data.avgPilsner).to.eql(150);
+                            expect(data.totAlc).to.eql(205.5);
+                            expect(data.totAlcLiquor).to.eql(129);
+                            expect(data.totAlcWine).to.eql(37.5);
+                            expect(data.totAlcStrongbeer).to.eql(22.5);
+                            expect(data.totAlcPilsner).to.eql(16.5);
+                            expect(data.totLiquor).to.eql(300);
+                            expect(data.totWine).to.eql(300);
+                            expect(data.totStrongbeer).to.eql(300);
+                            expect(data.totPilsner).to.eql(300);
+                            expect(data.series.length).to.eql(2);
+                            expect(data.series[0].cumAlc).to.eql(137);
+                            expect(Math.round(data.series[0].spreadAlc)).to.eql(20);
+                            expect(data.series[1].cumAlc).to.eql(205.5);
+                            expect(Math.round(data.series[1].spreadAlc)).to.eql(29);
                             done();
                         }
                     };

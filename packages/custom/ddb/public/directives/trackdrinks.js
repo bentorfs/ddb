@@ -26,6 +26,15 @@ angular.module('mean.ddb').directive('trackDrinks', function () {
                     }
                 };
 
+                $scope.$watch('selectedDrink', function() {
+                    if ($scope.selectedDrink) {
+                        $scope.updateSizes();
+                        if (window.mobilecheck) {
+                            $scope.scrollTo('select-amount');
+                        }
+                    }
+                });
+
                 $scope.getDrinks = function (name) {
                     $scope.newDrinkName = name;
                     return Drink.list(name).then(function (response) {
@@ -36,7 +45,8 @@ angular.module('mean.ddb').directive('trackDrinks', function () {
                 $scope.addNewDrink = function () {
                     Drink.add({
                         name: $scope.newDrinkName,
-                        alc: $scope.newDrinkAlcoholContent
+                        type: $scope.newDrinkType,
+                        alc: $scope.newDrinkAlcoholContent >= 1 ? $scope.newDrinkAlcoholContent / 100 : $scope.newDrinkAlcoholContent
                     }).success(function (drink) {
                         $scope.showAdd = false;
                         $scope.newDrinkName = '';
@@ -45,10 +55,6 @@ angular.module('mean.ddb').directive('trackDrinks', function () {
                     })
                 };
 
-                $scope.onDrinkSelect = function () {
-                    $scope.scrollTo('select-amount');
-                    $scope.updateSizes();
-                };
 
                 $scope.scrollTo = function (location) {
                     smoothScroll(document.getElementById(location), {offset: 55});
@@ -62,9 +68,12 @@ angular.module('mean.ddb').directive('trackDrinks', function () {
                     return $scope.selectedAmount;
                 };
 
+                $scope.setNewDrinkType = function (type) {
+                    $scope.newDrinkType = type;
+                };
+
                 $scope.selectDrink = function (drink) {
                     $scope.selectedDrink = drink;
-                    $scope.updateSizes();
                 };
 
                 $scope.loadData = function () {

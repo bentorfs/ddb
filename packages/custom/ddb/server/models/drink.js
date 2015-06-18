@@ -17,6 +17,10 @@ var DrinkSchema = new Schema({
         type: String
     }],
     type: { // beer/liquor/wine
+        type: String,
+        required: true
+    },
+    brewery: {
         type: String
     },
     creationDate: {
