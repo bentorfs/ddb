@@ -36,7 +36,37 @@ function updateProfile(analyses, user, callback) {
     var highestBingeDate = null;
     var dailyAlcohol = [];
     var groups = {};
+    var totAlc = 0, totPilsner = 0, totStrongbeer = 0, totWine = 0, totLiquor = 0;
+    var totAlcPilsner = 0, totAlcStrongbeer = 0, totAlcWine = 0, totAlcLiquor = 0;
+    var series = [];
+    var spreadAlc = [0, 0, 0, 0, 0, 0, 0];
+
     for (var i = 0; i < analyses.length; i++) {
+        totPilsner += analyses[i].todPilsner;
+        totStrongbeer += analyses[i].todStrongbeer;
+        totWine += analyses[i].todWine;
+        totLiquor += analyses[i].todLiquor;
+        totAlc += analyses[i].todAlc;
+        totAlcPilsner += analyses[i].todAlcPilsner;
+        totAlcStrongbeer += analyses[i].todAlcStrongbeer;
+        totAlcWine += analyses[i].todAlcWine;
+        totAlcLiquor += analyses[i].todAlcLiquor;
+
+        spreadAlc[i % 7] = analyses[i].todAlc;
+        series.push(
+            {
+                date: analyses[i].date,
+                cumAlc: totAlc,
+                cumAlcPilsner: totAlcPilsner,
+                cumAlcStrongbeer: totAlcStrongbeer,
+                cumAlcWine: totAlcWine,
+                cumAlcLiquor: totAlcLiquor,
+                spreadAlc: _.reduce(spreadAlc, function (prev, cur) {
+                    return prev + cur;
+                }, 0) / spreadAlc.length
+            }
+        );
+
         alcPerDay[analyses[i].dayOfWeek] += analyses[i].todAlc;
 
         if (analyses[i].todAlc != 0) {
@@ -98,29 +128,29 @@ function updateProfile(analyses, user, callback) {
         avgAlcWorkWeek: ((alcPerDay[1] + alcPerDay[2] + alcPerDay[3] + alcPerDay[4]) / (nbOfWeekDays[1] + nbOfWeekDays[2] + nbOfWeekDays[3] + nbOfWeekDays[4]) || 0),
         avgAlcWeekend: ((alcPerDay[5] + alcPerDay[6] + alcPerDay[0]) / (nbOfWeekDays[5] + nbOfWeekDays[6] + nbOfWeekDays[0]) || 0),
 
-        totPilsner: _.last(analyses).cumPilsner,
-        totStrongbeer: _.last(analyses).cumStrongbeer,
-        totWine: _.last(analyses).cumWine,
-        totLiquor: _.last(analyses).cumLiquor,
+        totPilsner: totPilsner,
+        totStrongbeer: totStrongbeer,
+        totWine: totWine,
+        totLiquor: totLiquor,
 
-        totAlcPilsner: _.last(analyses).cumAlcPilsner,
-        totAlcStrongbeer: _.last(analyses).cumAlcStrongbeer,
-        totAlcWine: _.last(analyses).cumAlcWine,
-        totAlcLiquor: _.last(analyses).cumAlcLiquor,
-        totAlc: _.last(analyses).cumAlc,
+        totAlcPilsner: totAlcPilsner,
+        totAlcStrongbeer: totAlcStrongbeer,
+        totAlcWine: totAlcWine,
+        totAlcLiquor: totAlcLiquor,
+        totAlc: totAlc,
 
-        avgPilsner: _.last(analyses).cumPilsner / analyses.length,
-        avgStrongbeer: _.last(analyses).cumStrongbeer / analyses.length,
-        avgWine: _.last(analyses).cumWine / analyses.length,
-        avgLiquor: _.last(analyses).cumLiquor / analyses.length,
+        avgPilsner: totPilsner / analyses.length,
+        avgStrongbeer: totStrongbeer / analyses.length,
+        avgWine: totWine / analyses.length,
+        avgLiquor: totLiquor / analyses.length,
 
-        avgAlcPilsner: _.last(analyses).cumAlcPilsner / analyses.length,
-        avgAlcStrongbeer: _.last(analyses).cumAlcStrongbeer / analyses.length,
-        avgAlcWine: _.last(analyses).cumAlcWine / analyses.length,
-        avgAlcLiquor: _.last(analyses).cumAlcLiquor / analyses.length,
-        avgAlc: _.last(analyses).cumAlc / analyses.length,
+        avgAlcPilsner: totAlcPilsner / analyses.length,
+        avgAlcStrongbeer: totAlcStrongbeer / analyses.length,
+        avgAlcWine: totAlcWine / analyses.length,
+        avgAlcLiquor: totAlcLiquor / analyses.length,
+        avgAlc: totAlc / analyses.length,
 
-        consistencyFactor: (avgAlcStdev / (_.last(analyses).cumAlc / analyses.length)) || 0,
+        consistencyFactor: (avgAlcStdev / (totAlc / analyses.length)) || 0,
 
         activeDays: analyses.length,
         drinkingDays: drinkingDays,
@@ -129,7 +159,8 @@ function updateProfile(analyses, user, callback) {
         highestBinge: highestBinge,
         highestBingeDate: highestBingeDate,
 
-        groups: groupData
+        groups: groupData,
+        series: series
     };
 
     Profile.findOneAndUpdate({

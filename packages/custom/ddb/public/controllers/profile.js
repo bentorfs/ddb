@@ -8,23 +8,40 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$state
             $scope.user = user;
         });
 
-        Profile.get($stateParams.userId).success(function (profile) {
-            if (profile.length > 0 && profile[0]) {
-                $scope.typeLabels = ["Pilsner", "Strong Beer", "Wine", "Liquor"];
-                $scope.typeProfileData = [[profile[0].totAlcPilsner, profile[0].totAlcStrongbeer, profile[0].totAlcWine, profile[0].totAlcLiquor]];
+        Profile.getUser($stateParams.userId).success(function (profile) {
+            if (profile) {
+                $scope.typeLabels = ["Beer", "Strong Beer", "Wine", "Liquor"];
+                $scope.typeProfileData = [
+                    [
+                        $filter('number')(profile.totAlcPilsner, 2),
+                        $filter('number')(profile.totAlcStrongbeer, 2),
+                        $filter('number')(profile.totAlcWine, 2),
+                        $filter('number')(profile.totAlcLiquor, 2)
+                    ]
+                ];
 
                 $scope.weekLabels = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-                $scope.weekProfileData = [[profile[0].totAlcMon, profile[0].totAlcTue, profile[0].totAlcWed, profile[0].totAlcThu, profile[0].totAlcFri, profile[0].totAlcSat, profile[0].totAlcSun]];
+                $scope.weekProfileData = [
+                    [
+                        $filter('number')(profile.totAlcMon, 2),
+                        $filter('number')(profile.totAlcTue, 2),
+                        $filter('number')(profile.totAlcWed, 2),
+                        $filter('number')(profile.totAlcThu, 2),
+                        $filter('number')(profile.totAlcFri, 2),
+                        $filter('number')(profile.totAlcSat, 2),
+                        $filter('number')(profile.totAlcSun, 2)
+                    ]
+                ];
 
-                $scope.profile = profile[0];
+                $scope.profile = profile;
+
+                $scope.getSpreadAverageChartData(30);
+                $scope.getCumulativeChartData(30);
             }
         });
 
-        DailyAnalysis.get($stateParams.userId).success(function (dailyAnalyses) {
+        DailyAnalysis.get($stateParams.userId, moment().subtract(11, 'days').valueOf(), moment().valueOf()).success(function (dailyAnalyses) {
             $scope.dailyAnalyses = dailyAnalyses;
-
-            $scope.getSpreadAverageChartData(30);
-            $scope.getCumulativeChartData(30);
         });
 
         $scope.getSpreadAverageChartData = function (nbDays) {
@@ -39,7 +56,7 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$state
                 scaleSteps: 15,
                 scaleStepWidth: 1,
                 scaleStartValue: 0,
-                bezierCurve : true,
+                bezierCurve: true,
                 showScale: true,
                 pointDot: false,
                 pointHitDetectionRadius: 1
@@ -47,12 +64,12 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$state
 
             $scope.spreadAverageSeries = ['Spread Average'];
             var fromDate = moment.utc().subtract(nbDays, 'days');
-            angular.forEach($scope.dailyAnalyses, function (analysis) {
-                var date = moment.utc(analysis.date, 'YYYY-MM-DD hh:mm:ss');
+            angular.forEach($scope.profile.series, function (serie) {
+                var date = moment.utc(serie.date, 'YYYY-MM-DD hh:mm:ss');
                 if (date >= fromDate) {
                     //var displayDate = date.format('MM/DD');
                     $scope.spreadAverageLabels.push('');
-                    $scope.spreadAverageData[0].push($filter('number')(analysis.spreadAverage, 2));
+                    $scope.spreadAverageData[0].push($filter('number')(serie.spreadAlc, 2));
                 }
             });
         };
@@ -66,19 +83,19 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$state
             $scope.cumulativeTrendDataOptions = {
                 scaleOverride: false,
                 scaleShowVerticalLines: false,
-                bezierCurve : true,
+                bezierCurve: true,
                 showScale: true,
                 pointDot: false,
                 pointHitDetectionRadius: 1
             };
             $scope.cumulativeTrendSeries = ['Cumulative Trend'];
             var fromDate = moment.utc().subtract(nbDays, 'days');
-            angular.forEach($scope.dailyAnalyses, function (analysis) {
-                var date = moment.utc(analysis.date, 'YYYY-MM-DD hh:mm:ss');
+            angular.forEach($scope.profile.series, function (serie) {
+                var date = moment.utc(serie.date, 'YYYY-MM-DD hh:mm:ss');
                 if (date >= fromDate) {
                     //var displayDate = date.format('MM/DD');
                     $scope.cumulativeTrendLabels.push('');
-                    $scope.cumulativeTrendData[0].push($filter('number')(analysis.cumAlc, 2));
+                    $scope.cumulativeTrendData[0].push($filter('number')(serie.cumAlc, 2));
                 }
             });
         }

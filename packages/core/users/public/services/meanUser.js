@@ -47,7 +47,6 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
             this.resetpassworderror = null;
             this.validationError = null;
             $http.get('/api/users/me').success(this.onIdentity.bind(this)).error(function() {
-                console.log('test');
                 //localStorage.removeItem('JWT');
                 //$location.url('/login');
             });
@@ -74,7 +73,7 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
                     $location.path(destination.replace(/^"|"$/g, ''));
                     $cookieStore.remove('redirect');
                 } else {
-                    $location.url('/ddb/news');
+                    $location.url('/ddb/dashboard');
                 }
             } else if (response) {
                 this.user = response;
@@ -204,6 +203,10 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
             });
 
             return deferred.promise;
+        };
+
+        MeanUserKlass.prototype.get = function () {
+            return this.user;
         };
 
         //Temporary code

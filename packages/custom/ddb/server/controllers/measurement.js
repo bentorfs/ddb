@@ -8,13 +8,12 @@ var mongoose = require('mongoose'),
 
 module.exports = {
     update: function (req, res) {
-        var measurement = new Measurement(req.body);
-        measurement.user = req.user;
-        var upsertData = measurement.toObject();
+        var upsertData = req.body;
+        upsertData.user = req.user;
         delete upsertData._id;
         delete upsertData.__v;
 
-        var dateToUpdate = moment.utc(measurement.date).startOf('day');
+        var dateToUpdate = moment.utc(upsertData.date).startOf('day');
         if (dateToUpdate < moment.utc().subtract(60, 'days') || dateToUpdate > moment.utc().add(3, 'days')) {
             res.status(400);
             res.json({
@@ -23,6 +22,7 @@ module.exports = {
             return;
         }
         upsertData.date = dateToUpdate.valueOf();
+        upsertData.lastModifiedDate = moment.utc().valueOf();
 
         Measurement.findOneAndUpdate({date: dateToUpdate.valueOf(), user: req.user, isDeleted: false}, upsertData, {
             upsert: true,
@@ -37,6 +37,88 @@ module.exports = {
             rebuild.rebuildUser(req.user, function () {
                 res.json(updatedMeasurement);
             });
+        });
+    },
+    addConsumption: function (req, res) {
+        var newConsumption = req.body;
+        newConsumption.drinkDate = moment.utc();
+        var dateToUpdate = moment.utc(parseInt(req.params.date, 10)).startOf('day');
+        Measurement.findOneAndUpdate({
+            date: dateToUpdate.valueOf(),
+            user: req.user,
+            isDeleted: false
+        }, {
+            '$push': {consumptions: newConsumption},
+            lastModifiedDate: moment.utc().valueOf()
+        }, {
+            new: true
+        }, function (err, updatedMeasurement) {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({
+                    error: 'Cannot update the measurement'
+                });
+            }
+            rebuild.rebuildUser(req.user, _.noop);
+            res.json(updatedMeasurement);
+        });
+    },
+    removeConsumption: function (req, res) {
+        var dateToUpdate = moment.utc(parseInt(req.params.date, 10)).startOf('day');
+        Measurement.findOneAndUpdate({
+            date: dateToUpdate.valueOf(),
+            user: req.user,
+            isDeleted: false
+        }, {
+            '$pull': {
+                consumptions: {
+                    _id: req.query.consumptionId
+                }
+            },
+            lastModifiedDate: moment.utc().valueOf()
+        }, {
+            new: true
+        }, function (err, updatedMeasurement) {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({
+                    error: 'Cannot update the measurement'
+                });
+            }
+            rebuild.rebuildUser(req.user, _.noop);
+            res.json(updatedMeasurement);
+        });
+    },
+    get: function (req, res) {
+        var dateToGet = moment.utc(parseInt(req.params.date, 10)).startOf('day');
+        if (dateToGet > moment.utc().add(3, 'days')) {
+            res.status(400);
+            res.json({
+                error: 'Cannot add measurements on this date'
+            });
+            return;
+        }
+        var upsert = true;
+        if (dateToGet < moment.utc().subtract(60, 'days')) {
+            // Only get, don't create
+            upsert = false;
+        }
+
+        var upsertData = {
+            date: dateToGet.valueOf()
+        };
+
+        Measurement.findOneAndUpdate({date: dateToGet.valueOf(), user: req.user, isDeleted: false}, upsertData, {
+            upsert: true,
+            new: true
+        }).populate('consumptions.drink').exec(function (err, measurement) {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({
+                    error: 'Cannot get the measurement'
+                });
+            }
+            res.json(measurement);
         });
     },
     all: function (req, res) {
@@ -101,11 +183,13 @@ function getEmptyMeasurement(user, date) {
     return {
         user: user._id,
         date: date.valueOf(),
+        drinks: [],
         pilsner: 0,
         strongbeer: 0,
         wine: 0,
         liquor: 0,
-        isDeleted: false
+        isDeleted: false,
+        lastModifiedDate: moment.utc().valueOf()
     };
 }
 

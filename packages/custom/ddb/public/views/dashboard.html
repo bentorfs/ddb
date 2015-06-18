@@ -1,0 +1,56 @@
+<section class="container" style="min-height: 100vh">
+    <div data-ng-controller="DdbNewsController">
+
+        <div class="page-header">
+            <h1>Welcome,
+                <small>{{user.username}}</small>
+            </h1>
+        </div>
+
+        <div class="panel panel-primary" id="track-more">
+            <div class="panel-heading">
+                <h3 class="panel-title">Track a Drink</h3>
+            </div>
+            <div class="panel-body">
+                <track-drinks on-save="onDrinkTracked" date="today"/>
+            </div>
+        </div>
+
+        <div class="panel panel-danger" id="today-consumptions">
+            <div class="panel-heading">
+                <h3 class="panel-title">Today's Consumptions</h3>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-condensed">
+                        <tr ng-hide="measurement.consumptions.length">
+                            <th colspan="4" class="text-center">
+                                No drinks tracked yet! Are you not thirsty today?
+                            </th>
+                        </tr>
+                        <tr ng-repeat="consumption in measurement.consumptions | orderBy:'-drinkDate'">
+                            <td class="col-xs-3">
+                                <span am-time-ago="consumption.drinkDate"></span>
+                            </td>
+                            <td class="text-right col-xs-3">
+                                {{consumption.amount}} cl
+                            </td>
+                            <td class="col-xs-5">
+                                {{consumption.drink.name}}
+                            </td>
+                            <td class="col-xs-1 text-right">
+                                <button type="button" class="close" ng-click="removeConsumption(consumption)"
+                                        aria-label="Close" tooltip="Delete this drink">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div style="font-size: 10vw; color: #FFD8AA; margin-top: 20vh" class="text-center">Beerkeeper</div>-->
+
+</section>

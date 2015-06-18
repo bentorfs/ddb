@@ -14,5 +14,4 @@ module.exports = function (Tools, app, auth) {
             res.json({});
         });
 
-
 };
