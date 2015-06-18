@@ -13,13 +13,10 @@ var DrinkSchema = new Schema({
         type: Number,
         default: 0
     },
-    tags: [{
+    tags: [{ // style, type, .. spirit type
         type: String
     }],
-    type: {
-        type: String
-    },
-    brewery: {
+    type: { // beer/liquor/wine
         type: String
     },
     creationDate: {
@@ -29,7 +26,28 @@ var DrinkSchema = new Schema({
     lastModifiedDate: {
         type: Date,
         required: true
-    }
+    },
+    producer: { // Brewery / brand / bottler
+        type: String
+    },
+    firstBrewed: {
+        type: Date
+    },
+    location: { // Or region
+        type: String
+    },
+    article: {
+        type: String
+    },
+    website: {
+        type: String
+    },
+    age: {
+        type: Number
+    },
+    components: [{
+        type: String
+    }]
 });
 
 mongoose.model('Drink', DrinkSchema);
