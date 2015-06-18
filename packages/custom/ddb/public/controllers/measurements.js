@@ -12,7 +12,7 @@ angular.module('mean.ddb').controller('DdbMeasurementsController', ['$rootScope'
         };
 
         $scope.removeConsumption = function (consumption) {
-            Measurement.removeConsumption($scope.date, consumption
+            Measurement.removeConsumption($scope.date, consumption._id
             ).success(function (data) {
                     $scope.loadData();
                 });

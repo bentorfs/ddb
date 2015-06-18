@@ -5,16 +5,18 @@ var expect = require('expect.js'),
     User = mongoose.model('User'),
     Measurement = mongoose.model('Measurement'),
     measurementCtrl = require('../controllers/measurement'),
+    drinkCtrl = require('../controllers/drink'),
     _ = require('lodash'),
     moment = require('moment');
 
 var _user1;
+var _drink1;
 
 describe('<Unit Test>', function () {
     describe('Measurements Controller:', function () {
 
         before(function (done) {
-
+            var counter = _.after(1, done);
             User.find({}).remove(function (err) {
                 expect(err).to.be(null);
                 var user1 = {
@@ -27,7 +29,21 @@ describe('<Unit Test>', function () {
                 _user1 = new User(user1);
                 _user1.save(function (err) {
                     expect(err).to.be(null);
-                    done();
+                    drinkCtrl.add({
+                        user: {
+                            _id: _user1._id
+                        },
+                        body: {
+                            name: 'Drank1',
+                            alc: 0.05,
+                            type: 'beer'
+                        }
+                    }, {
+                        json: function (data) {
+                            _drink1 = data;
+                            counter();
+                        }
+                    });
                 });
             });
         });
@@ -164,6 +180,91 @@ describe('<Unit Test>', function () {
                     }
                 };
                 measurementCtrl.update(req, res);
+            });
+
+        });
+
+        describe('Updating consumptions', function () {
+
+            var measurement;
+            it('can add a consumption to an already existing measurement', function (done) {
+                measurementCtrl.get({
+                    user: {
+                        _id: _user1._id
+                    },
+                    params: {
+                        date: moment().valueOf()
+                    }
+                }, {
+                    json: function () {
+                        var counter = _.after(2, done);
+                        measurementCtrl.addConsumption({
+                            user: {
+                                _id: _user1._id
+                            },
+                            params: {
+                                date: moment().valueOf()
+                            },
+                            body: {
+                                amount: 100,
+                                drink: _drink1._id
+                            }
+                        }, {
+                            json: function (data) {
+                                measurement = data;
+                                counter();
+                            }
+                        });
+                        measurementCtrl.addConsumption({
+                            user: {
+                                _id: _user1._id
+                            },
+                            params: {
+                                date: moment().valueOf()
+                            },
+                            body: {
+                                amount: 200,
+                                drink: _drink1._id
+                            }
+                        }, {
+                            json: function (data) {
+                                measurement = data;
+                                counter();
+                            }
+                        });
+                    }
+                });
+            });
+
+            it('can remove an individual consumption', function (done) {
+                measurementCtrl.get({
+                    user: {
+                        _id: _user1._id
+                    },
+                    params: {
+                        date: moment().valueOf()
+                    }
+                }, {
+                    json: function (data) {
+                        measurementCtrl.removeConsumption({
+                            user: {
+                                _id: _user1._id
+                            },
+                            params: {
+                                date: moment().valueOf()
+                            },
+                            query: {
+                                consumptionId: measurement.consumptions[0]._id
+                            }
+                        }, {
+                            json: function (data) {
+                                expect(data.consumptions.length).to.eql(1);
+                                done();
+                            }
+                        });
+                    }
+                });
+
             });
 
         });

@@ -33,7 +33,7 @@ function insertMeasurement(userId, measurement, callback) {
 }
 
 describe('<Unit Test>', function () {
-    describe('Daily Analysis Generator:', function () {
+    describe('Profile Generator:', function () {
 
         beforeEach(function (done) {
             var counter = _.after(3, done);
@@ -63,7 +63,8 @@ describe('<Unit Test>', function () {
                     },
                     body: {
                         name: 'Drank1',
-                        alc: 0.05
+                        alc: 0.05,
+                        type: 'beer'
                     }
                 }, {
                     json: function (data) {
@@ -78,7 +79,8 @@ describe('<Unit Test>', function () {
                     },
                     body: {
                         name: 'Drank2',
-                        alc: 0.10
+                        alc: 0.10,
+                        type: 'beer'
                     }
                 }, {
                     json: function (data) {

@@ -13,14 +13,21 @@
                     </div>
                     <div class="panel-body">
 
-                        <form ng-submit="createGroup()">
+                        <form ng-submit="createGroup()" name="frmNewGroup">
                             <table class="table">
                                 <tbody>
                                 <tr>
                                     <th class="col-xs-6">Group Name</th>
                                     <td>
-                                        <input type="text" class="form-control" id="groupName" placeholder="Group name"
-                                               ng-model="groupName">
+                                        <div class="form-group has-success has-feedback">
+                                            <input type="text" class="form-control" id="groupName"
+                                                   placeholder="Group name"
+                                                   ng-model="groupName"
+                                                   required>
+                                              <span class="glyphicon glyphicon-ok form-control-feedback"
+                                                    aria-hidden="true"
+                                                    ng-if="groupName"></span>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -44,9 +51,8 @@
                                 <tr>
                                     <th></th>
                                     <td>
-                                        <button type="submit" class="btn btn-danger"><i
-                                                class="glyphicon glyphicon-ok"/>
-                                            Create Group
+                                        <button type="submit" class="btn btn-danger" ng-disabled="!frmNewGroup.$valid">
+                                            <i class="glyphicon glyphicon-ok"/> Create Group
                                         </button>
                                     </td>
                                 </tr>

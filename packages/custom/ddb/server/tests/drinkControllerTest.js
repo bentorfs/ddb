@@ -62,7 +62,8 @@ describe('<Unit Test>', function () {
                     },
                     body: {
                         name: 'TestBier',
-                        alc: 0.05
+                        alc: 0.05,
+                        type: 'beer'
                     }
                 };
                 var res = {
@@ -95,7 +96,7 @@ describe('<Unit Test>', function () {
                 drinkCtrl.list(req, res);
             });
 
-            it('Can add update drink', function (done) {
+            it('Can update an existing drink', function (done) {
                 var req = {
                     user: {
                         _id: _user1._id
@@ -160,15 +161,18 @@ describe('<Unit Test>', function () {
 
                 addDrink(_user1._id, {
                     name: 'Orval',
-                    alc: 0.05
+                    alc: 0.05,
+                    type: 'beer'
                 }, counter);
                 addDrink(_user1._id, {
                     name: 'Westmalle',
-                    alc: 0.10
+                    alc: 0.10,
+                    type: 'beer'
                 }, counter);
                 addDrink(_user1._id, {
                     name: 'Oostmalle',
-                    alc: 0.20
+                    alc: 0.20,
+                    type: 'beer'
                 }, counter);
             });
 
