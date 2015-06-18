@@ -9,14 +9,14 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$state
         });
 
         Profile.getUser($stateParams.userId).success(function (profile) {
-            if (profile.length > 0 && profile[0]) {
+            if (profile.length > 0 && profile) {
                 $scope.typeLabels = ["Pilsner", "Strong Beer", "Wine", "Liquor"];
-                $scope.typeProfileData = [[profile[0].totAlcPilsner, profile[0].totAlcStrongbeer, profile[0].totAlcWine, profile[0].totAlcLiquor]];
+                $scope.typeProfileData = [[profile.totAlcPilsner, profile.totAlcStrongbeer, profile.totAlcWine, profile.totAlcLiquor]];
 
                 $scope.weekLabels = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-                $scope.weekProfileData = [[profile[0].totAlcMon, profile[0].totAlcTue, profile[0].totAlcWed, profile[0].totAlcThu, profile[0].totAlcFri, profile[0].totAlcSat, profile[0].totAlcSun]];
+                $scope.weekProfileData = [[profile.totAlcMon, profile.totAlcTue, profile.totAlcWed, profile.totAlcThu, profile.totAlcFri, profile.totAlcSat, profile.totAlcSun]];
 
-                $scope.profile = profile[0];
+                $scope.profile = profile;
             }
         });
 
@@ -39,7 +39,7 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$state
                 scaleSteps: 15,
                 scaleStepWidth: 1,
                 scaleStartValue: 0,
-                bezierCurve : true,
+                bezierCurve: true,
                 showScale: true,
                 pointDot: false,
                 pointHitDetectionRadius: 1
@@ -66,7 +66,7 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$state
             $scope.cumulativeTrendDataOptions = {
                 scaleOverride: false,
                 scaleShowVerticalLines: false,
-                bezierCurve : true,
+                bezierCurve: true,
                 showScale: true,
                 pointDot: false,
                 pointHitDetectionRadius: 1

@@ -38,6 +38,7 @@ function updateProfile(analyses, user, callback) {
     var groups = {};
     var totAlc = 0, totPilsner = 0, totStrongbeer = 0, totWine = 0, totLiquor = 0;
     var totAlcPilsner = 0, totAlcStrongbeer = 0, totAlcWine = 0, totAlcLiquor = 0;
+    var series = [];
     for (var i = 0; i < analyses.length; i++) {
         totPilsner += analyses[i].todPilsner;
         totStrongbeer += analyses[i].todStrongbeer;
@@ -48,6 +49,13 @@ function updateProfile(analyses, user, callback) {
         totAlcStrongbeer += analyses[i].todAlcStrongbeer;
         totAlcWine += analyses[i].todAlcWine;
         totAlcLiquor += analyses[i].todAlcLiquor;
+
+        series.push(
+            {
+                date: analyses[i].date,
+                cumAlc: totAlc
+            }
+        );
 
         alcPerDay[analyses[i].dayOfWeek] += analyses[i].todAlc;
 
@@ -141,7 +149,8 @@ function updateProfile(analyses, user, callback) {
         highestBinge: highestBinge,
         highestBingeDate: highestBingeDate,
 
-        groups: groupData
+        groups: groupData,
+        series: series
     };
 
     Profile.findOneAndUpdate({

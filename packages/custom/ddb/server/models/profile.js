@@ -141,6 +141,7 @@ var ProfileSchema = new Schema({
     happyLonerFactor: {
         type: Number
     },
+    // Group-related data
     groups: [
         {
             group: {
@@ -149,6 +150,13 @@ var ProfileSchema = new Schema({
             },
             sadLonerFactor: Number,
             happyLonerFactor: Number
+        }
+    ],
+    // Chart data
+    series: [
+        {
+            date: Date,
+            cumAlc: Number
         }
     ]
 });
