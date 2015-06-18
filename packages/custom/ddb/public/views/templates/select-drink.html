@@ -1,3 +1,19 @@
 <a href="#">
-    {{match.label}} <i>({{match.model.alc}}%)</i>
+    <div class="row">
+        <div class="col-xs-6">
+            <span bind-html-unsafe="match.label | typeaheadHighlight:query"></span>
+            <em>({{match.model.alc * 100 | number:1}}%)</em>
+        </div>
+        <div class="col-xs-6 text-right">
+            <strong>{{match.model.type | uppercase}}</strong>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <small>{{match.model.brewery}}</small>
+        </div>
+        <div class="col-sm-6 text-right">
+            <small>{{match.model.tags.join(', ')}}</small>
+        </div>
+    </div>
 </a>

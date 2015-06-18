@@ -10,7 +10,7 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$state
 
         Profile.getUser($stateParams.userId).success(function (profile) {
             if (profile) {
-                $scope.typeLabels = ["Pilsner", "Strong Beer", "Wine", "Liquor"];
+                $scope.typeLabels = ["Beer", "Strong Beer", "Wine", "Liquor"];
                 $scope.typeProfileData = [
                     [
                         $filter('number')(profile.totAlcPilsner, 2),

@@ -156,6 +156,7 @@ tr.active {
 .dropdown-menu > li > a {
     padding-top: 5px;
     min-height: 30px;
+    font-weight: normal !important;
 }
 
 .close {
