@@ -54,11 +54,6 @@ var DailyAnalysisSchema = new Schema({
         type: Number,
         required: true
     },
-    // 7-Day Average
-    spreadAverage: {
-        type: Number,
-        required: true
-    },
     groups: [
         {
             group: {

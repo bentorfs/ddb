@@ -1,18 +1,18 @@
 <div>
     <div class="row">
-        <div class="col-md-6 col-border" style="min-height: 150px">
+        <div class="col-md-6 col-border" style="min-height: 120px">
 
-            <h3>Search a drink</h3>
+            <h5>Search a drink</h5>
 
-            <div class="form-group">
+            <div class="form-group has-success has-feedback">
                 <input type="text" ng-model="selectedDrink" placeholder="Search a drink"
                        typeahead="drink as drink.name for drink in getDrinks($viewValue)"
                        typeahead-loading="loadingDrinks"
-                       class="form-control input-lg"
+                       class="form-control"
                        typeahead-template-url="ddb/views/templates/select-drink.html"
-                       typeahead-editable="false" typeahead-min-length="2"
-                       typeahead-on-select="onDrinkSelect()">
-                <i ng-show="loadingDrinks" class="glyphicon glyphicon-refresh"></i>
+                       typeahead-editable="false" typeahead-min-length="2">
+                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"
+                      ng-if="selectedDrink"></span>
             </div>
 
             <div ng-show="newDrinkName && !loadingDrinks && !selectedDrink">
@@ -45,8 +45,30 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="col-sm-4 control-label">
+                        Type
+                    </label>
+
+                    <div class="col-sm-8">
+                        <div class="btn-group" role="group" ng-init="setNewDrinkType('beer')">
+                            <button type="button" class="btn btn-default" ng-click="setNewDrinkType('beer')"
+                                    ng-class="{active: newDrinkType === 'beer'}">
+                                Beer
+                            </button>
+                            <button type="button" class="btn btn-default" ng-click="setNewDrinkType('wine')"
+                                    ng-class="{active: newDrinkType === 'wine'}">
+                                Wine
+                            </button>
+                            <button type="button" class="btn btn-default" ng-click="setNewDrinkType('liquor')"
+                                    ng-class="{active: newDrinkType === 'liquor'}">
+                                Liquor
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
                     <div class="col-sm-offset-4 col-sm-8">
-                        <button ng-click="addNewDrink()" class="btn btn-default"
+                        <button ng-click="addNewDrink()" class="btn btn-warning"
                                 ng-disabled="!newDrinkForm.$valid">
                             Add new drink
                         </button>
@@ -55,14 +77,13 @@
             </form>
         </div>
         <div class="col-md-6">
-            <h3>Or select a favorite</h3>
+            <h5>Or select a favorite</h5>
 
             <div class="form-group btn-collection">
-                <button type="button" class="btn btn-lg btn-danger"
+                <button type="button" class="btn btn-danger"
                         ng-repeat="frequentDrink in frequentDrinks | limitTo: 5"
                         ng-class="{active: selectedDrink._id === frequentDrink.drink._id}"
-                        ng-click="selectDrink(frequentDrink.drink)"
-                        scroll-to="select-amount" offset="55">
+                        ng-click="selectDrink(frequentDrink.drink)">
                     {{frequentDrink.drink.name}}
                 </button>
                 <div class="alert alert-danger" role="alert" ng-hide="frequentDrinks.length">
@@ -72,19 +93,21 @@
         </div>
     </div>
     <div class="row" style="border-top: 1px dotted #FF6700" id="select-amount">
-        <div class="col-md-6">
-            <h3>How much are you having?</h3>
+        <div class="col-md-6 col-border">
+            <h5>How much are you having?</h5>
 
-            <div class="form-group">
+            <div class="form-group has-success has-feedback">
                 <input type="number" ng-model="selectedAmount" placeholder="How many centiliters?"
-                       class="form-control input-lg">
+                       class="form-control">
+                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"
+                      ng-if="selectedAmount"></span>
             </div>
         </div>
-        <div class="col-md-6" style="border-left: 1px dotted #FF6700">
-            <h3>Or choose a standard size</h3>
+        <div class="col-md-6">
+            <h5>Or choose a standard size</h5>
 
             <div class="form-group btn-collection">
-                <button type="button" class="btn btn-lg btn-danger"
+                <button type="button" class="btn btn-danger"
                         ng-repeat="size in sizes"
                         ng-click="setAmount(size)"
                         ng-class="{active: getAmount() === size}">

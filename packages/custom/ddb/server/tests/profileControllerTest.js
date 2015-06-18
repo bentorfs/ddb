@@ -132,7 +132,9 @@ describe('<Unit Test>', function () {
                             expect(data.totPilsner).to.eql(300);
                             expect(data.series.length).to.eql(2);
                             expect(data.series[0].cumAlc).to.eql(137);
+                            expect(Math.round(data.series[0].spreadAlc)).to.eql(20);
                             expect(data.series[1].cumAlc).to.eql(205.5);
+                            expect(Math.round(data.series[1].spreadAlc)).to.eql(29);
                             done();
                         }
                     };

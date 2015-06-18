@@ -156,7 +156,8 @@ var ProfileSchema = new Schema({
     series: [
         {
             date: Date,
-            cumAlc: Number
+            cumAlc: Number,
+            spreadAlc: Number
         }
     ]
 });

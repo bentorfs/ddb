@@ -47,7 +47,6 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
             this.resetpassworderror = null;
             this.validationError = null;
             $http.get('/api/users/me').success(this.onIdentity.bind(this)).error(function() {
-                console.log('test');
                 //localStorage.removeItem('JWT');
                 //$location.url('/login');
             });

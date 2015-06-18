@@ -51,7 +51,7 @@ angular.module('mean.ddb').controller('DdbMeasurementsController', ['$rootScope'
 
         $scope.onDrinkTracked = function () {
             $scope.loadData();
-            smoothScroll(document.getElementById('track-more'), {offset: 55});
+            smoothScroll(document.getElementById('consumptions'), {offset: 55});
         };
 
         $scope.isValid = function (measurement) {

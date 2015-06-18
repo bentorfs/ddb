@@ -11,7 +11,16 @@ var mongoose = require('mongoose'),
 module.exports = {
     all: function (req, res) {
         permissions.ifDailyAnalysisPermission(req.user, req.params.userId, function () {
-            DailyAnalysis.find({user: req.params.userId}).sort('date').exec(function (err, analyses) {
+
+            var fromDate = req.query.fromDate || moment.utc().subtract(30, 'days').valueOf();
+            var toDate = req.query.toDate || moment.utc().valueOf();
+
+            DailyAnalysis.find({
+                user: req.params.userId, date: {
+                    $gte: fromDate,
+                    $lte: toDate
+                }
+            }).sort('date').exec(function (err, analyses) {
                 if (err) {
                     console.error(err);
                     return res.status(500).json({

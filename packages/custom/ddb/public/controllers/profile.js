@@ -9,7 +9,7 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$state
         });
 
         Profile.getUser($stateParams.userId).success(function (profile) {
-            if (profile.length > 0 && profile) {
+            if (profile) {
                 $scope.typeLabels = ["Pilsner", "Strong Beer", "Wine", "Liquor"];
                 $scope.typeProfileData = [[profile.totAlcPilsner, profile.totAlcStrongbeer, profile.totAlcWine, profile.totAlcLiquor]];
 
@@ -17,14 +17,14 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$state
                 $scope.weekProfileData = [[profile.totAlcMon, profile.totAlcTue, profile.totAlcWed, profile.totAlcThu, profile.totAlcFri, profile.totAlcSat, profile.totAlcSun]];
 
                 $scope.profile = profile;
+
+                $scope.getSpreadAverageChartData(30);
+                $scope.getCumulativeChartData(30);
             }
         });
 
-        DailyAnalysis.get($stateParams.userId).success(function (dailyAnalyses) {
+        DailyAnalysis.get($stateParams.userId, moment().subtract(11, 'days').valueOf(), moment().valueOf()).success(function (dailyAnalyses) {
             $scope.dailyAnalyses = dailyAnalyses;
-
-            $scope.getSpreadAverageChartData(30);
-            $scope.getCumulativeChartData(30);
         });
 
         $scope.getSpreadAverageChartData = function (nbDays) {
@@ -47,12 +47,12 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$state
 
             $scope.spreadAverageSeries = ['Spread Average'];
             var fromDate = moment.utc().subtract(nbDays, 'days');
-            angular.forEach($scope.dailyAnalyses, function (analysis) {
-                var date = moment.utc(analysis.date, 'YYYY-MM-DD hh:mm:ss');
+            angular.forEach($scope.profile.series, function (serie) {
+                var date = moment.utc(serie.date, 'YYYY-MM-DD hh:mm:ss');
                 if (date >= fromDate) {
                     //var displayDate = date.format('MM/DD');
                     $scope.spreadAverageLabels.push('');
-                    $scope.spreadAverageData[0].push($filter('number')(analysis.spreadAverage, 2));
+                    $scope.spreadAverageData[0].push($filter('number')(serie.spreadAlc, 2));
                 }
             });
         };
@@ -73,12 +73,12 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$state
             };
             $scope.cumulativeTrendSeries = ['Cumulative Trend'];
             var fromDate = moment.utc().subtract(nbDays, 'days');
-            angular.forEach($scope.dailyAnalyses, function (analysis) {
-                var date = moment.utc(analysis.date, 'YYYY-MM-DD hh:mm:ss');
+            angular.forEach($scope.profile.series, function (serie) {
+                var date = moment.utc(serie.date, 'YYYY-MM-DD hh:mm:ss');
                 if (date >= fromDate) {
                     //var displayDate = date.format('MM/DD');
                     $scope.cumulativeTrendLabels.push('');
-                    $scope.cumulativeTrendData[0].push($filter('number')(analysis.cumAlc, 2));
+                    $scope.cumulativeTrendData[0].push($filter('number')(serie.cumAlc, 2));
                 }
             });
         }

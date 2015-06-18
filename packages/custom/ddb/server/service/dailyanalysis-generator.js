@@ -59,17 +59,8 @@ module.exports = {
 function getDailyAnalyses(measurements, user) {
     var result = [];
     var todAlc = 0;
-    var spreadData = [0, 0, 0, 0, 0, 0, 0];
-    spreadData.average = function () {
-        return spreadData.reduce(function (prev, cur) {
-                return prev + cur;
-            }) / spreadData.length;
-    };
-
-    var spreadIndex = 0;
     _.forEach(measurements, function (measurement) {
         todAlc = getTotalAlcohol(measurement);
-        spreadData[spreadIndex % 7] = todAlc;
         var analysisData = {
             user: new ObjectId(user._id),
             date: measurement.date,
@@ -86,13 +77,9 @@ function getDailyAnalyses(measurements, user) {
             todAlcLiquor: getTotAlcLiquor(measurement),
             todAlc: todAlc,
 
-            spreadAverage: spreadData.average(),
-
             groups: []
         };
         result.push(analysisData);
-
-        spreadIndex++;
     });
 
     return result;

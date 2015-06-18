@@ -39,6 +39,8 @@ function updateProfile(analyses, user, callback) {
     var totAlc = 0, totPilsner = 0, totStrongbeer = 0, totWine = 0, totLiquor = 0;
     var totAlcPilsner = 0, totAlcStrongbeer = 0, totAlcWine = 0, totAlcLiquor = 0;
     var series = [];
+    var spreadAlc = [0, 0, 0, 0, 0, 0, 0];
+
     for (var i = 0; i < analyses.length; i++) {
         totPilsner += analyses[i].todPilsner;
         totStrongbeer += analyses[i].todStrongbeer;
@@ -50,10 +52,18 @@ function updateProfile(analyses, user, callback) {
         totAlcWine += analyses[i].todAlcWine;
         totAlcLiquor += analyses[i].todAlcLiquor;
 
+        spreadAlc[i % 7] = analyses[i].todAlc;
         series.push(
             {
                 date: analyses[i].date,
-                cumAlc: totAlc
+                cumAlc: totAlc,
+                cumAlcPilsner: totAlcPilsner,
+                cumAlcStrongbeer: totAlcStrongbeer,
+                cumAlcWine: totAlcWine,
+                cumAlcLiquor: totAlcLiquor,
+                spreadAlc: _.reduce(spreadAlc, function (prev, cur) {
+                    return prev + cur;
+                }, 0) / spreadAlc.length
             }
         );
 
