@@ -54,44 +54,6 @@ var DailyAnalysisSchema = new Schema({
         type: Number,
         required: true
     },
-
-    // Cumulative up till this day
-    cumPilsner: {
-        type: Number,
-        required: true
-    },
-    cumStrongbeer: {
-        type: Number,
-        required: true
-    },
-    cumWine: {
-        type: Number,
-        required: true
-    },
-    cumLiquor: {
-        type: Number,
-        required: true
-    },
-    cumAlcPilsner: {
-        type: Number,
-        required: true
-    },
-    cumAlcStrongbeer: {
-        type: Number,
-        required: true
-    },
-    cumAlcWine: {
-        type: Number,
-        required: true
-    },
-    cumAlcLiquor: {
-        type: Number,
-        required: true
-    },
-    cumAlc: {
-        type: Number,
-        required: true
-    },
     // 7-Day Average
     spreadAverage: {
         type: Number,

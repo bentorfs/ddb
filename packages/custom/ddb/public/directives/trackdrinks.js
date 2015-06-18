@@ -36,7 +36,7 @@ angular.module('mean.ddb').directive('trackDrinks', function () {
                 $scope.addNewDrink = function () {
                     Drink.add({
                         name: $scope.newDrinkName,
-                        alc: $scope.newDrinkAlcoholContent
+                        alc: $scope.newDrinkAlcoholContent >= 1 ? $scope.newDrinkAlcoholContent / 100 : $scope.newDrinkAlcoholContent
                     }).success(function (drink) {
                         $scope.showAdd = false;
                         $scope.newDrinkName = '';
