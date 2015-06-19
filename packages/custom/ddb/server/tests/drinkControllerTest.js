@@ -96,7 +96,7 @@ describe('<Unit Test>', function () {
                 drinkCtrl.list(req, res);
             });
 
-            it('Can update an existing drink', function (done) {
+            it('Can update an existing drink, by the same user', function (done) {
                 var req = {
                     user: {
                         _id: _user1._id
@@ -113,6 +113,28 @@ describe('<Unit Test>', function () {
                     json: function (data) {
                         expect(data.alc).to.eql(0.10);
                         expect(data.lastModifiedDate).to.not.eql(lastModifiedDate);
+                        done();
+                    }
+                };
+                drinkCtrl.update(req, res);
+            });
+
+            it('Cannot update an existing drink, by another user', function (done) {
+                var req = {
+                    user: {
+                        _id: "otherUser"
+                    },
+                    params: {
+                        drinkId: drinkId
+                    },
+                    body: {
+                        name: 'TestBier',
+                        alc: 0.50
+                    }
+                };
+                var res = {
+                    status: function (code) {
+                        expect(code).to.eql(401);
                         done();
                     }
                 };

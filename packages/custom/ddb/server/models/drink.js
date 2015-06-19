@@ -13,6 +13,10 @@ var DrinkSchema = new Schema({
         type: Number,
         default: 0
     },
+    createdBy: {
+        type: Schema.ObjectId,
+        ref: 'User'
+    },
     tags: [{ // style, type, .. spirit type
         type: String
     }],
@@ -20,7 +24,7 @@ var DrinkSchema = new Schema({
         type: String,
         required: true
     },
-    brewery: {
+    brewery: { // TODO: delete? Replaced by producer
         type: String
     },
     creationDate: {

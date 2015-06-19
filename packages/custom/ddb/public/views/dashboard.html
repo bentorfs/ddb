@@ -36,7 +36,9 @@
                                 {{consumption.amount}} cl
                             </td>
                             <td class="col-xs-5">
-                                {{consumption.drink.name}}
+                                <a ui-sref="drink({drinkId: consumption.drink._id})" autoscroll="true" tooltip="See drink details">
+                                    <i class="glyphicon glyphicon-zoom-in"></i> {{consumption.drink.name}}
+                                </a>
                             </td>
                             <td class="col-xs-1 text-right">
                                 <button type="button" class="close" ng-click="removeConsumption(consumption)"
@@ -50,7 +52,5 @@
             </div>
         </div>
     </div>
-
-    <!-- <div style="font-size: 10vw; color: #FFD8AA; margin-top: 20vh" class="text-center">Beerkeeper</div>-->
 
 </section>

@@ -2,6 +2,7 @@
 
 var mongoose = require('mongoose'),
     Group = mongoose.model('Group'),
+    Drink = mongoose.model('Drink'),
     _ = require('lodash');
 
 module.exports = {
@@ -57,6 +58,21 @@ module.exports = {
                 authorizedCallback();
             }
         });
-    }
+    },
+    ifDrinkPermission: function (requestUser, targetDrinkId, authorizedCallback, forbiddenCallback) {
+        // See if the user created the drink
+        Drink.findOne({_id: targetDrinkId, createdBy: requestUser._id}, function (err, drink) {
+            if (err) {
+                console.error('Could not check drink permission, because of error: ' + err);
+                forbiddenCallback()
+            }
+            else if (!drink) {
+                console.error('User ' + requestUser.username + ' has no permission to change drink ' + targetDrinkId);
+                forbiddenCallback()
+            } else {
+                authorizedCallback();
+            }
+        });
+    },
 };
 

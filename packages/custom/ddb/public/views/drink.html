@@ -1,0 +1,113 @@
+<section class="container">
+    <div data-ng-controller="DdbDrinkController">
+
+        <div class="page-header">
+            <h1>Drink
+                <br class="visible-xs"/>
+                <small>{{drink.name}}</small>
+            </h1>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Fact Sheet</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-condensed">
+                            <tr>
+                                <th><small>Producer</small></th>
+                            </tr>
+                            <tr>
+                                <td><em>{{drink.producer || 'Unavailable'}}</em></td>
+                            </tr>
+                            <tr>
+                                <th><small>First Brewed</small></th>
+                            </tr>
+                            <tr>
+                                <td><em>{{drink.firstBrewed || 'Unavailable'}}</em></td>
+                            </tr>
+                            <tr>
+                                <th><small>Region</small></th>
+                            </tr>
+                            <tr>
+                                <td><em>{{drink.location || 'Unavailable'}}</em></td>
+                            </tr>
+                            <tr>
+                                <th><small>Website</small></th>
+                            </tr>
+                            <tr>
+                                <td><em>{{drink.website || 'Unavailable'}}</em></td>
+                            </tr>
+                            <tr>
+                                <th><small>Age</small></th>
+                            </tr>
+                            <tr>
+                                <td><em>{{drink.age || 'Unavailable'}}</em></td>
+                            </tr>
+                            <tr>
+                                <th><small>Components</small></th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <ul>
+                                        <li ng-repeat="component in drink.components">{{component}}</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><small>Tags</small></th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <ul>
+                                        <li ng-repeat="tag in drink.tags">{{tag}}</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Description</h3>
+                    </div>
+                    <div class="panel-body">
+                        {{drink.article}}
+                        <div ng-if="!drink.article"><em>No description available</em></div>
+                    </div>
+                </div>
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Reviews</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div><em>No reviews available</em></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Top Drinkers</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-striped">
+                            <tr ng-repeat="topDrinker in drink.topDrinkers">
+                                <td class="col-xs-8">{{topDrinker.user.name}}</td>
+                                <td class="col-xs-4">
+                                    {{topDrinker.totalAmount}} cl
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>

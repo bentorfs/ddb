@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('mean.system').controller('HeaderController', ['$scope', '$rootScope', 'Menus', 'MeanUser', '$state', 'Group',
-    function ($scope, $rootScope, Menus, MeanUser, $state, Group) {
+angular.module('mean.system').controller('HeaderController', ['$scope', '$rootScope', 'Menus', 'MeanUser', '$state', '$anchorScroll', 'Group',
+    function ($scope, $rootScope, Menus, MeanUser, $state, $anchorScroll, Group) {
 
         $scope.isActive = function (state) {
             return state === $state.$current.name;
@@ -19,6 +19,10 @@ angular.module('mean.system').controller('HeaderController', ['$scope', '$rootSc
 
         $rootScope.$on('beerkeeper.groups.update', function () {
             $scope.updateGroups();
+        });
+
+        $rootScope.$on('$stateChangeSuccess', function () {
+            $anchorScroll(top);
         });
 
         var vm = this;
