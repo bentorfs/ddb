@@ -13,30 +13,38 @@ var mongoose = require('mongoose'),
 
 
 module.exports = {
-    rebuildEverything: function () {
-        rebuildAllDailyAnalyses();
+    rebuildEverything: function (done) {
+        rebuildAllDailyAnalyses(done);
     },
-    rebuildUser: function (user, callback) {
-        dailyanalysisGenerator.processUser(user, function () {
-            profileGenerator.processUser(user, function () {
-                dailygroupanalysisGenerator.processUser(user, function () {
-                    grouprankingGenerator.processUser(user, function () {
-                        if (callback) {
-                            callback();
-                        }
+    rebuildUser: function (userId, done) {
+        User.findById(userId, function (err, user) {
+            if (err || !user) {
+                console.error('Could not retrieve user with id ' + userId + ', because: ' + err);
+            } else {
+                dailyanalysisGenerator.processUser(user, function () {
+                    profileGenerator.processUser(user, function () {
+                        dailygroupanalysisGenerator.processUser(user, function () {
+                            grouprankingGenerator.processUser(user, function () {
+                                if (done) {
+                                    done();
+                                }
+                            });
+                        });
                     });
                 });
-            });
+            }
         });
     }
 };
 
-function rebuildAllDailyAnalyses() {
+function rebuildAllDailyAnalyses(done) {
     User.find({}).exec(function (err, users) {
         if (err) {
             console.error('Could not retrieve users for rebuilding daily analyses, because: ' + err)
         }
-        var counter = _.after(users.length, rebuildAllDailyGroupAnalyses);
+        var counter = _.after(users.length, function () {
+            rebuildAllDailyGroupAnalyses(done);
+        });
         _.forEach(users, function (user) {
             console.log('Rebuilding all daily analyses for user ' + user.username);
             dailyanalysisGenerator.processUser(user, counter);
@@ -44,12 +52,14 @@ function rebuildAllDailyAnalyses() {
     });
 }
 
-function rebuildAllDailyGroupAnalyses() {
+function rebuildAllDailyGroupAnalyses(done) {
     Group.find({}).exec(function (err, groups) {
         if (err) {
             console.error('Could not retrieve groups for rebuilding daily group analyses, because: ' + err)
         }
-        var counter = _.after(groups.length, rebuildAllProfiles);
+        var counter = _.after(groups.length, function () {
+            rebuildAllProfiles(done);
+        });
         _.forEach(groups, function (group) {
             console.log('Rebuilding all daily group analyses for group ' + group.name);
             dailygroupanalysisGenerator.processGroup(group, counter);
@@ -57,12 +67,14 @@ function rebuildAllDailyGroupAnalyses() {
     });
 }
 
-function rebuildAllProfiles() {
+function rebuildAllProfiles(done) {
     User.find({}).exec(function (err, users) {
         if (err) {
             console.error('Could not retrieve users for rebuilding profiles, because: ' + err)
         }
-        var counter = _.after(users.length, rebuildAllGroupRankings);
+        var counter = _.after(users.length, function () {
+            rebuildAllGroupRankings(done);
+        });
         _.forEach(users, function (user) {
             console.log('Rebuilding profile for user ' + user.username);
             profileGenerator.processUser(user, counter);
@@ -70,14 +82,15 @@ function rebuildAllProfiles() {
     });
 }
 
-function rebuildAllGroupRankings() {
+function rebuildAllGroupRankings(done) {
     Group.find({}).exec(function (err, groups) {
         if (err) {
             console.error('Could not retrieve groups for rebuilding rankings, because: ' + err)
         }
+        var counter = _.after(groups.length, done);
         _.forEach(groups, function (group) {
             console.log('Rebuilding rankings for group ' + group.name);
-            grouprankingGenerator.processGroup(group);
+            grouprankingGenerator.processGroup(group, counter);
         });
     });
 }

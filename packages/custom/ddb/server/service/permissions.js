@@ -74,5 +74,12 @@ module.exports = {
             }
         });
     },
+    ifUserToolsPermission: function (requestUser, targetUserId, authorizedCallback, forbiddenCallback) {
+        if (targetUserId === requestUser._id || requestUser.isAdmin()) {
+            authorizedCallback();
+        } else {
+            forbiddenCallback();
+        }
+    }
 };
 

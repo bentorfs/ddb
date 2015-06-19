@@ -13,9 +13,7 @@ module.exports = {
         Group.find({members: req.user._id}, function (err, groups) {
             if (err) {
                 console.error(err);
-                return res.status(500).json({
-                    error: 'Cannot list the groups'
-                });
+                return res.status(500).end();
             }
             res.json(groups);
         });
@@ -23,10 +21,7 @@ module.exports = {
     createGroup: function (req, res) {
         var group = new Group(req.body);
         if (!group.name) {
-            res.status(400);
-            res.json({
-                error: 'Invalid group data'
-            });
+            res.status(400).end();
             return;
         }
         group.members = [req.user._id];
@@ -34,9 +29,7 @@ module.exports = {
         group.save(function (err) {
             if (err) {
                 console.error(err);
-                return res.status(500).json({
-                    error: 'Could not create group'
-                });
+                return res.status(500).end();
             }
             grouprankingGenerator.processGroup(group, function () {
                 res.json(group);
@@ -48,14 +41,12 @@ module.exports = {
             Group.findById(req.params.groupId).populate('members', 'username').populate('invitations', 'username').exec(function (err, doc) {
                 if (err || !doc) {
                     console.error(err);
-                    return res.status(500).json({
-                        error: 'Cannot retrieve the group'
-                    });
+                    return res.status(500).end();
                 }
                 res.json(doc);
             });
         }, function () {
-            res.status(401);
+            res.status(401).end();
         });
     },
     getRanking: function (req, res) {
@@ -83,23 +74,19 @@ module.exports = {
                 .exec(function (err, ranking) {
                     if (err || !ranking) {
                         console.error(err);
-                        return res.status(500).json({
-                            error: 'Cannot retrieve the group ranking'
-                        });
+                        return res.status(500).end();
                     }
                     res.json(ranking);
                 });
         }, function () {
-            res.status(401);
+            res.status(401).end();
         });
     },
     listInvitations: function (req, res) {
         Group.find({invitations: req.user._id}, function (err, groups) {
             if (err) {
                 console.error(err);
-                return res.status(500).json({
-                    error: 'Cannot list the invitations'
-                });
+                return res.status(500).end();
             }
             res.json(groups);
         });
@@ -113,9 +100,7 @@ module.exports = {
             function (err, group) {
                 if (err) {
                     console.error(err);
-                    return res.status(500).json({
-                        error: 'Cannot accept the invitation'
-                    });
+                    return res.status(500).end();
                 }
                 grouprankingGenerator.processGroup(group, function () {
                     res.status(200).end();
@@ -130,15 +115,12 @@ module.exports = {
             },
             {
                 '$pull': {invitations: req.user._id, members: req.user._id}
-
             },
             {new: true},
             function (err, group) {
                 if (err) {
                     console.error(err);
-                    return res.status(500).json({
-                        error: 'Cannot leave the group'
-                    });
+                    return res.status(500).end();
                 }
                 grouprankingGenerator.processGroup(group, function () {
                     res.status(200).end();
@@ -157,14 +139,12 @@ module.exports = {
                 }, function (err) {
                     if (err) {
                         console.error(err);
-                        return res.status(500).json({
-                            error: 'Cannot add the invitation'
-                        });
+                        return res.status(500).end();
                     }
                     res.status(200).end();
                 });
         }, function () {
-            res.status(401);
+            res.status(401).end();
         });
     },
     removeInvitation: function (req, res) {
@@ -179,14 +159,12 @@ module.exports = {
                 function (err) {
                     if (err) {
                         console.error(err);
-                        return res.status(500).json({
-                            error: 'Cannot reject the invitation'
-                        });
+                        return res.status(500).end();
                     }
                     res.status(200).end();
                 });
         }, function () {
-            res.status(401);
+            res.status(401).end();
         });
     }
 };

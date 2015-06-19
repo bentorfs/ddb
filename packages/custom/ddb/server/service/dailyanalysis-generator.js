@@ -12,7 +12,6 @@ var mongoose = require('mongoose'),
 
 module.exports = {
     processUser: function (user, callback) {
-
         // Get the users groups first
         Group.find({members: user._id}, function (err, groups) {
             if (err) {

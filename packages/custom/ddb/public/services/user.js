@@ -7,24 +7,21 @@ angular.module('mean.ddb').factory('User', ['$http',
         userDao.list = function () {
             return $http({
                 url: '/api/users',
-                method: 'GET',
-                params: {}
+                method: 'GET'
             });
         };
 
         userDao.get = function (userId) {
             return $http({
                 url: '/api/users/' + userId,
-                method: 'GET',
-                params: {}
+                method: 'GET'
             });
         };
 
-        userDao.purge = function () {
+        userDao.delete = function () {
             return $http({
-                url: '/api/users/data',
-                method: 'DELETE',
-                params: {}
+                url: '/api/users/' + userId,
+                method: 'DELETE'
             });
         };
 

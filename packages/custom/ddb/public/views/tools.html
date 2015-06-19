@@ -6,48 +6,15 @@
             </h1>
         </div>
 
-      <!--  <div class="panel panel-danger">
-            <div class="panel-heading">
-                <h3 class="panel-title">Data importeren uit Google Sheets Drankdatabank</h3>
-            </div>
-            <div class="panel-body">
-                <h3>Instructies</h3>
-                <ul>
-                    <li>Chrome gebruiken</li>
-                    <li>Google sheet drankdatabank openen</li>
-                    <li>Selecteer de gegevens van jouw 4 kolommen (zonder headers). Bv J3:M50 voor Michiel. Altijd
-                        beginnen
-                        op rij 3, ookal ben je pas later gegevens beginnen ingeven.
-                    </li>
-                    <li>CTRL+C om de gegevens te kopieren, en plakken in het invoerveld hieronder</li>
-                    <li>Indien je niet hebt meegedaan vanaf de eerste dag, hieronder corrigeren naar de eerste dag
-                        waarop je
-                        wel
-                        gegevens hebt.
-                    </li>
-                    <li>Op import klikken</li>
-                </ul>
-
-                <form>
-                    Eerste dag met gegevens: <input type="date" ng-model="firstDay"/> <strong>(Pas op: dit is
-                    MM/DD/YYYY,
-                    omgekeerd
-                    als in google sheets)</strong>
-                    <textarea ng-model="importData" rows="30" class="form-control input-sm" ng-trim="false"></textarea>
-                    <button ng-click="import()" class="btn btn-primary">Import</button>
-                </form>
-            </div>
-        </div>-->
-
         <div class="row">
             <div class="col-md-6">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Rebuild Database</h3>
+                        <h3 class="panel-title">Rebuild User Database</h3>
                     </div>
                     <div class="panel-body">
                         <p>
-                            Don't delete measurements, but rebuild all statistics
+                            Re-generates all your statistics. No data will be lost.
                         </p>
                         <button class="btn btn-primary" ng-click="rebuild()"><i class="glyphicon glyphicon-ok"/> Rebuild
                         </button>
@@ -74,6 +41,23 @@
                   </div>
               </div>-->
         </div>
-    </div>
+
+        <div class="row">
+            <div class="col-md-6" ng-show="user.isAdmin">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Rebuild Entire Database</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>
+                            Re-generates all statistics for everyone. No data will be lost.
+                        </p>
+                        <button class="btn btn-primary" ng-click="rebuildAll()">
+                            <i class="glyphicon glyphicon-ok"/> Rebuild
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 </section>

@@ -135,6 +135,9 @@ describe('<Unit Test>', function () {
                 var res = {
                     status: function (code) {
                         expect(code).to.eql(401);
+                        return this;
+                    },
+                    end: function () {
                         done();
                     }
                 };

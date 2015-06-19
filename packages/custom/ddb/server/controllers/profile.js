@@ -15,18 +15,16 @@ module.exports = {
             Profile.findOne({user: req.params.userId}).exec(function (err, profile) {
                 if (err) {
                     console.error(err);
-                    return res.status(500).json({
-                        error: 'Cannot retrieve profile for user'
-                    });
+                    return res.status(500).end();
                 }
                 if (profile) {
                     res.json(profile);
                 } else {
-                    res.status(404).json({error: 'Profile does not exist'})
+                    res.status(404).end()
                 }
             });
         }, function () {
-            res.status(401);
+            res.status(401).end();
         });
     },
     getFrequentDrinks: function (req, res) {
@@ -48,15 +46,13 @@ module.exports = {
                 Drink.populate(frequentDrinks, {path: "drink"}, function (err, docs) {
                     if (err) {
                         console.error(err);
-                        return res.status(500).json({
-                            error: 'Cannot populate drinks'
-                        });
+                        return res.status(500).end();
                     }
                     res.json(docs);
                 });
             });
         }, function () {
-            res.status(401);
+            res.status(401).end();
         });
     }
 };

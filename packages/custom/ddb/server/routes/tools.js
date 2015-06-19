@@ -2,16 +2,15 @@
 
 module.exports = function (Tools, app, auth) {
 
-    var purge = require('../controllers/purge');
-    var rebuild = require('../service/rebuild');
+    var tools = require('../controllers/tools');
 
-    app.route('/api/users/data')
-        .delete(auth.requiresLogin, purge.purgeUser);
+    app.route('/api/users/:userId')
+        .delete(auth.requiresLogin, tools.purgeUser);
 
-    app.route('/api/rebuild')
-        .post(auth.requiresLogin, function (req, res) {
-            rebuild.rebuildEverything();
-            res.json({});
-        });
+    app.route('/api/tools/rebuild/user/:userId')
+        .post(auth.requiresLogin, tools.rebuildUser);
+
+    app.route('/api/tools/rebuild')
+        .post(auth.requiresAdmin, tools.rebuildEverything);
 
 };

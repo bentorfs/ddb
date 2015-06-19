@@ -14,14 +14,12 @@ module.exports = {
             DailyGroupAnalysis.find({'group': req.params.groupId}).sort('date').exec(function (err, groupanalyses) {
                 if (err) {
                     console.error(err);
-                    return res.status(500).json({
-                        error: 'Cannot list the daily group analysis'
-                    });
+                    return res.status(500).end();
                 }
                 res.json(groupanalyses);
             });
         }, function () {
-            res.status(401);
+            res.status(401).end();
         });
     }
 };

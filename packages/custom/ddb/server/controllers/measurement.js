@@ -15,10 +15,7 @@ module.exports = {
 
         var dateToUpdate = moment.utc(upsertData.date).startOf('day');
         if (dateToUpdate < moment.utc().subtract(60, 'days') || dateToUpdate > moment.utc().add(3, 'days')) {
-            res.status(400);
-            res.json({
-                error: 'Cannot add measurements on this date'
-            });
+            res.status(400).end();
             return;
         }
         upsertData.date = dateToUpdate.valueOf();
@@ -30,11 +27,9 @@ module.exports = {
         }, function (err, updatedMeasurement) {
             if (err) {
                 console.error(err);
-                return res.status(500).json({
-                    error: 'Cannot update the measurement'
-                });
+                return res.status(500).end();
             }
-            rebuild.rebuildUser(req.user, function () {
+            rebuild.rebuildUser(req.user._id, function () {
                 res.json(updatedMeasurement);
             });
         });
@@ -55,11 +50,9 @@ module.exports = {
         }, function (err, updatedMeasurement) {
             if (err) {
                 console.error(err);
-                return res.status(500).json({
-                    error: 'Cannot update the measurement'
-                });
+                return res.status(500).end();
             }
-            rebuild.rebuildUser(req.user, _.noop);
+            rebuild.rebuildUser(req.user._id, _.noop);
             res.json(updatedMeasurement);
         });
     },
@@ -81,21 +74,16 @@ module.exports = {
         }, function (err, updatedMeasurement) {
             if (err) {
                 console.error(err);
-                return res.status(500).json({
-                    error: 'Cannot update the measurement'
-                });
+                return res.status(500).end();
             }
-            rebuild.rebuildUser(req.user, _.noop);
+            rebuild.rebuildUser(req.user._id, _.noop);
             res.json(updatedMeasurement);
         });
     },
     get: function (req, res) {
         var dateToGet = moment.utc(parseInt(req.params.date, 10)).startOf('day');
         if (dateToGet > moment.utc().add(3, 'days')) {
-            res.status(400);
-            res.json({
-                error: 'Cannot add measurements on this date'
-            });
+            res.status(400).end();
             return;
         }
         var upsert = true;
@@ -114,9 +102,7 @@ module.exports = {
         }).populate('consumptions.drink').exec(function (err, measurement) {
             if (err) {
                 console.error(err);
-                return res.status(500).json({
-                    error: 'Cannot get the measurement'
-                });
+                return res.status(500).end();
             }
             res.json(measurement);
         });
@@ -127,9 +113,7 @@ module.exports = {
         Measurement.find({user: req.user, isDeleted: false}).sort('date').exec(function (err, measurements) {
             if (err) {
                 console.error(err);
-                return res.status(500).json({
-                    error: 'Cannot retrieve measurements'
-                });
+                return res.status(500).end();
             }
 
             var today = moment.utc().startOf('day');
@@ -162,11 +146,9 @@ module.exports = {
                     }).sort('date').exec(function (err, measurements) {
                         if (err) {
                             console.error(err);
-                            return res.status(500).json({
-                                error: 'Cannot list the measurements'
-                            });
+                            return res.status(500).end();
                         } else {
-                            rebuild.rebuildUser(req.user, function () {
+                            rebuild.rebuildUser(req.user._id, function () {
                                 res.json(measurements);
                             });
                         }

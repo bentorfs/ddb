@@ -78,7 +78,7 @@ describe('<Unit Test>', function () {
                     }
                 };
                 var res = {
-                   json: function (group) {
+                    json: function (group) {
                         groupId = group._id;
                         expect(group.members.length).to.eql(1);
                         expect(group.members[0]).to.eql(_user1._id);
@@ -103,10 +103,7 @@ describe('<Unit Test>', function () {
                         expect(code).to.eql(400);
                         return this;
                     },
-                    json: function (data) {
-                        expect(data).to.eql({
-                            error: 'Invalid group data'
-                        });
+                    end: function () {
                         done();
                     }
                 };
@@ -127,10 +124,7 @@ describe('<Unit Test>', function () {
                         expect(code).to.eql(400);
                         return this;
                     },
-                    json: function (data) {
-                        expect(data).to.eql({
-                            error: 'Invalid group data'
-                        });
+                    end: function () {
                         done();
                     }
                 };
@@ -215,6 +209,9 @@ describe('<Unit Test>', function () {
                 var res = {
                     status: function (code) {
                         expect(code).to.eql(401);
+                        return this;
+                    },
+                    end: function () {
                         done();
                     }
                 };
@@ -295,10 +292,6 @@ describe('<Unit Test>', function () {
                             }
                         };
                         var res = {
-                            status: function (code) {
-                                expect(code).to.not.eql(500);
-                                return this;
-                            },
                             json: function (group) {
                                 expect(group.members.length).to.eql(1);
                                 done();

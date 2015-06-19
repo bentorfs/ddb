@@ -65,7 +65,8 @@
                     </a>
                 </li>
                 <li ng-show="hdrctr.hdrvars.authenticated">
-                    <a ui-sref='tools' ng-click="collapse()" ng-class="{active: isActive('tools')}">
+                    <a ui-sref='tools({userId: hdrctr.hdrvars.user._id})' ng-click="collapse()"
+                       ng-class="{active: isActive('tools')}">
                         <i class="glyphicon glyphicon-wrench"/> &nbsp; Tools
                     </a>
                 </li>

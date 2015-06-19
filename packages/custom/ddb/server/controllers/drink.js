@@ -19,9 +19,7 @@ module.exports = {
         Drink.find(search).limit(20).exec(function (err, drinks) {
             if (err) {
                 console.error(err);
-                return res.status(500).json({
-                    error: 'Cannot list the drinks'
-                });
+                return res.status(500).end();
             }
             res.json(drinks);
         });
@@ -33,9 +31,7 @@ module.exports = {
                     Drink.findById(req.params.drinkId).exec(function (err, drink) {
                         if (err) {
                             console.error(err);
-                            return res.status(500).json({
-                                error: 'Cannot retrieve the drink'
-                            });
+                            return res.status(500).end();
                         }
                         callback(err, drink);
                     });
@@ -58,9 +54,7 @@ module.exports = {
                         User.populate(topDrinkers, {path: "user", select: 'name _id'}, function (err, docs) {
                             if (err) {
                                 console.error(err);
-                                return res.status(500).json({
-                                    error: 'Cannot populate frequent drinkers'
-                                });
+                                return res.status(500).end();
                             }
                             callback(err, docs);
                         });
@@ -70,9 +64,7 @@ module.exports = {
             function (error, result) {
                 if (error) {
                     console.error(err);
-                    return res.status(500).json({
-                        error: 'Cannot get the drink info'
-                    });
+                    return res.status(500).end();
                 }
                 var enrichedResult = result.drink.toJSON();
                 enrichedResult.topDrinkers = result.topDrinkers;
@@ -93,20 +85,18 @@ module.exports = {
             }, function (err, updatedDrink) {
                 if (err) {
                     console.error(err);
-                    return res.status(500).json({
-                        error: 'Cannot update the drink'
-                    });
+                    return res.status(500).end();
                 }
                 if (updatedDrink) {
                     console.info('Updated drink ' + updatedDrink._id);
                     res.json(updatedDrink);
                 } else {
-                    res.status(404);
+                    res.status(404).end();
                 }
 
             });
         }, function () {
-            res.status(401);
+            res.status(401).end();
         });
     },
     add: function (req, res) {
@@ -117,9 +107,7 @@ module.exports = {
         newDrink.save(function (err, drink) {
             if (err) {
                 console.error(err);
-                return res.status(500).json({
-                    error: 'Cannot add the drink'
-                });
+                return res.status(500).end();
 
             }
             console.info('Added drink ' + drink._id);

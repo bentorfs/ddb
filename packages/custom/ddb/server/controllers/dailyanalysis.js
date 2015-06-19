@@ -23,14 +23,12 @@ module.exports = {
             }).sort('date').exec(function (err, analyses) {
                 if (err) {
                     console.error(err);
-                    return res.status(500).json({
-                        error: 'Cannot list the daily analysis'
-                    });
+                    return res.status(500).end();
                 }
                 res.json(analyses);
             });
         }, function () {
-            res.status(401);
+            res.status(401).end();
         });
     }
 };

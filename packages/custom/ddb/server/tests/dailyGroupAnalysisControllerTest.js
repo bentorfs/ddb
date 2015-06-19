@@ -20,9 +20,6 @@ function insertMeasurement(userId, measurement, callback) {
         body: measurement
     };
     var res = {
-        status: function (code) {
-            expect(code).to.not.eql(500);
-        },
         json: function (data) {
             callback();
         }
@@ -118,9 +115,6 @@ describe('<Unit Test>', function () {
 
                     };
                     var res = {
-                        status: function (code) {
-                            expect(code).to.eql(200);
-                        },
                         json: function (data) {
                             expect(data.length).to.eql(2);
                             expect(data[0].todAvgAlc).to.eql(11);
@@ -174,9 +168,6 @@ describe('<Unit Test>', function () {
 
                     };
                     var res = {
-                        status: function (code) {
-                            expect(code).to.eql(200);
-                        },
                         json: function (data) {
                             expect(data.length).to.eql(1);
                             done();

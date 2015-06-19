@@ -22,9 +22,6 @@ function insertMeasurement(userId, measurement, callback) {
         body: measurement
     };
     var res = {
-        status: function (code) {
-            expect(code).to.not.eql(500);
-        },
         json: function (data) {
             callback();
         }
@@ -36,7 +33,6 @@ describe('<Unit Test>', function () {
     describe('Profile Generator:', function () {
 
         beforeEach(function (done) {
-            var counter = _.after(3, done);
             // Add a user and two drinks
             User.find({}).remove(function (err) {
                 expect(err).to.be(null);
@@ -50,45 +46,44 @@ describe('<Unit Test>', function () {
                 _user1 = new User(user1);
                 _user1.save(function (err) {
                     expect(err).to.be(null);
-                    counter();
+                    var counter = _.after(2, done);
+                    Drink.find({}).remove(function (err) {
+                        expect(err).to.be(null);
+
+                        drinkCtrl.add({
+                            user: {
+                                _id: _user1._id
+                            },
+                            body: {
+                                name: 'Drank1',
+                                alc: 0.05,
+                                type: 'beer'
+                            }
+                        }, {
+                            json: function (data) {
+                                _drink1 = data;
+                                counter();
+                            }
+                        });
+
+                        drinkCtrl.add({
+                            user: {
+                                _id: _user1._id
+                            },
+                            body: {
+                                name: 'Drank2',
+                                alc: 0.10,
+                                type: 'beer'
+                            }
+                        }, {
+                            json: function (data) {
+                                _drink2 = data;
+                                counter();
+                            }
+                        });
+
+                    });
                 });
-            });
-
-            Drink.find({}).remove(function (err) {
-                expect(err).to.be(null);
-
-                drinkCtrl.add({
-                    user: {
-                        _id: _user1._id
-                    },
-                    body: {
-                        name: 'Drank1',
-                        alc: 0.05,
-                        type: 'beer'
-                    }
-                }, {
-                    json: function (data) {
-                        _drink1 = data;
-                        counter();
-                    }
-                });
-
-                drinkCtrl.add({
-                    user: {
-                        _id: _user1._id
-                    },
-                    body: {
-                        name: 'Drank2',
-                        alc: 0.10,
-                        type: 'beer'
-                    }
-                }, {
-                    json: function (data) {
-                        _drink2 = data;
-                        counter();
-                    }
-                });
-
             });
         });
 
@@ -105,9 +100,6 @@ describe('<Unit Test>', function () {
 
                     };
                     var res = {
-                        status: function (code) {
-                            expect(code).to.eql(200);
-                        },
                         json: function (data) {
                             expect(data.highestBinge).to.eql(137);
                             expect(data.drinkingDayRate).to.eql(1);
@@ -185,6 +177,9 @@ describe('<Unit Test>', function () {
                     var res = {
                         status: function (code) {
                             expect(code).to.eql(401);
+                            return this;
+                        },
+                        end: function () {
                             done();
                         }
                     };
@@ -240,7 +235,6 @@ describe('<Unit Test>', function () {
                     date: moment.utc().subtract(2, 'days').valueOf()
                 }, afterInsert);
             });
-
 
         });
     });

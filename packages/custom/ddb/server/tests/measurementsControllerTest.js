@@ -57,9 +57,6 @@ describe('<Unit Test>', function () {
                     }
                 };
                 var res = {
-                    status: function (code) {
-                        expect(code).to.not.eql(500);
-                    },
                     json: function (data) {
                         expect(data.length).to.eql(1);
                         done();
@@ -81,9 +78,6 @@ describe('<Unit Test>', function () {
                     }
                 };
                 var res = {
-                    status: function (code) {
-                        expect(code).to.not.eql(500);
-                    },
                     json: function (data) {
                         expect(moment.utc(data.date).valueOf()).to.eql(testDate.startOf('day').valueOf());
                         expect(data.pilsner).to.eql(100);
@@ -108,9 +102,6 @@ describe('<Unit Test>', function () {
                     }
                 };
                 var res = {
-                    status: function (code) {
-                        expect(code).to.not.eql(500);
-                    },
                     json: function (data) {
                         expect(moment.utc(data.date).valueOf()).to.eql(testDate.startOf('day').valueOf());
 
@@ -120,9 +111,6 @@ describe('<Unit Test>', function () {
                             }
                         };
                         var res = {
-                            status: function (code) {
-                                expect(code).to.not.eql(500);
-                            },
                             json: function (data) {
                                 expect(data.length).to.eql(4);
                                 done();
@@ -147,12 +135,10 @@ describe('<Unit Test>', function () {
                 var res = {
                     status: function (code) {
                         expect(code).to.eql(400);
-                        done();
+                        return this;
                     },
-                    json: function (data) {
-                        expect(data).to.eql({
-                            error: 'Cannot add measurements on this date'
-                        });
+                    end: function (data) {
+                        done();
                     }
                 };
                 measurementCtrl.update(req, res);
@@ -171,12 +157,10 @@ describe('<Unit Test>', function () {
                 var res = {
                     status: function (code) {
                         expect(code).to.eql(400);
-                        done();
+                        return this;
                     },
-                    json: function (data) {
-                        expect(data).to.eql({
-                            error: 'Cannot add measurements on this date'
-                        });
+                    end: function (data) {
+                        done();
                     }
                 };
                 measurementCtrl.update(req, res);
