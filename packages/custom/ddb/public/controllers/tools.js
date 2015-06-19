@@ -5,7 +5,7 @@ angular.module('mean.ddb').controller('DdbToolsController', ['$scope', '$state',
 
         $scope.user = MeanUser;
 
-        $scope.deleteAll = function () {
+        $scope.purgeUser = function () {
             User.delete($stateParams.userId).then(function () {
                 localStorage.removeItem('JWT');
                 $state.go('home');
@@ -30,7 +30,7 @@ angular.module('mean.ddb').controller('DdbToolsController', ['$scope', '$state',
             }).success(function () {
                 alert('Rebuild done');
             });
-        }
+        };
 
     }
 ]);

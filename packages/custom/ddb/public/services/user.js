@@ -18,7 +18,7 @@ angular.module('mean.ddb').factory('User', ['$http',
             });
         };
 
-        userDao.delete = function () {
+        userDao.delete = function (userId) {
             return $http({
                 url: '/api/users/' + userId,
                 method: 'DELETE'

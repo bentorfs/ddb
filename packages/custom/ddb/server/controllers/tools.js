@@ -30,6 +30,7 @@ module.exports = {
     },
     purgeUser: function (req, res) {
         permissions.ifUserToolsPermission(req.user, req.params.userId, function () {
+            var userId = req.params.userId;
             async.parallel(
                 {
                     measurements: function (callback) {
@@ -65,13 +66,14 @@ module.exports = {
                         });
                     },
                     groups: function (callback) {
-                        Group.findAndModify(
+                        // TODO: this is broken
+                        Group.where(
                             {
                                 $or: [{members: userId}, {invitations: userId}]
-                            },
+                            }).update(
                             {
                                 '$pull': {invitations: userId, members: userId}
-                            }, function (err) {
+                            }).exec(function (err) {
                                 if (err) {
                                     console.error(err);
                                 }

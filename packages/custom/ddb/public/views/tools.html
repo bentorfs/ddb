@@ -58,6 +58,21 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-6" ng-show="user.isAdmin">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Purge User</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>
+                            This deletes your account, and all your data. Irreversible.
+                        </p>
+                        <button class="btn btn-primary" ng-click="purgeUser()">
+                            <i class="glyphicon glyphicon-ok"/> Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
 </section>
