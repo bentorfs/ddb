@@ -14,15 +14,15 @@ module.exports = {
     processGroup: processGroup
 };
 
-function processUser(user, callback) {
+function processUser(user, date, callback) {
     Group.find({members: user}).exec(function (err, groups) {
         if (err) {
-           return callback(err);
+            return callback(err);
         }
         if (groups.length > 0) {
             var counter = _.after(groups.length, callback);
             _.forEach(groups, function (group) {
-                processGroup(group, counter);
+                processGroup(group, date, counter);
             });
         } else {
             callback();
@@ -31,11 +31,15 @@ function processUser(user, callback) {
     });
 }
 
-function processGroup(group, callback) {
-    console.info('Generating new daily group analyses for: ' + group.name);
+function processGroup(group, date, callback) {
+    console.info('Generating new daily group analyses for: ' + group.name + ' on date ' + moment.utc(date).format());
+    var match = {'user': {'$in': group.members}};
+    if (date) {
+        match.date = new Date(date);
+    }
     DailyAnalysis.aggregate([
         {$project: {date: 1, user: 1, todAlc: 1, group: {$literal: group._id}}},
-        {'$match': {'user': {'$in': group.members}}},
+        {'$match': match},
         {
             '$group': {
                 _id: {date: '$date', group: '$group'},

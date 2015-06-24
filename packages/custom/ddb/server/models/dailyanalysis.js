@@ -69,5 +69,6 @@ var DailyAnalysisSchema = new Schema({
     ]
 });
 
+DailyAnalysisSchema.index({date: 1, user: 1}, {unique: true});
 
 mongoose.model('DailyAnalysis', DailyAnalysisSchema);

@@ -71,8 +71,8 @@ var GroupRankingSchema = new Schema({
     rankingHappyLoner: [
         {user: {type: Schema.ObjectId, ref: 'User'}, value: {type: Number}}
     ]
-
 });
 
+GroupRankingSchema.index({group: 1}, {unique: true});
 
 mongoose.model('GroupRanking', GroupRankingSchema);

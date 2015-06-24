@@ -141,7 +141,7 @@ module.exports = function (MeanUser) {
                     res.json({token: token});
                 });
 
-                rebuild.rebuildUser(user, _.noop);
+                rebuild.rebuildUser(user, null, _.noop);
                 res.status(200);
             });
         },

@@ -28,7 +28,7 @@ module.exports = {
             if (err) {
                 return next(err);
             }
-            rebuild.rebuildUser(req.user._id, function (err) {
+            rebuild.rebuildUser(req.user._id, dateToUpdate.valueOf(), function (err) {
                 if (err) {
                     return next(err);
                 }
@@ -53,7 +53,7 @@ module.exports = {
             if (err) {
                 return next(err);
             }
-            rebuild.rebuildUser(req.user._id, function (err) {
+            rebuild.rebuildUser(req.user._id, dateToUpdate.valueOf(), function (err) {
                 if (err) {
                     return next(err);
                 }
@@ -80,7 +80,7 @@ module.exports = {
             if (err) {
                 return next(err);
             }
-            rebuild.rebuildUser(req.user._id, function (err) {
+            rebuild.rebuildUser(req.user._id, dateToUpdate.valueOf(), function (err) {
                 if (err) {
                     return next(err);
                 }
@@ -104,17 +104,29 @@ module.exports = {
             date: dateToGet.valueOf()
         };
 
-        Measurement.findOneAndUpdate({date: dateToGet.valueOf(), user: req.user, isDeleted: false}, upsertData, {
-            upsert: true,
-            new: true
-        }).populate('consumptions.drink').exec(function (err, measurement) {
-            if (err) {
-                return next(err);
+        Measurement.update({date: dateToGet.valueOf(), user: req.user, isDeleted: false}, upsertData, {
+            upsert: true
+        }, function (err, num, n) {
+            if (num.upserted && num.upserted.length > 0) {
+                rebuild.rebuildUser(req.user._id, dateToGet.valueOf(), function (err) {
+                    if (err) {
+                        console.error(err);
+                    }
+                });
             }
-            res.json(measurement);
+            Measurement.findOne({
+                date: dateToGet.valueOf(),
+                user: req.user,
+                isDeleted: false
+            }).populate('consumptions.drink').exec(function (err, measurement) {
+                if (err) {
+                    return next(err);
+                }
+                res.json(measurement);
+            });
         });
     },
-    all: function (req, res, next) {
+    all: function (req, res, next) { // TODO: This is not used any more ?
         var user = req.user;
 
         Measurement.find({user: req.user, isDeleted: false}).sort('date').exec(function (err, measurements) {
@@ -153,7 +165,7 @@ module.exports = {
                         if (err) {
                             return next(err);
                         } else {
-                            rebuild.rebuildUser(req.user._id, function (err) {
+                            rebuild.rebuildUser(req.user._id, null, function (err) {
                                 if (err) {
                                     next(err);
                                 }

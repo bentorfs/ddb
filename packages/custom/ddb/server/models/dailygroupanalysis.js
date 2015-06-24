@@ -33,5 +33,6 @@ var DailyGroupAnalysisSchema = new Schema({
     }
 });
 
+DailyGroupAnalysisSchema.index({date: 1, group: 1}, {unique: true});
 
 mongoose.model('DailyGroupAnalysis', DailyGroupAnalysisSchema);

@@ -162,5 +162,6 @@ var ProfileSchema = new Schema({
     ]
 });
 
+ProfileSchema.index({user: 1}, {unique: true});
 
 mongoose.model('Profile', ProfileSchema);

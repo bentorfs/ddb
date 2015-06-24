@@ -11,7 +11,7 @@ var mongoose = require('mongoose'),
     async = require('async');
 
 module.exports = {
-    processUser: function (user, callback) {
+    processUser: function (user, date, callback) {
         // Get the users groups first
         Group.find({members: user._id}, function (err, groups) {
             if (err) {
@@ -21,10 +21,14 @@ module.exports = {
             async.parallel(
                 {
                     measurements: function (callback) {
-                        Measurement.find({
+                        var search = {
                             user: user,
                             isDeleted: false
-                        }).sort('date').populate('consumptions.drink').exec(function (err, measurements) {
+                        };
+                        if (date) {
+                            search.date = new Date(date);
+                        }
+                        Measurement.find(search).sort('date').populate('consumptions.drink').exec(function (err, measurements) {
                             if (err) {
                                 console.error('Could not load measurement to update daily analyses: ' + err);
                             }
@@ -32,7 +36,11 @@ module.exports = {
                         });
                     },
                     groupAnalyses: function (callback) {
-                        DailyGroupAnalysis.find({'group': {'$in': groups}}).sort('date').exec(function (err, dailyGroupAnalyses) {
+                        var search = {'group': {'$in': groups}};
+                        if (date) {
+                            search.date = date;
+                        }
+                        DailyGroupAnalysis.find(search).sort('date').exec(function (err, dailyGroupAnalyses) {
                             if (err) {
                                 console.error('Could not load group analyses to update daily user analyses: ' + err);
                             }

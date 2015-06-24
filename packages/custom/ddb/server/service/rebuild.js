@@ -16,20 +16,20 @@ module.exports = {
     rebuildEverything: function (done) {
         rebuildAllDailyAnalyses(done);
     },
-    rebuildUser: function (userId, done) {
+    rebuildUser: function (userId, date, done) {
         User.findById(userId, function (err, user) {
             if (err || !user) {
                 console.error('Could not retrieve user with id ' + userId + ', because: ' + err);
             } else {
                 async.waterfall([
                     function (callback) {
-                        dailyanalysisGenerator.processUser(user, callback);
+                        dailyanalysisGenerator.processUser(user, date, callback);
                     },
                     function (callback) {
                         profileGenerator.processUser(user, callback);
                     },
                     function (callback) {
-                        dailygroupanalysisGenerator.processUser(user, callback);
+                        dailygroupanalysisGenerator.processUser(user, date, callback);
                     },
                     function (callback) {
                         grouprankingGenerator.processUser(user, callback);
@@ -52,8 +52,8 @@ function rebuildAllDailyAnalyses(done) {
             rebuildAllDailyGroupAnalyses(done);
         });
         _.forEach(users, function (user) {
-            console.log('Rebuilding all daily analyses for user ' + user.username);
-            dailyanalysisGenerator.processUser(user, counter);
+            console.info('Rebuilding all daily analyses for user ' + user.username);
+            dailyanalysisGenerator.processUser(user, null, counter);
         });
     });
 }
@@ -68,8 +68,8 @@ function rebuildAllDailyGroupAnalyses(done) {
             rebuildAllProfiles(done);
         });
         _.forEach(groups, function (group) {
-            console.log('Rebuilding all daily group analyses for group ' + group.name);
-            dailygroupanalysisGenerator.processGroup(group, counter);
+            console.info('Rebuilding all daily group analyses for group ' + group.name);
+            dailygroupanalysisGenerator.processGroup(group, null, counter);
         });
     });
 }

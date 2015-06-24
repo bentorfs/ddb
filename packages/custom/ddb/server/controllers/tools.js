@@ -24,7 +24,7 @@ module.exports = {
     },
     rebuildUser: function (req, res, next) {
         permissions.ifUserToolsPermission(req.user, req.params.userId, function () {
-            rebuild.rebuildUser(req.params.userId, function (err) {
+            rebuild.rebuildUser(req.params.userId, null, function (err) {
                 if (err) {
                     return next(err);
                 }

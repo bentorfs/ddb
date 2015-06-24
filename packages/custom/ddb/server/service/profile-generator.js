@@ -160,7 +160,6 @@ function updateProfile(analyses, user, callback) {
         user: user
     }, profileData, {upsert: true}, function (err) {
         if (err) {
-            console.log(err);
             return callback(err);
         }
         console.info('Successfully saved updated profile for user ' + user.username);
