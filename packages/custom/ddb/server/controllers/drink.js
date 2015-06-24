@@ -14,7 +14,21 @@ module.exports = {
     list: function (req, res, next) {
         var search = {};
         if (req.query && req.query.name) {
-            search.name = {$regex: req.query.name, $options: 'i'};
+            search = {
+                '$or': [
+                    {
+                        name: {
+                            $regex: req.query.name,
+                            $options: 'i'
+                        }
+                    },
+                    {
+                        type: {
+                            $regex: req.query.name,
+                            $options: 'i'
+                        }
+                    }]
+            };
         }
         Drink.find(search).limit(20).exec(function (err, drinks) {
             if (err) {

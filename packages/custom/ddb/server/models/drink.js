@@ -55,7 +55,10 @@ var DrinkSchema = new Schema({
     },
     components: [{
         type: String
-    }]
+    }],
+    validated: {
+        type: Boolean
+    }
 });
 
 mongoose.model('Drink', DrinkSchema);

@@ -40,6 +40,10 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$state
             }
         });
 
+        Profile.getFrequentDrinks($stateParams.userId).success(function (frequentDrinks) {
+            $scope.frequentDrinks = frequentDrinks;
+        });
+
         DailyAnalysis.get($stateParams.userId, moment().subtract(11, 'days').valueOf(), moment().valueOf()).success(function (dailyAnalyses) {
             $scope.dailyAnalyses = dailyAnalyses;
         });
