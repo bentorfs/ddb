@@ -15,14 +15,8 @@ module.exports = {
             if (err) {
                 return callback(err);
             }
-
-            if (analyses.length > 0) {
-                console.info('Updating profile for user ' + user.username);
-                updateProfile(analyses, user, callback);
-            } else {
-                console.info('Skipping profile update for user ' + user.username + ', because there are no daily analyses');
-            }
-
+            console.info('Updating profile for user ' + user.username);
+            updateProfile(analyses, user, callback);
         });
     }
 };
@@ -138,22 +132,22 @@ function updateProfile(analyses, user, callback) {
         totAlcLiquor: totAlcLiquor,
         totAlc: totAlc,
 
-        avgPilsner: totPilsner / analyses.length,
-        avgStrongbeer: totStrongbeer / analyses.length,
-        avgWine: totWine / analyses.length,
-        avgLiquor: totLiquor / analyses.length,
+        avgPilsner: analyses.length > 0 ? (totPilsner / analyses.length) : 0,
+        avgStrongbeer: analyses.length > 0 ? (totStrongbeer / analyses.length) : 0,
+        avgWine: analyses.length > 0 ? (totWine / analyses.length) : 0,
+        avgLiquor: analyses.length > 0 ? (totLiquor / analyses.length) : 0,
 
-        avgAlcPilsner: totAlcPilsner / analyses.length,
-        avgAlcStrongbeer: totAlcStrongbeer / analyses.length,
-        avgAlcWine: totAlcWine / analyses.length,
-        avgAlcLiquor: totAlcLiquor / analyses.length,
-        avgAlc: totAlc / analyses.length,
+        avgAlcPilsner: analyses.length > 0 ? (totAlcPilsner / analyses.length) : 0,
+        avgAlcStrongbeer: analyses.length > 0 ? (totAlcStrongbeer / analyses.length) : 0,
+        avgAlcWine: analyses.length > 0 ? (totAlcWine / analyses.length) : 0,
+        avgAlcLiquor: analyses.length > 0 ? (totAlcLiquor / analyses.length) : 0,
+        avgAlc: analyses.length > 0 ? (totAlc / analyses.length) : 0,
 
         consistencyFactor: (avgAlcStdev / (totAlc / analyses.length)) || 0,
 
         activeDays: analyses.length,
         drinkingDays: drinkingDays,
-        drinkingDayRate: drinkingDays / analyses.length,
+        drinkingDayRate: analyses.length > 0 ? (drinkingDays / analyses.length) : 0,
 
         highestBinge: highestBinge,
         highestBingeDate: highestBingeDate,
@@ -166,6 +160,7 @@ function updateProfile(analyses, user, callback) {
         user: user
     }, profileData, {upsert: true}, function (err) {
         if (err) {
+            console.log(err);
             return callback(err);
         }
         console.info('Successfully saved updated profile for user ' + user.username);

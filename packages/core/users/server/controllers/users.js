@@ -5,6 +5,7 @@
  */
 var mongoose = require('mongoose'),
     User = mongoose.model('User'),
+    rebuild = require('../../../../custom/ddb/server/service/rebuild'),
     async = require('async'),
     config = require('meanio').loadConfig(),
     crypto = require('crypto'),
@@ -139,6 +140,8 @@ module.exports = function (MeanUser) {
                     var token = jwt.sign(escaped, config.secret, {expiresInMinutes: 60 * 5});
                     res.json({token: token});
                 });
+
+                rebuild.rebuildUser(user, _.noop);
                 res.status(200);
             });
         },
