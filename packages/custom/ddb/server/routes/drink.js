@@ -10,5 +10,5 @@ module.exports = function (Drink, app, auth) {
 
     app.route('/api/drink')
         .get(drink.list)
-        .post(auth.requiresLogin, drink.add);
+        .post( drink.add);
 };
