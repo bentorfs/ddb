@@ -55,41 +55,56 @@ angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$statePa
                 scaleStepWidth: 1,
                 scaleStartValue: 0,
                 bezierCurve: true,
+                bezierCurveTension: 0.4,
                 showScale: true,
                 pointDot: false,
                 pointHitDetectionRadius: 1
             };
             $scope.groupTrendSeries = [];
-            var fromDate = moment.utc().subtract(nbDays, 'days');
+            var fromDate = moment.utc().startOf('day').subtract(nbDays, 'days');
             var today = moment.utc().startOf('day');
-            var maxLength = 0;
+            var dataMap = {};
+
             _.forEach($scope.group.members, function (member) {
                 var dataForMember = [];
                 var i = 0;
                 _.forEach($scope.groupProfiles[member.username].data.series, function (serie) {
                     var date = moment.utc(serie.date, 'YYYY-MM-DD hh:mm:ss');
                     if (date >= fromDate && date < today) {
-                        i++;
-                        dataForMember.push($filter('number')(serie.spreadAlc, 2));
+                        var formattedDate = date.format('YYYY-MM-DD');
+                        if (!dataMap[formattedDate]) {
+                            dataMap[formattedDate] = {}
+                        }
+                        dataMap[formattedDate][member.username] = $filter('number')(serie.spreadAlc, 2);
                     }
                 });
-                if (i > maxLength) {
-                    maxLength = i;
+            });
+
+            var value;
+            _.forEach($scope.group.members, function (member) {
+                var dataForMember = [];
+                var currentDate = moment.utc(fromDate);
+                while (currentDate < today) {
+                    var formattedDate = currentDate.format('YYYY-MM-DD');
+                    if (dataMap[formattedDate]) {
+                        value = dataMap[formattedDate][member.username];
+                        if (!value) {
+                            value = null;
+                        }
+                    } else {
+                        value = null;
+                    }
+                    dataForMember.push(value);
+                    currentDate = currentDate.add(1, 'days');
                 }
                 $scope.groupTrendData.push(dataForMember);
                 $scope.groupTrendSeries.push(member.username);
             });
-            for (var j = 0; j < maxLength; j++) {
+            var currentDate = moment.utc(fromDate);
+            while (currentDate < today) {
                 $scope.groupTrendLabels.push('');
+                currentDate = currentDate.add(1, 'days');
             }
-
-            // Pad in front for data that are shorter than maxLength
-            _.forEach($scope.groupTrendData, function (series) {
-                var difference = maxLength - series.length;
-                for (var j = 0; j < difference; j++) {
-                    series.unshift(null);
-                }
-            })
         };
 
         $scope.loadTrendData = function () {
