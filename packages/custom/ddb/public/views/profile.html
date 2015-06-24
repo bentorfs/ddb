@@ -200,6 +200,11 @@
                                 <td>{{drink.drink.name}}</td>
                                 <td>{{drink.nbDays}}</td>
                             </tr>
+                            <tfoot>
+                            <tr ng-if="!frequentDrinks.length">
+                                <td colspan="3" class="text-center"><em>There are no tracked consumptions so far</em></td>
+                            </tr>
+                            </tfoot>
                             </tbody>
                         </table>
                     </div>
