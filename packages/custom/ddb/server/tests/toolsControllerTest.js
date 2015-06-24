@@ -94,6 +94,9 @@ describe('<Unit Test>', function () {
                                         }
                                     });
                                 }
+                            },
+                            function (err) {
+                                done(err);
                             });
                     }
                 };
@@ -140,6 +143,9 @@ describe('<Unit Test>', function () {
                                         }
                                     });
                                 }
+                            },
+                            function (err) {
+                                done(err);
                             });
                     }
                 };
