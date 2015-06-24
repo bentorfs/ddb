@@ -190,7 +190,7 @@ describe('<Unit Test>', function () {
         });
 
         describe('Frequent Drinks Calculation', function () {
-            it('Returns a sorted list of the drinks the user most frequently measures', function (done) {
+            it('Returns a sorted list of the drinks the user most frequently drinks', function (done) {
                 var afterInsert = _.after(3, function () {
                     profileCtrl.getFrequentDrinks({
                         user: {

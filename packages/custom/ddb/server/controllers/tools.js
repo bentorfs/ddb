@@ -60,20 +60,18 @@ module.exports = {
                         });
                     },
                     groups: function (callback) {
-                        // TODO: this is broken
-                        Group.where(
-                            {
-                                $or: [{members: userId}, {invitations: userId}]
-                            }).update(
-                            {
-                                '$pull': {invitations: userId, members: userId}
-                            }).exec(function (err) {
+                        Group.update(
+                            {$or: [{members: userId}, {invitations: userId}]},
+                            {'$pull': {members: userId, invitations: userId}},
+                            {multi: true},
+                            function (err) {
                                 callback(err);
-                            });
+                            }
+                        );
                     }
                 },
-                function (error, result) {
-                    if (error) {
+                function (err, result) {
+                    if (err) {
                         return next(err);
                     }
                     res.status(200).end();

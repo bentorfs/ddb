@@ -14,7 +14,7 @@ describe('<Unit Test>', function () {
     describe('Groups Controller:', function () {
 
         before(function (done) {
-            var trigger = _.after(2, done);
+            var trigger = _.after(3, done);
             Group.find({}).remove(function (err) {
                 expect(err).to.be(null);
                 trigger();
@@ -32,6 +32,7 @@ describe('<Unit Test>', function () {
                 _user1 = new User(user1);
                 _user1.save(function (err) {
                     expect(err).to.be(null);
+                    trigger();
                 });
 
                 var user2 = {
@@ -44,9 +45,9 @@ describe('<Unit Test>', function () {
                 _user2 = new User(user2);
                 _user2.save(function (err) {
                     expect(err).to.be(null);
+                    trigger();
                 });
 
-                trigger();
             });
         });
 
