@@ -26,12 +26,10 @@ angular.module('mean.ddb').directive('trackDrinks', function () {
                     }
                 };
 
-                $scope.$watch('selectedDrink', function() {
+                $scope.$watch('selectedDrink', function () {
                     if ($scope.selectedDrink) {
                         $scope.updateSizes();
-                        if (window.mobilecheck) {
-                            $scope.scrollTo('select-amount');
-                        }
+                        $scope.scrollTo('select-amount');
                     }
                 });
 
@@ -43,6 +41,7 @@ angular.module('mean.ddb').directive('trackDrinks', function () {
                 };
 
                 $scope.addNewDrink = function () {
+                    $scope.savingDrink = true;
                     Drink.add({
                         name: $scope.newDrinkName,
                         type: $scope.newDrinkType,
@@ -52,12 +51,16 @@ angular.module('mean.ddb').directive('trackDrinks', function () {
                         $scope.newDrinkName = '';
                         $scope.newDrinkAlcoholContent = '';
                         $scope.selectedDrink = drink;
-                    })
+                    }).finally(function () {
+                        $scope.savingDrink = false;
+                    });
                 };
 
 
                 $scope.scrollTo = function (location) {
-                    smoothScroll(document.getElementById(location), {offset: 55});
+                    if (window.mobilecheck) {
+                        smoothScroll(document.getElementById(location), {offset: 55});
+                    }
                 };
 
                 $scope.setAmount = function (amount) {
@@ -85,6 +88,7 @@ angular.module('mean.ddb').directive('trackDrinks', function () {
                 };
 
                 $scope.addConsumption = function () {
+                    $scope.savingConsumption = true;
                     Measurement.addConsumption($scope.date, {
                             drink: $scope.selectedDrink._id,
                             amount: $scope.selectedAmount
@@ -95,7 +99,11 @@ angular.module('mean.ddb').directive('trackDrinks', function () {
                             $scope.newDrinkName = null;
                             $scope.loadData();
                             $scope.onSave();
-                        });
+                        }
+                    ).finally(function () {
+                            $scope.savingConsumption = false;
+                        }
+                    );
                 };
 
                 $scope.user = MeanUser.get();

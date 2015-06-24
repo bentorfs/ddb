@@ -98,7 +98,7 @@
         <div class="panel panel-primary" ng-show="!trackMore && measurement">
             <div class="panel-body">
                 <button type="button" class="btn btn-primary btn-block dropdown-toggle"
-                        ng-click="trackMore = true" scroll-to="track-more" offset="55">
+                        ng-click="trackMore = true; scrollTo('track-more')">
                     Track another drink for {{date | date:'dd/MM/yy'}}
                 </button>
             </div>

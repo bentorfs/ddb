@@ -51,7 +51,13 @@ angular.module('mean.ddb').controller('DdbMeasurementsController', ['$rootScope'
 
         $scope.onDrinkTracked = function () {
             $scope.loadData();
-            smoothScroll(document.getElementById('consumptions'), {offset: 55});
+            $scope.scrollTo('consumptions');
+        };
+
+        $scope.scrollTo = function (location) {
+            if (window.mobilecheck) {
+                smoothScroll(document.getElementById(location), {offset: 55});
+            }
         };
 
         $scope.isValid = function (measurement) {

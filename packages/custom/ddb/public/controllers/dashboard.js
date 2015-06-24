@@ -19,7 +19,9 @@ angular.module('mean.ddb').controller('DdbNewsController', ['$rootScope', '$scop
         };
 
         $scope.scrollTo = function (location) {
-            smoothScroll(document.getElementById(location), {offset: 55});
+            if (window.mobilecheck) {
+                smoothScroll(document.getElementById(location), {offset: 55});
+            }
         };
 
         $scope.removeConsumption = function (consumption) {
