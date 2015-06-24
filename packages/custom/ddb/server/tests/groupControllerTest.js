@@ -65,7 +65,9 @@ describe('<Unit Test>', function () {
                         done();
                     }
                 };
-                groupCtrl.listGroups(req, res);
+                groupCtrl.listGroups(req, res, function (err) {
+                    done(err);
+                });
             });
 
             it('Can create groups, and at the same time invite users', function (done) {
@@ -89,7 +91,9 @@ describe('<Unit Test>', function () {
                         done();
                     }
                 };
-                groupCtrl.createGroup(req, res);
+                groupCtrl.createGroup(req, res, function (err) {
+                    done(err);
+                });
             });
 
             it('Cannot create groups with empty name', function (done) {
@@ -108,7 +112,9 @@ describe('<Unit Test>', function () {
                         done();
                     }
                 };
-                groupCtrl.createGroup(req, res);
+                groupCtrl.createGroup(req, res, function (err) {
+                    done(err);
+                });
             });
 
             it('Cannot create groups without a name', function (done) {
@@ -129,7 +135,9 @@ describe('<Unit Test>', function () {
                         done();
                     }
                 };
-                groupCtrl.createGroup(req, res);
+                groupCtrl.createGroup(req, res, function (err) {
+                    done(err);
+                });
             });
 
             it('Can revoke invitations', function (done) {
@@ -151,7 +159,9 @@ describe('<Unit Test>', function () {
                         done();
                     }
                 };
-                groupCtrl.removeInvitation(req, res);
+                groupCtrl.removeInvitation(req, res, function (err) {
+                    done(err);
+                });
             });
 
             it('Can later add invitations', function (done) {
@@ -173,7 +183,9 @@ describe('<Unit Test>', function () {
                         done();
                     }
                 };
-                groupCtrl.addInvitation(req, res);
+                groupCtrl.addInvitation(req, res, function (err) {
+                    done(err);
+                });
             });
 
             it('Can retrieve the data for one group', function (done) {
@@ -195,7 +207,9 @@ describe('<Unit Test>', function () {
                         done();
                     }
                 };
-                groupCtrl.getGroup(req, res);
+                groupCtrl.getGroup(req, res, function (err) {
+                    done(err);
+                });
             });
 
             it('Cannot retrieve the data for a group you are not a member of', function (done) {
@@ -216,7 +230,9 @@ describe('<Unit Test>', function () {
                         done();
                     }
                 };
-                groupCtrl.getGroup(req, res);
+                groupCtrl.getGroup(req, res, function (err) {
+                    done(err);
+                });
             });
 
             it('Return all the groups that a member is invited to', function (done) {
@@ -231,7 +247,9 @@ describe('<Unit Test>', function () {
                         done();
                     }
                 };
-                groupCtrl.listInvitations(req, res);
+                groupCtrl.listInvitations(req, res, function (err) {
+                    done(err);
+                });
             });
 
             it('Can approve invitations', function (done) {
@@ -263,10 +281,14 @@ describe('<Unit Test>', function () {
                                 done();
                             }
                         };
-                        groupCtrl.getGroup(req, res);
+                        groupCtrl.getGroup(req, res, function (err) {
+                            done(err);
+                        });
                     }
                 };
-                groupCtrl.approveInvitation(req, res);
+                groupCtrl.approveInvitation(req, res, function (err) {
+                    done(err);
+                });
             });
 
             it('Can leave groups', function (done) {
@@ -298,10 +320,14 @@ describe('<Unit Test>', function () {
                                 done();
                             }
                         };
-                        groupCtrl.getGroup(req, res);
+                        groupCtrl.getGroup(req, res, function (err) {
+                            done(err);
+                        });
                     }
                 };
-                groupCtrl.leaveGroup(req, res);
+                groupCtrl.leaveGroup(req, res, function (err) {
+                    done(err);
+                });
             });
         });
 

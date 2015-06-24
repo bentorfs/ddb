@@ -62,7 +62,9 @@ describe('<Unit Test>', function () {
                         done();
                     }
                 };
-                measurementCtrl.all(req, res);
+                measurementCtrl.all(req, res, function (err) {
+                    done(err);
+                });
             });
 
             it('Can manually create a measurement. They are stored in UTC', function (done) {
@@ -87,7 +89,9 @@ describe('<Unit Test>', function () {
                         done();
                     }
                 };
-                measurementCtrl.update(req, res);
+                measurementCtrl.update(req, res, function (err) {
+                    done(err);
+                });
             });
 
             it('It is possible create a measurement in the past. All subsequent dates will be generated on the next GET', function (done) {
@@ -116,10 +120,14 @@ describe('<Unit Test>', function () {
                                 done();
                             }
                         };
-                        measurementCtrl.all(req, res);
+                        measurementCtrl.all(req, res, function (err) {
+                            done(err);
+                        });
                     }
                 };
-                measurementCtrl.update(req, res);
+                measurementCtrl.update(req, res, function (err) {
+                    done(err);
+                });
             });
 
             it('It is not possible to create measurements more than 60 days in the past', function (done) {
@@ -141,7 +149,9 @@ describe('<Unit Test>', function () {
                         done();
                     }
                 };
-                measurementCtrl.update(req, res);
+                measurementCtrl.update(req, res, function (err) {
+                    done(err);
+                });
             });
 
             it('It is not possible to create measurements more than 3 days in the future', function (done) {
@@ -163,7 +173,9 @@ describe('<Unit Test>', function () {
                         done();
                     }
                 };
-                measurementCtrl.update(req, res);
+                measurementCtrl.update(req, res, function (err) {
+                    done(err);
+                });
             });
 
         });
@@ -198,6 +210,8 @@ describe('<Unit Test>', function () {
                                 measurement = data;
                                 counter();
                             }
+                        }, function (err) {
+                            done(err);
                         });
                         measurementCtrl.addConsumption({
                             user: {
@@ -215,6 +229,8 @@ describe('<Unit Test>', function () {
                                 measurement = data;
                                 counter();
                             }
+                        }, function (err) {
+                            done(err);
                         });
                     }
                 });
@@ -245,6 +261,8 @@ describe('<Unit Test>', function () {
                                 expect(data.consumptions.length).to.eql(1);
                                 done();
                             }
+                        }, function (err) {
+                            done(err);
                         });
                     }
                 });

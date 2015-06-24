@@ -24,7 +24,9 @@ function insertMeasurement(userId, measurement, callback) {
             callback();
         }
     };
-    measurementCtrl.update(req, res);
+    measurementCtrl.update(req, res, function (err) {
+        done(err);
+    });
 }
 
 describe('<Unit Test>', function () {
@@ -66,10 +68,14 @@ describe('<Unit Test>', function () {
                                     done();
                                 }
                             };
-                            groupCtrl.approveInvitation(req, res);
+                            groupCtrl.approveInvitation(req, res, function (err) {
+                                done(err);
+                            });
                         }
                     };
-                    groupCtrl.createGroup(req, res);
+                    groupCtrl.createGroup(req, res, function (err) {
+                        done(err);
+                    });
                 });
 
 
@@ -129,7 +135,9 @@ describe('<Unit Test>', function () {
                             done();
                         }
                     };
-                    dailyGroupAnalysisCtrl.all(req, res);
+                    dailyGroupAnalysisCtrl.all(req, res, function (err) {
+                        done(err);
+                    });
 
                 });
                 insertMeasurement(_user2._id, {
@@ -173,7 +181,9 @@ describe('<Unit Test>', function () {
                             done();
                         }
                     };
-                    dailyGroupAnalysisCtrl.all(req, res);
+                    dailyGroupAnalysisCtrl.all(req, res, function (err) {
+                        done(err);
+                    });
 
                 });
                 // Two measurements quickly for each user, all on the same day

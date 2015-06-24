@@ -26,7 +26,9 @@ function insertMeasurement(userId, measurement, callback) {
             callback();
         }
     };
-    measurementCtrl.update(req, res);
+    measurementCtrl.update(req, res, function (err) {
+        done(err);
+    });
 }
 
 describe('<Unit Test>', function () {
@@ -64,6 +66,8 @@ describe('<Unit Test>', function () {
                                 _drink1 = data;
                                 counter();
                             }
+                        }, function (err) {
+                            done(err);
                         });
 
                         drinkCtrl.add({
@@ -80,6 +84,8 @@ describe('<Unit Test>', function () {
                                 _drink2 = data;
                                 counter();
                             }
+                        }, function (err) {
+                            done(err);
                         });
 
                     });
@@ -132,7 +138,9 @@ describe('<Unit Test>', function () {
                             done();
                         }
                     };
-                    profileCtrl.getUser(req, res);
+                    profileCtrl.getUser(req, res, function (err) {
+                        done(err);
+                    });
 
                 });
                 // Two measurements
@@ -183,7 +191,9 @@ describe('<Unit Test>', function () {
                             done();
                         }
                     };
-                    profileCtrl.getUser(req, res);
+                    profileCtrl.getUser(req, res, function (err) {
+                        done(err);
+                    });
                 });
 
             });
@@ -209,6 +219,8 @@ describe('<Unit Test>', function () {
                             expect(data[1].nbDays).to.eql(2);
                             done();
                         }
+                    }, function (err) {
+                        done(err);
                     });
 
                 });

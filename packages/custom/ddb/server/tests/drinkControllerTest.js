@@ -52,7 +52,9 @@ describe('<Unit Test>', function () {
                         done();
                     }
                 };
-                drinkCtrl.list(req, res);
+                drinkCtrl.list(req, res, function (err) {
+                    done(err);
+                });
             });
 
             it('Can add a drink', function (done) {
@@ -78,7 +80,9 @@ describe('<Unit Test>', function () {
                         done();
                     }
                 };
-                drinkCtrl.add(req, res);
+                drinkCtrl.add(req, res, function (err) {
+                    done(err);
+                });
             });
 
             it('Can retrieve the list of drinks', function (done) {
@@ -93,7 +97,9 @@ describe('<Unit Test>', function () {
                         done();
                     }
                 };
-                drinkCtrl.list(req, res);
+                drinkCtrl.list(req, res, function (err) {
+                    done(err);
+                });
             });
 
             it('Can update an existing drink, by the same user', function (done) {
@@ -116,7 +122,9 @@ describe('<Unit Test>', function () {
                         done();
                     }
                 };
-                drinkCtrl.update(req, res);
+                drinkCtrl.update(req, res, function (err) {
+                    done(err);
+                });
             });
 
             it('Cannot update an existing drink, by another user', function (done) {
@@ -141,7 +149,9 @@ describe('<Unit Test>', function () {
                         done();
                     }
                 };
-                drinkCtrl.update(req, res);
+                drinkCtrl.update(req, res, function (err) {
+                    done(err);
+                });
             });
 
             it('Can get one specific drink', function (done) {
@@ -159,7 +169,9 @@ describe('<Unit Test>', function () {
                         done();
                     }
                 };
-                drinkCtrl.get(req, res);
+                drinkCtrl.get(req, res, function (err) {
+                    done(err);
+                });
             });
         });
 
@@ -177,7 +189,9 @@ describe('<Unit Test>', function () {
                         callback();
                     }
                 };
-                drinkCtrl.add(req, res);
+                drinkCtrl.add(req, res, function (err) {
+                    done(err);
+                });
             }
 
 
@@ -216,7 +230,9 @@ describe('<Unit Test>', function () {
                         done();
                     }
                 };
-                drinkCtrl.list(req, res);
+                drinkCtrl.list(req, res, function (err) {
+                    done(err);
+                });
             });
 
         });

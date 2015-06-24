@@ -23,7 +23,10 @@ function insertMeasurement(userId, measurement, callback) {
             callback();
         }
     };
-    measurementCtrl.update(req, res);
+    measurementCtrl.update(req, res,
+        function (err) {
+            done(err);
+        });
 }
 
 describe('<Unit Test>', function () {
@@ -86,7 +89,10 @@ describe('<Unit Test>', function () {
                             done();
                         }
                     };
-                    dailyAnalysisCtrl.all(req, res);
+                    dailyAnalysisCtrl.all(req, res,
+                        function (err) {
+                            done(err);
+                        });
 
                 });
                 insertMeasurement(_user1._id, {
@@ -124,7 +130,9 @@ describe('<Unit Test>', function () {
                             done();
                         }
                     };
-                    dailyAnalysisCtrl.all(req, res);
+                    dailyAnalysisCtrl.all(req, res, function (err) {
+                        done(err);
+                    });
 
                 });
                 // Three measurements quickly on the same day
@@ -174,7 +182,9 @@ describe('<Unit Test>', function () {
                             done();
                         }
                     };
-                    dailyAnalysisCtrl.all(req, res);
+                    dailyAnalysisCtrl.all(req, res, function (err) {
+                        done(err);
+                    });
                 });
 
             });
