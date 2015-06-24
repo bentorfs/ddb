@@ -14,55 +14,49 @@ var mongoose = require('mongoose'),
 
 
 module.exports = {
-    rebuildEverything: function (req, res) {
-        rebuild.rebuildEverything(function () {
+    rebuildEverything: function (req, res, next) {
+        rebuild.rebuildEverything(function (err) {
+            if (err) {
+                return next(err);
+            }
             res.status(200).end();
         });
     },
-    rebuildUser: function (req, res) {
+    rebuildUser: function (req, res, next) {
         permissions.ifUserToolsPermission(req.user, req.params.userId, function () {
-            rebuild.rebuildUser(req.params.userId, function () {
+            rebuild.rebuildUser(req.params.userId, function (err) {
+                if (err) {
+                    return next(err);
+                }
                 res.status(200).end();
             });
         }, function () {
             res.status(401).end();
         });
     },
-    purgeUser: function (req, res) {
+    purgeUser: function (req, res, next) {
         permissions.ifUserToolsPermission(req.user, req.params.userId, function () {
             var userId = req.params.userId;
             async.parallel(
                 {
                     measurements: function (callback) {
                         Measurement.where({user: userId}).setOptions({multi: true}).remove(function (err) {
-                            if (err) {
-                                console.error(err);
-                            }
-                            callback();
+                            callback(err);
                         });
                     },
                     dailyanalyses: function (callback) {
                         DailyAnalysis.where({user: userId}).setOptions({multi: true}).remove(function (err) {
-                            if (err) {
-                                console.error(err);
-                            }
-                            callback();
+                            callback(err);
                         });
                     },
                     profile: function (callback) {
                         Profile.where({user: userId}).setOptions({multi: true}).remove(function (err) {
-                            if (err) {
-                                console.error(err);
-                            }
-                            callback();
+                            callback(err);
                         });
                     },
                     user: function (callback) {
                         User.where({_id: userId}).setOptions({multi: true}).remove(function (err) {
-                            if (err) {
-                                console.error(err);
-                            }
-                            callback();
+                            callback(err);
                         });
                     },
                     groups: function (callback) {
@@ -74,17 +68,13 @@ module.exports = {
                             {
                                 '$pull': {invitations: userId, members: userId}
                             }).exec(function (err) {
-                                if (err) {
-                                    console.error(err);
-                                }
-                                callback();
+                                callback(err);
                             });
                     }
                 },
                 function (error, result) {
                     if (error) {
-                        console.error(err);
-                        return res.status(500).end();
+                        return next(err);
                     }
                     res.status(200).end();
                 }

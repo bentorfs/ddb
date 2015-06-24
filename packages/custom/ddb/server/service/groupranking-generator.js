@@ -18,7 +18,7 @@ function processUser(user, callback) {
     Group.find({members: user}).exec(function (err, groups) {
         if (err) {
             console.error('Could not load groups of user: ' + err);
-            return;
+            return callback(err);
         }
         if (groups.length > 0) {
             var counter = _.after(groups.length, callback);
@@ -48,11 +48,10 @@ function processGroup(group, callback) {
         }, groupRanking, {upsert: true}, function (err) {
             if (err) {
                 console.error('Could not update group ranking: ' + err);
+                return callback(err);
             }
             console.info('Updated rankings for group ' + group.name);
-            if (callback) {
-                callback();
-            }
+            callback();
         });
     });
 }

@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
     rebuild = require('./../service/rebuild');
 
 module.exports = {
-    update: function (req, res) {
+    update: function (req, res, next) {
         var upsertData = req.body;
         upsertData.user = req.user;
         delete upsertData._id;
@@ -26,15 +26,17 @@ module.exports = {
             new: true
         }, function (err, updatedMeasurement) {
             if (err) {
-                console.error(err);
-                return res.status(500).end();
+                return next(err);
             }
-            rebuild.rebuildUser(req.user._id, function () {
+            rebuild.rebuildUser(req.user._id, function (err) {
+                if (err) {
+                    return next(err);
+                }
                 res.json(updatedMeasurement);
             });
         });
     },
-    addConsumption: function (req, res) {
+    addConsumption: function (req, res, next) {
         var newConsumption = req.body;
         newConsumption.drinkDate = moment.utc();
         var dateToUpdate = moment.utc(parseInt(req.params.date, 10)).startOf('day');
@@ -49,14 +51,17 @@ module.exports = {
             new: true
         }, function (err, updatedMeasurement) {
             if (err) {
-                console.error(err);
-                return res.status(500).end();
+                return next(err);
             }
-            rebuild.rebuildUser(req.user._id, _.noop);
-            res.json(updatedMeasurement);
+            rebuild.rebuildUser(req.user._id, function (err) {
+                if (err) {
+                    return next(err);
+                }
+                res.json(updatedMeasurement);
+            });
         });
     },
-    removeConsumption: function (req, res) {
+    removeConsumption: function (req, res, next) {
         var dateToUpdate = moment.utc(parseInt(req.params.date, 10)).startOf('day');
         Measurement.findOneAndUpdate({
             date: dateToUpdate.valueOf(),
@@ -73,14 +78,17 @@ module.exports = {
             new: true
         }, function (err, updatedMeasurement) {
             if (err) {
-                console.error(err);
-                return res.status(500).end();
+                return next(err);
             }
-            rebuild.rebuildUser(req.user._id, _.noop);
-            res.json(updatedMeasurement);
+            rebuild.rebuildUser(req.user._id, function (err) {
+                if (err) {
+                    return next(err);
+                }
+                res.json(updatedMeasurement);
+            });
         });
     },
-    get: function (req, res) {
+    get: function (req, res, next) {
         var dateToGet = moment.utc(parseInt(req.params.date, 10)).startOf('day');
         if (dateToGet > moment.utc().add(3, 'days')) {
             res.status(400).end();
@@ -101,19 +109,17 @@ module.exports = {
             new: true
         }).populate('consumptions.drink').exec(function (err, measurement) {
             if (err) {
-                console.error(err);
-                return res.status(500).end();
+                return next(err);
             }
             res.json(measurement);
         });
     },
-    all: function (req, res) {
+    all: function (req, res, next) {
         var user = req.user;
 
         Measurement.find({user: req.user, isDeleted: false}).sort('date').exec(function (err, measurements) {
             if (err) {
-                console.error(err);
-                return res.status(500).end();
+                return next(err);
             }
 
             var today = moment.utc().startOf('day');
@@ -145,10 +151,12 @@ module.exports = {
                         isDeleted: false
                     }).sort('date').exec(function (err, measurements) {
                         if (err) {
-                            console.error(err);
-                            return res.status(500).end();
+                            return next(err);
                         } else {
-                            rebuild.rebuildUser(req.user._id, function () {
+                            rebuild.rebuildUser(req.user._id, function (err) {
+                                if (err) {
+                                    next(err);
+                                }
                                 res.json(measurements);
                             });
                         }

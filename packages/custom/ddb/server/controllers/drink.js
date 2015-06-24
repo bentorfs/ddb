@@ -11,28 +11,23 @@ var mongoose = require('mongoose'),
     async = require('async');
 
 module.exports = {
-    list: function (req, res) {
+    list: function (req, res, next) {
         var search = {};
         if (req.query && req.query.name) {
             search.name = {$regex: req.query.name, $options: 'i'};
         }
         Drink.find(search).limit(20).exec(function (err, drinks) {
             if (err) {
-                console.error(err);
-                return res.status(500).end();
+                return next(err);
             }
             res.json(drinks);
         });
     },
-    get: function (req, res) {
+    get: function (req, res, next) {
         async.parallel(
             {
                 drink: function (callback) {
                     Drink.findById(req.params.drinkId).exec(function (err, drink) {
-                        if (err) {
-                            console.error(err);
-                            return res.status(500).end();
-                        }
                         callback(err, drink);
                     });
                 },
@@ -52,19 +47,14 @@ module.exports = {
                         {$limit: 5}
                     ]).exec(function (err, topDrinkers) {
                         User.populate(topDrinkers, {path: "user", select: 'name _id'}, function (err, docs) {
-                            if (err) {
-                                console.error(err);
-                                return res.status(500).end();
-                            }
                             callback(err, docs);
                         });
                     });
                 }
             },
-            function (error, result) {
-                if (error) {
-                    console.error(err);
-                    return res.status(500).end();
+            function (err, result) {
+                if (err) {
+                    return next(err);
                 }
                 var enrichedResult = result.drink.toJSON();
                 enrichedResult.topDrinkers = result.topDrinkers;
@@ -72,7 +62,7 @@ module.exports = {
             }
         );
     },
-    update: function (req, res) {
+    update: function (req, res, next) {
         permissions.ifDrinkPermission(req.user, req.params.drinkId, function () {
             var upsertData = req.body;
             delete upsertData._id;
@@ -84,8 +74,7 @@ module.exports = {
                 new: true
             }, function (err, updatedDrink) {
                 if (err) {
-                    console.error(err);
-                    return res.status(500).end();
+                    return next(err);
                 }
                 if (updatedDrink) {
                     console.info('Updated drink ' + updatedDrink._id);
@@ -99,16 +88,14 @@ module.exports = {
             res.status(401).end();
         });
     },
-    add: function (req, res) {
+    add: function (req, res, next) {
         var newDrink = new Drink(req.body);
         newDrink.createdBy = req.user;
         newDrink.creationDate = moment.utc().valueOf();
         newDrink.lastModifiedDate = moment.utc().valueOf();
         newDrink.save(function (err, drink) {
             if (err) {
-                console.error(err);
-                return res.status(500).end();
-
+                return next(err);
             }
             console.info('Added drink ' + drink._id);
             res.json(drink);

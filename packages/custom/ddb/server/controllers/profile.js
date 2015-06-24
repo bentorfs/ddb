@@ -10,12 +10,11 @@ var mongoose = require('mongoose'),
     moment = require('moment');
 
 module.exports = {
-    getUser: function (req, res) {
+    getUser: function (req, res, next) {
         permissions.ifProfilePermission(req.user, req.params.userId, function () {
             Profile.findOne({user: req.params.userId}).exec(function (err, profile) {
                 if (err) {
-                    console.error(err);
-                    return res.status(500).end();
+                    return next(err);
                 }
                 if (profile) {
                     res.json(profile);
@@ -27,7 +26,7 @@ module.exports = {
             res.status(401).end();
         });
     },
-    getFrequentDrinks: function (req, res) {
+    getFrequentDrinks: function (req, res, next) {
         permissions.ifProfilePermission(req.user, req.params.userId, function () {
             Measurement.aggregate([
                 {$match: {'user': new ObjectId(req.params.userId)}},
@@ -45,8 +44,7 @@ module.exports = {
             ]).exec(function (err, frequentDrinks) {
                 Drink.populate(frequentDrinks, {path: "drink"}, function (err, docs) {
                     if (err) {
-                        console.error(err);
-                        return res.status(500).end();
+                        return next(err);
                     }
                     res.json(docs);
                 });

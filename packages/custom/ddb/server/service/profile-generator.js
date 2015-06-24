@@ -13,8 +13,7 @@ module.exports = {
     processUser: function (user, callback) {
         DailyAnalysis.find({user: user}).sort('date').exec(function (err, analyses) {
             if (err) {
-                console.error('Could not load daily analyses to update profile for user: ' + user.username + ', because: ' + err);
-                return;
+                return callback(err);
             }
 
             if (analyses.length > 0) {
@@ -167,8 +166,7 @@ function updateProfile(analyses, user, callback) {
         user: user
     }, profileData, {upsert: true}, function (err) {
         if (err) {
-            console.error('Could not update profile for user: ' + user.username + ', because: ' + err);
-            return;
+            return callback(err);
         }
         console.info('Successfully saved updated profile for user ' + user.username);
         callback();

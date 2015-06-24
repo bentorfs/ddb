@@ -14,7 +14,7 @@ module.exports = {
             Group.find({members: {'$all': [targetUserId, requestUser._id]}}, function (err, groups) {
                 if (err) {
                     console.error('Could not check profile permission, because of error: ' + err);
-                    forbiddenCallback()
+                    forbiddenCallback(err)
                 }
                 else if (!groups || groups.length === 0) {
                     console.error('User ' + requestUser.username + ' has no permission to see profile of user ' + targetUserId);
@@ -33,7 +33,7 @@ module.exports = {
             Group.find({members: {'$all': [targetUserId, requestUser._id]}}, function (err, groups) {
                 if (err) {
                     console.error('Could not check daily analyses permission, because of error: ' + err);
-                    forbiddenCallback()
+                    forbiddenCallback(err)
                 }
                 else if (!groups || groups.length === 0) {
                     console.error('User ' + requestUser.username + ' has no permission to see daily analyses of user ' + targetUserId);
@@ -49,7 +49,7 @@ module.exports = {
         Group.find({'_id': groupId, members: requestUser._id}, function (err, groups) {
             if (err) {
                 console.error('Could not check group permission, because of error: ' + err);
-                forbiddenCallback()
+                forbiddenCallback(err)
             }
             else if (!groups || groups.length === 0) {
                 console.error('User ' + requestUser.username + ' has no permission to see group ' + groupId);
@@ -64,7 +64,7 @@ module.exports = {
         Drink.findOne({_id: targetDrinkId, createdBy: requestUser._id}, function (err, drink) {
             if (err) {
                 console.error('Could not check drink permission, because of error: ' + err);
-                forbiddenCallback()
+                forbiddenCallback(err)
             }
             else if (!drink) {
                 console.error('User ' + requestUser.username + ' has no permission to change drink ' + targetDrinkId);

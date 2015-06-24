@@ -17,8 +17,7 @@ module.exports = {
 function processUser(user, callback) {
     Group.find({members: user}).exec(function (err, groups) {
         if (err) {
-            console.error('Could not load groups that user ' + user.username + 'is a member of, because: ' + err);
-            return;
+           return callback(err);
         }
         if (groups.length > 0) {
             var counter = _.after(groups.length, callback);
@@ -49,7 +48,7 @@ function processGroup(group, callback) {
     ]).exec(function (err, dailygroupanalyses) {
         if (err) {
             console.error('Failed to generate daily group analyses for: ' + group.name + ', due to: ' + err);
-            return
+            return callback(err);
         }
 
         if (dailygroupanalyses.length > 0) {

@@ -21,16 +21,21 @@ module.exports = {
             if (err || !user) {
                 console.error('Could not retrieve user with id ' + userId + ', because: ' + err);
             } else {
-                dailyanalysisGenerator.processUser(user, function () {
-                    profileGenerator.processUser(user, function () {
-                        dailygroupanalysisGenerator.processUser(user, function () {
-                            grouprankingGenerator.processUser(user, function () {
-                                if (done) {
-                                    done();
-                                }
-                            });
-                        });
-                    });
+                async.waterfall([
+                    function (callback) {
+                        dailyanalysisGenerator.processUser(user, callback);
+                    },
+                    function (callback) {
+                        profileGenerator.processUser(user, callback);
+                    },
+                    function (callback) {
+                        dailygroupanalysisGenerator.processUser(user, callback);
+                    },
+                    function (callback) {
+                        grouprankingGenerator.processUser(user, callback);
+                    }
+                ], function (err) {
+                    done(err);
                 });
             }
         });
@@ -40,7 +45,8 @@ module.exports = {
 function rebuildAllDailyAnalyses(done) {
     User.find({}).exec(function (err, users) {
         if (err) {
-            console.error('Could not retrieve users for rebuilding daily analyses, because: ' + err)
+            console.error('Could not retrieve users for rebuilding daily analyses, because: ' + err);
+            return done(err);
         }
         var counter = _.after(users.length, function () {
             rebuildAllDailyGroupAnalyses(done);
@@ -55,7 +61,8 @@ function rebuildAllDailyAnalyses(done) {
 function rebuildAllDailyGroupAnalyses(done) {
     Group.find({}).exec(function (err, groups) {
         if (err) {
-            console.error('Could not retrieve groups for rebuilding daily group analyses, because: ' + err)
+            console.error('Could not retrieve groups for rebuilding daily group analyses, because: ' + err);
+            return done(err);
         }
         var counter = _.after(groups.length, function () {
             rebuildAllProfiles(done);
@@ -70,7 +77,8 @@ function rebuildAllDailyGroupAnalyses(done) {
 function rebuildAllProfiles(done) {
     User.find({}).exec(function (err, users) {
         if (err) {
-            console.error('Could not retrieve users for rebuilding profiles, because: ' + err)
+            console.error('Could not retrieve users for rebuilding profiles, because: ' + err);
+            return done(err);
         }
         var counter = _.after(users.length, function () {
             rebuildAllGroupRankings(done);
@@ -85,7 +93,8 @@ function rebuildAllProfiles(done) {
 function rebuildAllGroupRankings(done) {
     Group.find({}).exec(function (err, groups) {
         if (err) {
-            console.error('Could not retrieve groups for rebuilding rankings, because: ' + err)
+            console.error('Could not retrieve groups for rebuilding rankings, because: ' + err);
+            return done(err);
         }
         var counter = _.after(groups.length, done);
         _.forEach(groups, function (group) {

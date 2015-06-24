@@ -9,16 +9,15 @@ var mongoose = require('mongoose'),
     grouprankingGenerator = require('./../service/groupranking-generator');
 
 module.exports = {
-    listGroups: function (req, res) {
+    listGroups: function (req, res, next) {
         Group.find({members: req.user._id}, function (err, groups) {
             if (err) {
-                console.error(err);
-                return res.status(500).end();
+                return next(err);
             }
             res.json(groups);
         });
     },
-    createGroup: function (req, res) {
+    createGroup: function (req, res, next) {
         var group = new Group(req.body);
         if (!group.name) {
             res.status(400).end();
@@ -28,20 +27,21 @@ module.exports = {
         group.creationDate = moment.utc().valueOf();
         group.save(function (err) {
             if (err) {
-                console.error(err);
-                return res.status(500).end();
+                return next(err);
             }
             grouprankingGenerator.processGroup(group, function () {
                 res.json(group);
             });
         });
     },
-    getGroup: function (req, res) {
+    getGroup: function (req, res, next) {
         permissions.ifGroupPermission(req.user, req.params.groupId, function () {
             Group.findById(req.params.groupId).populate('members', 'username').populate('invitations', 'username').exec(function (err, doc) {
-                if (err || !doc) {
-                    console.error(err);
-                    return res.status(500).end();
+                if (err) {
+                    return next(err);
+                }
+                if (!doc) {
+                    return res.status(404).end();
                 }
                 res.json(doc);
             });
@@ -49,7 +49,7 @@ module.exports = {
             res.status(401).end();
         });
     },
-    getRanking: function (req, res) {
+    getRanking: function (req, res, next) {
         permissions.ifGroupPermission(req.user, req.params.groupId, function () {
             GroupRanking.findOne({group: req.params.groupId})
                 .populate('rankingHighestBinge.user', 'username')
@@ -72,9 +72,11 @@ module.exports = {
                 .populate('rankingSadLoner.user', 'username')
                 .populate('rankingSuperCup.user', 'username')
                 .exec(function (err, ranking) {
-                    if (err || !ranking) {
-                        console.error(err);
-                        return res.status(500).end();
+                    if (err) {
+                        return next(err);
+                    }
+                    if (!ranking) {
+                        return res.status(404).end();
                     }
                     res.json(ranking);
                 });
@@ -82,16 +84,15 @@ module.exports = {
             res.status(401).end();
         });
     },
-    listInvitations: function (req, res) {
+    listInvitations: function (req, res, next) {
         Group.find({invitations: req.user._id}, function (err, groups) {
             if (err) {
-                console.error(err);
-                return res.status(500).end();
+                return next(err);
             }
             res.json(groups);
         });
     },
-    approveInvitation: function (req, res) {
+    approveInvitation: function (req, res, next) {
         Group.findOneAndUpdate({_id: req.params.groupId}, {
                 '$pull': {invitations: req.user._id},
                 '$addToSet': {members: req.user._id}
@@ -99,15 +100,17 @@ module.exports = {
             {new: true},
             function (err, group) {
                 if (err) {
-                    console.error(err);
-                    return res.status(500).end();
+                    return next(err);
+                }
+                if (!group) {
+                    return res.status(404).end();
                 }
                 grouprankingGenerator.processGroup(group, function () {
                     res.status(200).end();
                 });
             });
     },
-    leaveGroup: function (req, res) {
+    leaveGroup: function (req, res, next) {
         // This is both for leaving a group, and rejecting an invitation to it
         Group.findOneAndUpdate(
             {
@@ -119,15 +122,17 @@ module.exports = {
             {new: true},
             function (err, group) {
                 if (err) {
-                    console.error(err);
-                    return res.status(500).end();
+                    return next(err);
+                }
+                if (!group) {
+                    return res.status(404).end();
                 }
                 grouprankingGenerator.processGroup(group, function () {
                     res.status(200).end();
                 });
             });
     },
-    addInvitation: function (req, res) {
+    addInvitation: function (req, res, next) {
         permissions.ifGroupPermission(req.user, req.params.groupId, function () {
             Group.findOneAndUpdate(
                 {
@@ -138,8 +143,7 @@ module.exports = {
                     '$addToSet': {invitations: req.params.userId}
                 }, function (err) {
                     if (err) {
-                        console.error(err);
-                        return res.status(500).end();
+                        return next(err);
                     }
                     res.status(200).end();
                 });
@@ -147,7 +151,7 @@ module.exports = {
             res.status(401).end();
         });
     },
-    removeInvitation: function (req, res) {
+    removeInvitation: function (req, res, next) {
         permissions.ifGroupPermission(req.user, req.params.groupId, function () {
             Group.findOneAndUpdate(
                 {
@@ -158,8 +162,7 @@ module.exports = {
                 },
                 function (err) {
                     if (err) {
-                        console.error(err);
-                        return res.status(500).end();
+                        return next(err);
                     }
                     res.status(200).end();
                 });

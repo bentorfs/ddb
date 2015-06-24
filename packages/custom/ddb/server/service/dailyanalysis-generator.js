@@ -16,7 +16,7 @@ module.exports = {
         Group.find({members: user._id}, function (err, groups) {
             if (err) {
                 console.error('Could not load groups that user ' + user.username + 'is a member of, because: ' + err);
-                return;
+                return callback(err);
             }
             async.parallel(
                 {
@@ -40,9 +40,9 @@ module.exports = {
                         });
                     }
                 },
-                function (error, result) {
-                    if (error) {
-                        return
+                function (err, result) {
+                    if (err) {
+                        return callback(err);
                     }
 
                     var dailyAnalyses = getDailyAnalyses(result.measurements, user);
@@ -232,7 +232,7 @@ function saveDailyAnalyses(dailyAnalyses, user, callback) {
                 date: dailyAnalysis.date
             }, dailyAnalysis, {upsert: true}, function (err) {
                 if (err) {
-                    console.error('Failed to updated daily analyse for: ' + user.username + ', due to: ' + err);
+                    console.error('Failed to updated daily analysis for: ' + user.username + ', due to: ' + err);
                     return;
                 }
                 counter();

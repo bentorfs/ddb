@@ -9,7 +9,7 @@ var mongoose = require('mongoose'),
     moment = require('moment');
 
 module.exports = {
-    all: function (req, res) {
+    all: function (req, res, next) {
         permissions.ifDailyAnalysisPermission(req.user, req.params.userId, function () {
 
             var fromDate = req.query.fromDate || moment.utc().subtract(30, 'days').valueOf();
@@ -22,8 +22,7 @@ module.exports = {
                 }
             }).sort('date').exec(function (err, analyses) {
                 if (err) {
-                    console.error(err);
-                    return res.status(500).end();
+                    return next(err);
                 }
                 res.json(analyses);
             });
