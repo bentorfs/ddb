@@ -58,7 +58,7 @@ angular.module('mean.ddb').directive('trackDrinks', function () {
 
 
                 $scope.scrollTo = function (location) {
-                    if (window.mobilecheck) {
+                    if (window.mobilecheck()) {
                         smoothScroll(document.getElementById(location), {offset: 55});
                     }
                 };

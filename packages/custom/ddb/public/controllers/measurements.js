@@ -55,7 +55,7 @@ angular.module('mean.ddb').controller('DdbMeasurementsController', ['$rootScope'
         };
 
         $scope.scrollTo = function (location) {
-            if (window.mobilecheck) {
+            if (window.mobilecheck()) {
                 smoothScroll(document.getElementById(location), {offset: 55});
             }
         };

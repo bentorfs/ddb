@@ -3,11 +3,11 @@
 angular.module('mean.ddb').controller('DdbNewsController', ['$rootScope', '$scope', 'smoothScroll', 'MeanUser', 'Measurement',
     function ($rootScope, $scope, smoothScroll, MeanUser, Measurement) {
 
-        $scope.today = moment().valueOf();
+        $scope.today = moment.utc().valueOf();
 
         $scope.loadData = function () {
             if ($scope.user._id) {
-                Measurement.get(moment().valueOf()).success(function (data) {
+                Measurement.get(moment.utc().valueOf()).success(function (data) {
                     $scope.measurement = data;
                 });
             }
@@ -19,13 +19,13 @@ angular.module('mean.ddb').controller('DdbNewsController', ['$rootScope', '$scop
         };
 
         $scope.scrollTo = function (location) {
-            if (window.mobilecheck) {
+            if (window.mobilecheck()) {
                 smoothScroll(document.getElementById(location), {offset: 55});
             }
         };
 
         $scope.removeConsumption = function (consumption) {
-            Measurement.removeConsumption(moment().valueOf(), consumption._id
+            Measurement.removeConsumption(moment.utc().valueOf(), consumption._id
             ).success(function (data) {
                     $scope.loadData();
                 });
