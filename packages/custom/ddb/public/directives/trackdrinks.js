@@ -35,7 +35,7 @@ angular.module('mean.ddb').directive('trackDrinks', function () {
 
                 $scope.getDrinks = function (name) {
                     $scope.newDrinkName = name;
-                    return Drink.list(name, 20).then(function (response) {
+                    return Drink.list(name, 0, 20).then(function (response) {
                         return response.data;
                     });
                 };

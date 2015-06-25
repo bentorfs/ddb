@@ -170,3 +170,7 @@ tr.active {
     max-width: 200px;
     width: 200px;
 }
+
+.pager .disabled {
+    display: none
+}

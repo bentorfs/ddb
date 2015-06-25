@@ -5,12 +5,13 @@ angular.module('mean.ddb').factory('Drink', ['$http',
 
         var dao = {};
 
-        dao.list = function (name, limit) {
+        dao.list = function (name, skip, limit) {
             return $http({
                 url: '/api/drink',
                 method: 'GET',
                 params: {
                     name: name,
+                    skip: skip,
                     limit: limit
                 }
             });

@@ -30,7 +30,10 @@ module.exports = {
                     }]
             };
         }
-        var query = Drink.find(search);
+        var query = Drink.find(search).sort('name');
+        if (req.query.skip) {
+            query.skip(req.query.skip)
+        }
         if (req.query.limit) {
             query.limit(req.query.limit)
         }
