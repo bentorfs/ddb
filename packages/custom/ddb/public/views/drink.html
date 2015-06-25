@@ -161,6 +161,9 @@
                         <h3 class="panel-title">Top Drinkers</h3>
                     </div>
                     <div class="panel-body">
+                        <div class="alert alert-danger" role="alert" ng-hide="topDrinkers.length">
+                            Nobody has tasted it yet!
+                        </div>
                         <table class="table table-striped">
                             <tr ng-repeat="topDrinker in topDrinkers">
                                 <td class="col-xs-8">{{topDrinker.user.name}}</td>

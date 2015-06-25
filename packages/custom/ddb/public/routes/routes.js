@@ -26,6 +26,10 @@ angular.module('mean.ddb').config(['$stateProvider',
             url: '/ddb/drink/:drinkId',
             templateUrl: 'ddb/views/drink.html'
         });
+        $stateProvider.state('catalog', {
+            url: '/ddb/catalog',
+            templateUrl: 'ddb/views/catalog.html'
+        });
         $stateProvider.state('tools', {
             url: '/ddb/tools/:userId',
             templateUrl: 'ddb/views/tools.html'

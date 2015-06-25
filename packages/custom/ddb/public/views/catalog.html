@@ -1,0 +1,103 @@
+<section class="container">
+    <div data-ng-controller="DdbCatalogController">
+
+        <div class="page-header">
+            <h1>
+                Drink Catalog
+            </h1>
+        </div>
+
+        <div class="spinner" ng-show="!drinks">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+
+
+        <!--  <div class="panel panel-primary">
+              <div class="panel-body">
+                  <div class="btn-group-lg" role="group">
+                      <button type="button" class="btn btn-lg btn-primary"
+                              ng-click="getSpreadAverageChartData(365)"
+                              ng-class="{active: nbSpreadAverageDaysShown === 365}">
+                          Beers
+                      </button>
+                      <button type="button" class="btn btn-lg btn-primary"
+                              ng-click="getSpreadAverageChartData(90)"
+                              ng-class="{active: nbSpreadAverageDaysShown === 90}">
+                          Liquors
+                      </button>
+                      <button type="button" class="btn btn-lg btn-primary"
+                              ng-click="getSpreadAverageChartData(30)"
+                              ng-class="{active: nbSpreadAverageDaysShown === 30}">
+                          Wines
+                      </button>
+                  </div>
+              </div>
+          </div>-->
+
+        <div class="panel panel-danger" ng-show="drinks">
+            <div class="panel-heading">
+                <h3 class="panel-title">Search Results</h3>
+            </div>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-condensed table-hover">
+                        <thead>
+                        <tr>
+                            <th class="col-xs-2">Type</th>
+                            <th class="col-xs-6">Name</th>
+                            <th class="col-xs-2">Alcohol Content</th>
+                            <th class="col-xs-2"></th>
+                        </tr>
+                        <tr>
+                            <th class="col-xs-2">
+                                <select ng-model="filter.type" class="form-control input-sm">
+                                    <option value="">All</option>
+                                    <option value="beer">Beer</option>
+                                    <option value="liquor">Liquor</option>
+                                    <option value="wine">Wine</option>
+                                </select>
+                            </th>
+                            <th class="col-xs-6">
+                                <input type="text" placeholder="Search.." class="form-control input-sm"
+                                       ng-model="filter.name"/>
+                            </th>
+                            <th class="col-xs-2">
+                            </th>
+                            <th class="col-xs-2"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="drink in drinks | filter: filter | orderBy:'name' | startFrom:((currentPage-1)*pageSize) | limitTo:pageSize">
+                            <td><strong>{{drink.type| uppercase}}</strong></td>
+                            <td>{{drink.name}}</td>
+                            <td>{{drink.alc * 100 | number:2}}</td>
+                            <td class="text-right">
+                                <a ui-sref="drink({drinkId: drink._id})">
+                                    <i class="glyphicon glyphicon-zoom-in"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr ng-hide="!drinks" ng-init="pageSize = 50">
+                            <th colspan="50">
+                                <div class="text-right">
+                                    <pagination ng-init="currentPage = 1" total-items="drinks.length"
+                                                ng-model="currentPage"
+                                                items-per-page="pageSize" class="pagination-sm" max-size="10"
+                                                previous-text="&lsaquo;" next-text="&rsaquo;"></pagination>
+                                </div>
+                            </th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</section>

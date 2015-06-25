@@ -30,7 +30,11 @@ module.exports = {
                     }]
             };
         }
-        Drink.find(search).limit(20).exec(function (err, drinks) {
+        var query = Drink.find(search);
+        if (req.query.limit) {
+            query.limit(req.query.limit)
+        }
+        query.exec(function (err, drinks) {
             if (err) {
                 return next(err);
             }
