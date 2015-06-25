@@ -60,6 +60,9 @@ module.exports = {
         });
     },
     ifDrinkPermission: function (requestUser, targetDrinkId, authorizedCallback, forbiddenCallback) {
+        if (requestUser.isAdmin()) {
+            return authorizedCallback();
+        }
         // See if the user created the drink
         Drink.findOne({_id: targetDrinkId, createdBy: requestUser._id}, function (err, drink) {
             if (err) {

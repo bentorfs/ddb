@@ -109,7 +109,7 @@ module.exports = {
                 date: dateToGet.valueOf(),
                 user: req.user,
                 isDeleted: false
-            }, {new: true})
+            })
                 .populate('consumptions.drink')
                 .exec(function (err, measurement) {
                     if (err) {
