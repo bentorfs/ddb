@@ -30,6 +30,12 @@
                         <i class="glyphicon glyphicon-stats"/> &nbsp; Profile
                     </a>
                 </li>
+                <li ng-show="hdrctr.hdrvars.authenticated">
+                    <a ui-sref='catalog' ng-click="collapse()"
+                       ng-class="{active: isActive('catalog')}">
+                        <i class="glyphicon glyphicon-glass"/> &nbsp; Catalog
+                    </a>
+                </li>
                 <li class="dropdown" ng-show="hdrctr.hdrvars.authenticated" dropdown>
                     <a href="#" class="dropdown-toggle"
                        ng-class="{active: isActive('group')|| isActive('managegroups')}" href dropdown-toggle>
