@@ -60,25 +60,26 @@ module.exports = {
         });
     },
     ifDrinkPermission: function (requestUser, targetDrinkId, authorizedCallback, forbiddenCallback) {
-        if (requestUser.isAdmin()) {
-            return authorizedCallback();
-        }
-        // See if the user created the drink
-        Drink.findOne({_id: targetDrinkId, createdBy: requestUser._id}, function (err, drink) {
-            if (err) {
-                console.error('Could not check drink permission, because of error: ' + err);
-                forbiddenCallback(err)
-            }
-            else if (!drink) {
-                console.error('User ' + requestUser.username + ' has no permission to change drink ' + targetDrinkId);
-                forbiddenCallback()
-            } else {
-                authorizedCallback();
-            }
-        });
+        return authorizedCallback();
+        //if (requestUser.roles.indexOf('admin') != -1) {
+        //    return authorizedCallback();
+        //}
+        //// See if the user created the drink
+        //Drink.findOne({_id: targetDrinkId, createdBy: requestUser._id}, function (err, drink) {
+        //    if (err) {
+        //        console.error('Could not check drink permission, because of error: ' + err);
+        //        forbiddenCallback(err)
+        //    }
+        //    else if (!drink) {
+        //        console.error('User ' + requestUser.username + ' has no permission to change drink ' + targetDrinkId);
+        //        forbiddenCallback()
+        //    } else {
+        //        authorizedCallback();
+        //    }
+        //});
     },
     ifUserToolsPermission: function (requestUser, targetUserId, authorizedCallback, forbiddenCallback) {
-        if (targetUserId === requestUser._id || requestUser.isAdmin()) {
+        if (targetUserId === requestUser._id || requestUser.roles.indexOf('admin') != -1) {
             authorizedCallback();
         } else {
             forbiddenCallback();

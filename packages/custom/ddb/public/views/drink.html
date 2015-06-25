@@ -2,9 +2,15 @@
     <div data-ng-controller="DdbDrinkController">
 
         <div class="page-header">
-            <h1>Drink
+            <h1>
+                Drink
                 <br class="visible-xs"/>
-                <small>{{drink.name}}</small>
+                <small>
+                    {{drink.name}}
+                    <a ng-click="editMode = true" ng-show="!editMode" href="#">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                    </a>
+                </small>
             </h1>
         </div>
 
@@ -17,55 +23,110 @@
                     <div class="panel-body">
                         <table class="table table-condensed">
                             <tr>
-                                <th><small>Producer</small></th>
-                            </tr>
-                            <tr>
-                                <td><em>{{drink.producer || 'Unavailable'}}</em></td>
-                            </tr>
-                            <tr>
-                                <th><small>First Brewed</small></th>
-                            </tr>
-                            <tr>
-                                <td><em>{{drink.firstBrewed || 'Unavailable'}}</em></td>
-                            </tr>
-                            <tr>
-                                <th><small>Region</small></th>
-                            </tr>
-                            <tr>
-                                <td><em>{{drink.location || 'Unavailable'}}</em></td>
-                            </tr>
-                            <tr>
-                                <th><small>Website</small></th>
-                            </tr>
-                            <tr>
-                                <td><em>{{drink.website || 'Unavailable'}}</em></td>
-                            </tr>
-                            <tr>
-                                <th><small>Age</small></th>
-                            </tr>
-                            <tr>
-                                <td><em>{{drink.age || 'Unavailable'}}</em></td>
-                            </tr>
-                            <tr>
-                                <th><small>Components</small></th>
+                                <th>
+                                    <small>Producer</small>
+                                </th>
                             </tr>
                             <tr>
                                 <td>
-                                    <ul>
-                                        <li ng-repeat="component in drink.components">{{component}}</li>
-                                    </ul>
+                                    <div ng-show="!editMode">
+                                        <em>{{drink.producer || 'Unknown'}}</em>
+                                    </div>
+                                    <div ng-show="editMode">
+                                        <input type="text" class="form-control input-sm" ng-model="drink.producer"/>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
-                                <th><small>Tags</small></th>
+                                <th>
+                                    <small>Alcohol Content</small>
+                                </th>
                             </tr>
                             <tr>
                                 <td>
-                                    <ul>
-                                        <li ng-repeat="tag in drink.tags">{{tag}}</li>
-                                    </ul>
+                                    <div ng-show="!editMode">
+                                        <em>{{drink.alc * 100}}%</em>
+                                    </div>
+                                    <div ng-show="editMode">
+                                        <input type="text" class="form-control input-sm" ng-model="drink.alc"/>
+                                    </div>
                                 </td>
                             </tr>
+                            <tr>
+                                <th>
+                                    <small>Region</small>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div ng-show="!editMode">
+                                        <em>{{drink.location || 'Unknown'}}</em>
+                                    </div>
+                                    <div ng-show="editMode">
+                                        <input type="text" class="form-control input-sm" ng-model="drink.location"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <small>Website</small>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div ng-show="!editMode">
+                                        <em>{{drink.website || 'Unknown'}}</em>
+                                    </div>
+                                    <div ng-show="editMode">
+                                        <input type="text" class="form-control input-sm" ng-model="drink.website"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <small>Components</small>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div ng-show="!editMode">
+                                        <ul>
+                                            <li ng-repeat="component in drink.components">{{component}}</li>
+                                        </ul>
+                                    </div>
+                                    <div ng-show="editMode">
+                                        <input type="text" class="form-control input-sm" ng-model="drink.components"
+                                               ng-list/>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <small>Tags</small>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div ng-show="!editMode">
+                                        <ul>
+                                            <li ng-repeat="tag in drink.tags">{{tag}}</li>
+                                        </ul>
+                                    </div>
+                                    <div ng-show="editMode">
+                                        <input type="text" class="form-control input-sm" ng-model="drink.tags"
+                                               ng-list/>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tfoot ng-show="editMode">
+                            <tr>
+                                <td>
+                                    <button ng-click="saveDrink()" class="btn btn-warning" ng-show="editMode">
+                                        <i class="glyphicon glyphicon-ok"></i> Save
+                                    </button>
+                                </td>
+                            </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -76,8 +137,13 @@
                         <h3 class="panel-title">Description</h3>
                     </div>
                     <div class="panel-body">
-                        {{drink.article}}
-                        <div ng-if="!drink.article"><em>No description available</em></div>
+                        <div ng-show="!editMode">
+                            {{drink.article}}
+                            <div ng-if="!drink.article"><em>No description available</em></div>
+                        </div>
+                        <div ng-show="editMode">
+                            <textarea class="form-control" rows="10" ng-model="drink.article"></textarea>
+                        </div>
                     </div>
                 </div>
                 <div class="panel panel-danger">
@@ -96,7 +162,7 @@
                     </div>
                     <div class="panel-body">
                         <table class="table table-striped">
-                            <tr ng-repeat="topDrinker in drink.topDrinkers">
+                            <tr ng-repeat="topDrinker in topDrinkers">
                                 <td class="col-xs-8">{{topDrinker.user.name}}</td>
                                 <td class="col-xs-4">
                                     {{topDrinker.totalAmount}} cl
