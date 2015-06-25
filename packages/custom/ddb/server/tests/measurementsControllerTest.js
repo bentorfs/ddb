@@ -49,24 +49,6 @@ describe('<Unit Test>', function () {
         });
 
         describe('CRUD Operations', function () {
-            it('Creates a measurement for the current day, when getting the list, if it doesnt exist', function (done) {
-                var req = {
-                    user: {
-                        _id: _user1._id,
-                        username: 'test1'
-                    }
-                };
-                var res = {
-                    json: function (data) {
-                        expect(data.length).to.eql(1);
-                        done();
-                    }
-                };
-                measurementCtrl.all(req, res, function (err) {
-                    done(err);
-                });
-            });
-
             it('Can manually create a measurement. They are stored in UTC', function (done) {
                 var testDate = moment.utc();
                 var req = {
@@ -87,42 +69,6 @@ describe('<Unit Test>', function () {
                         expect(data.wine).to.eql(0);
                         expect(data.liquor).to.eql(0);
                         done();
-                    }
-                };
-                measurementCtrl.update(req, res, function (err) {
-                    done(err);
-                });
-            });
-
-            it('It is possible create a measurement in the past. All subsequent dates will be generated on the next GET', function (done) {
-                var testDate = moment.utc().subtract(3, 'days');
-                var req = {
-                    user: {
-                        _id: _user1._id,
-                        username: 'test1'
-                    },
-                    body: {
-                        date: testDate.valueOf()
-                    }
-                };
-                var res = {
-                    json: function (data) {
-                        expect(moment.utc(data.date).valueOf()).to.eql(testDate.startOf('day').valueOf());
-
-                        var req = {
-                            user: {
-                                _id: _user1._id
-                            }
-                        };
-                        var res = {
-                            json: function (data) {
-                                expect(data.length).to.eql(4);
-                                done();
-                            }
-                        };
-                        measurementCtrl.all(req, res, function (err) {
-                            done(err);
-                        });
                     }
                 };
                 measurementCtrl.update(req, res, function (err) {

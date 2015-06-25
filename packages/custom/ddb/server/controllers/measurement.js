@@ -88,98 +88,78 @@ module.exports = {
             });
         });
     },
+    all: function (req, res, next) {
+        Measurement.find({user: req.user._id, isDeleted: false}).sort('date').exec(function (err, measurements) {
+            if (err) {
+                return next(err);
+            } else {
+                res.json(measurements);
+            }
+        });
+    },
     get: function (req, res, next) {
         var dateToGet = moment.utc(parseInt(req.params.date, 10)).startOf('day');
         if (dateToGet > moment.utc().add(3, 'days')) {
             res.status(400).end();
             return;
         }
-        var upsert = true;
-        if (dateToGet < moment.utc().subtract(60, 'days')) {
-            // Only get, don't create
-            upsert = false;
-        }
 
-        var upsertData = {
-            date: dateToGet.valueOf()
-        };
-
-        Measurement.update({date: dateToGet.valueOf(), user: req.user, isDeleted: false}, upsertData, {
-            upsert: true
-        }, function (err, num, n) {
-            if (num.upserted && num.upserted.length > 0) {
-                rebuild.rebuildUser(req.user._id, dateToGet.valueOf(), function (err) {
-                    if (err) {
-                        console.error(err);
-                    }
-                });
-            }
+        backFillMeasurements(req.user, dateToGet.valueOf(), function () {
             Measurement.findOne({
                 date: dateToGet.valueOf(),
                 user: req.user,
                 isDeleted: false
-            }).populate('consumptions.drink').exec(function (err, measurement) {
-                if (err) {
-                    return next(err);
-                }
-                res.json(measurement);
-            });
-        });
-    },
-    all: function (req, res, next) { // TODO: This is not used any more ?
-        var user = req.user;
-
-        Measurement.find({user: req.user, isDeleted: false}).sort('date').exec(function (err, measurements) {
-            if (err) {
-                return next(err);
-            }
-
-            var today = moment.utc().startOf('day');
-            var toSave = [];
-            var nbSaved = measurements.length;
-            if (nbSaved === 0) {
-                var firstEntry = getEmptyMeasurement(req.user, today);
-                toSave.push(firstEntry);
-            } else {
-                var currentDay = moment.utc(measurements[0].date).startOf('day');
-                var i = 1;
-                while (currentDay < today) {
-                    currentDay.add(1, 'days');
-                    if (nbSaved > i) {
-                        while (currentDay < moment.utc(measurements[i].date)) {
-                            toSave.push(getEmptyMeasurement(req.user, currentDay));
-                            currentDay.add(1, 'days');
-                        }
-                        i++;
-                    } else {
-                        toSave.push(getEmptyMeasurement(req.user, currentDay));
+            }, {new: true})
+                .populate('consumptions.drink')
+                .exec(function (err, measurement) {
+                    if (err) {
+                        return next(err);
                     }
-                }
-            }
-            if (toSave.length > 0) {
-                saveMeasurements(req.user, toSave, function () {
-                    Measurement.find({
-                        user: req.user,
-                        isDeleted: false
-                    }).sort('date').exec(function (err, measurements) {
-                        if (err) {
-                            return next(err);
-                        } else {
-                            rebuild.rebuildUser(req.user._id, null, function (err) {
-                                if (err) {
-                                    next(err);
-                                }
-                                res.json(measurements);
-                            });
-                        }
-                    });
+                    res.json(measurement);
                 });
-            } else {
-                res.json(measurements);
-            }
         });
     }
 };
+
+function backFillMeasurements(user, date, done) {
+    if (user.registrationDate && (date < moment.utc(user.registrationDate, 'YYYY-MM-DD').valueOf())) {
+        done();
+    } else if (date < moment.utc('2015-05-07', 'YYYY-MM-DD').valueOf()) {
+        done();
+    } else {
+        Measurement.findOne({
+            date: date,
+            user: user,
+            isDeleted: false
+        }, function (err, measurement) {
+            if (err) {
+                return done(err);
+            }
+            else if (measurement) {
+                done(); // Done
+            } else {
+                // Create an empty measurement for this day
+                console.info('Backfilling empty measurement for ' + user.name + ' on ' + moment.utc(date).format('YYYY-MM-DD'));
+                Measurement.findOneAndUpdate({date: date, user: user, isDeleted: false},
+                    getEmptyMeasurement(user, date),
+                    {upsert: true},
+                    function (err) {
+                        if (err) {
+                            return done(err);
+                        }
+                        rebuild.rebuildUser(user._id, date, function (err) {
+                            if (err) {
+                                return done(err);
+                            }
+                            // Recurse to one day earlier
+                            var dayEarlier = moment.utc(date).subtract(1, 'days');
+                            backFillMeasurements(user, dayEarlier, done);
+                        });
+                    });
+            }
+        });
+    }
+}
 
 function getEmptyMeasurement(user, date) {
     return {
@@ -191,17 +171,6 @@ function getEmptyMeasurement(user, date) {
         wine: 0,
         liquor: 0,
         isDeleted: false,
-        lastModifiedDate: moment.utc().valueOf()
+        lastModifiedDate: null
     };
-}
-
-function saveMeasurements(user, measurements, callback) {
-    Measurement.create(measurements, function (err) {
-        if (err) {
-            console.error('Failed to save measurements for: ' + user.username + ', due to: ' + err);
-        } else {
-            console.info('Successfully saved ' + measurements.length + ' measurements for ' + user.username);
-        }
-        callback();
-    });
 }

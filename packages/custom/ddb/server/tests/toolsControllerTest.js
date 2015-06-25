@@ -5,11 +5,29 @@ var expect = require('expect.js'),
     User = mongoose.model('User'),
     Group = mongoose.model('Group'),
     groupCtrl = require('../controllers/group'),
+    measurementCtrl = require('../controllers/measurement'),
     toolsCtrl = require('../controllers/tools'),
     _ = require('lodash'),
     moment = require('moment');
 
 var _user1, _user2;
+
+function insertMeasurement(userId, measurement, callback) {
+    var req = {
+        user: {
+            _id: userId
+        },
+        body: measurement
+    };
+    var res = {
+        json: function (data) {
+            callback();
+        }
+    };
+    measurementCtrl.update(req, res, function (err) {
+        callback(err);
+    });
+}
 
 describe('<Unit Test>', function () {
     describe('Tools Controller:', function () {
@@ -49,6 +67,89 @@ describe('<Unit Test>', function () {
                     trigger();
                 });
 
+            });
+        });
+
+        describe('Rebuilding a user', function () {
+
+            it('Creates a measurement for the current day, when getting the list, if it doesnt exist', function (done) {
+                toolsCtrl.rebuildUser({
+                    user: {
+                        _id: _user1._id,
+                        isAdmin: function () {
+                            return true
+                        }
+                    },
+                    params: {
+                        userId: _user1.id
+                    }
+                }, {
+                    status: function (data) {
+                        expect(data).to.eql(200);
+                        return this;
+                    },
+                    end: function () {
+                        measurementCtrl.all({
+                            user: {
+                                _id: _user1._id
+                            }
+                        }, {
+                            json: function (data) {
+                                expect(data.length).to.eql(1);
+                                done();
+                            }
+                        }, function (err) {
+                            done(err);
+                        });
+                    }
+                }, function (err) {
+                    done(err);
+                })
+
+            });
+
+            it('Instantiates missing measurements', function (done) {
+                var counter = _.after(2, function () {
+                    toolsCtrl.rebuildUser({
+                        user: {
+                            _id: _user1._id,
+                            isAdmin: function () {
+                                return true
+                            }
+                        },
+                        params: {
+                            userId: _user1.id
+                        }
+                    }, {
+                        status: function (data) {
+                            expect(data).to.eql(200);
+                            return this;
+                        },
+                        end: function () {
+                            measurementCtrl.all({
+                                user: {
+                                    _id: _user1._id
+                                }
+                            }, {
+                                json: function (data) {
+                                    expect(data.length).to.eql(4);
+                                    done();
+                                }
+                            }, function (err) {
+                                done(err);
+                            });
+                        }
+                    }, function (err) {
+                        done(err);
+                    })
+                });
+
+                insertMeasurement(_user1._id, {
+                    date: moment.utc().valueOf()
+                }, counter);
+                insertMeasurement(_user1._id, {
+                    date: moment.utc().subtract('days', 3).valueOf()
+                }, counter);
             });
         });
 

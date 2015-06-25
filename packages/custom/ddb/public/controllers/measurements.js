@@ -71,10 +71,20 @@ angular.module('mean.ddb').controller('DdbMeasurementsController', ['$rootScope'
         $scope.user = MeanUser.get();
         $rootScope.$on('loggedin', function () {
             $scope.user = MeanUser.get();
+            if ($scope.user.registrationDate) {
+                $scope.registrationDate = moment.utc($scope.user.registrationDate, 'YYYY-MM-DD hh:mm:ss').valueOf();
+            } else {
+                $scope.registrationDate = moment.utc('2015-05-07', 'YYYY-MM-DD');
+            }
             $scope.loadData();
         });
-        $scope.date = moment().subtract(1, 'days').valueOf();
+        $scope.date = moment().valueOf();
         $scope.today = moment().valueOf();
+        if ($scope.user.registrationDate) {
+            $scope.registrationDate = moment.utc($scope.user.registrationDate, 'YYYY-MM-DD hh:mm:ss').valueOf();
+        } else {
+            $scope.registrationDate = moment.utc('2015-05-07', 'YYYY-MM-DD');
+        }
         $scope.setDays();
         $scope.loadData();
     }

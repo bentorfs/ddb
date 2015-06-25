@@ -8,6 +8,7 @@ var mongoose = require('mongoose'),
     Profile = mongoose.model('Profile'),
     permissions = require('./../service/permissions'),
     rebuild = require('../service/rebuild'),
+    measurementGenerator = require('./../service/measurement-generator'),
     _ = require('lodash'),
     async = require('async'),
     moment = require('moment');
@@ -15,20 +16,30 @@ var mongoose = require('mongoose'),
 
 module.exports = {
     rebuildEverything: function (req, res, next) {
-        rebuild.rebuildEverything(function (err) {
+        measurementGenerator.processAll(function (err) {
             if (err) {
                 return next(err);
             }
-            res.status(200).end();
-        });
-    },
-    rebuildUser: function (req, res, next) {
-        permissions.ifUserToolsPermission(req.user, req.params.userId, function () {
-            rebuild.rebuildUser(req.params.userId, null, function (err) {
+            rebuild.rebuildEverything(function (err) {
                 if (err) {
                     return next(err);
                 }
                 res.status(200).end();
+            });
+        });
+    },
+    rebuildUser: function (req, res, next) {
+        permissions.ifUserToolsPermission(req.user, req.params.userId, function () {
+            measurementGenerator.processUser(req.user, function (err) {
+                if (err) {
+                    return next(err);
+                }
+                rebuild.rebuildUser(req.params.userId, null, function (err) {
+                    if (err) {
+                        return next(err);
+                    }
+                    res.status(200).end();
+                });
             });
         }, function () {
             res.status(401).end();

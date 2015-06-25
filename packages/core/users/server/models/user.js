@@ -77,6 +77,7 @@ var UserSchema = new Schema({
     salt: String,
     resetPasswordToken: String,
     resetPasswordExpires: Date,
+    registrationDate: Date,
     profile: {},
     facebook: {},
     twitter: {},
