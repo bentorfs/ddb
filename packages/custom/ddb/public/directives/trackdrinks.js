@@ -30,6 +30,13 @@ angular.module('mean.ddb').directive('trackDrinks', function () {
                     if ($scope.selectedDrink) {
                         $scope.updateSizes();
                         $scope.scrollTo('select-amount');
+                        $rootScope.$emit('drinkSelected');
+                    }
+                });
+
+                $scope.$watch('selectedAmount', function () {
+                    if ($scope.selectedAmount) {
+                        $rootScope.$emit('amountSelected');
                     }
                 });
 
@@ -113,7 +120,19 @@ angular.module('mean.ddb').directive('trackDrinks', function () {
                 });
                 $scope.loadData();
 
-
             }]
+    };
+});
+
+angular.module('mean.ddb').directive('focusOnEvent', function ($timeout, $parse) {
+    return {
+        controller: ['$rootScope', '$element', '$attrs', function ($rootScope, $element, $attrs) {
+            var event = $attrs.focusOnEvent;
+            $rootScope.$on(event, function () {
+                $timeout(function () {
+                    $element[0].focus();
+                });
+            });
+        }]
     };
 });

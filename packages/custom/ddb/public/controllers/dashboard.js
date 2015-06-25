@@ -15,7 +15,7 @@ angular.module('mean.ddb').controller('DdbNewsController', ['$rootScope', '$scop
 
         $scope.onDrinkTracked = function () {
             $scope.loadData();
-            $scope.scrollTo('track-more');
+            $scope.scrollTo('today-consumptions');
         };
 
         $scope.scrollTo = function (location) {

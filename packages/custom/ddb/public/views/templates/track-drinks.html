@@ -103,7 +103,7 @@
 
             <div class="form-group has-success has-feedback">
                 <input type="number" ng-model="selectedAmount" placeholder="How many centiliters?"
-                       class="form-control">
+                       class="form-control" focus-on-event="drinkSelected">
                 <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"
                       ng-if="selectedAmount"></span>
             </div>
@@ -125,6 +125,7 @@
         <div class="col-md-12">
             <div class="form-group">
                 <button type="button" class="btn btn-lg btn-block btn-primary"
+                        focus-on-event="amountSelected"
                         ng-disabled="!selectedDrink || !selectedAmount || savingConsumption"
                         ng-click="addConsumption()">
                     <div ng-hide="savingConsumption">
