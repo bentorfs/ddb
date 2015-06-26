@@ -157,14 +157,10 @@ module.exports = function (MeanUser) {
 
                 if (err) {
                     console.error(err);
-                    return res.status(500).json({
-                        error: 'Cannot retrieve user'
-                    });
+                    return res.status(500).json();
                 }
                 if (!user) {
-                    return res.status(401).json({
-                        error: 'Invalid credentials'
-                    });
+                    return res.status(404).end();
                 }
 
 

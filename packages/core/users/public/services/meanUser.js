@@ -18,23 +18,6 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
             return decodeURIComponent(escape(window.atob(str)));
         }
 
-        /*function url_base64_decode(str) {
-         var output = str.replace('-', '+').replace('_', '/');
-         switch (output.length % 4) {
-         case 0:
-         break;
-         case 2:
-         output += '==';
-         break;
-         case 3:
-         output += '=';
-         break;
-         default:
-         throw 'Illegal base64url string!';
-         }
-         return window.atob(output); //polifyll https://github.com/davidchambers/Base64.js
-         }*/
-
         function MeanUserKlass() {
             this.name = 'users';
             this.user = {};
@@ -46,9 +29,11 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
             this.registerError = null;
             this.resetpassworderror = null;
             this.validationError = null;
-            $http.get('/api/users/me').success(this.onIdentity.bind(this)).error(function() {
-                //localStorage.removeItem('JWT');
-                //$location.url('/login');
+            $http.get('/api/users/me').success(this.onIdentity.bind(this)).error(function (data, status) {
+                if (status === 404) {
+                    localStorage.removeItem('JWT');
+                    $location.url('/login');
+                }
             });
             self = this;
         }
@@ -73,7 +58,7 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
                     $location.path(destination.replace(/^"|"$/g, ''));
                     $cookieStore.remove('redirect');
                 } else {
-                    $location.url('/ddb/dashboard');
+                    //$location.url('/ddb/dashboard');
                 }
             } else if (response) {
                 this.user = response;
@@ -185,7 +170,7 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
             });
 
             return deferred.promise;
-        }
+        };
 
         MeanUserKlass.prototype.checkAdmin = function () {
             var deferred = $q.defer();
