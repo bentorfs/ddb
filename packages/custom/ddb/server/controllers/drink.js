@@ -121,5 +121,45 @@ module.exports = {
             console.info('Added drink ' + drink._id);
             res.json(drink);
         })
+    },
+    delete: function (req, res, next) {
+        var drinkIdToDelete = req.params.drinkId;
+        var drinkIdToReplace = req.query.replacementId;
+
+        if (!drinkIdToReplace) {
+            Measurement.update(
+                {'consumptions.drink': drinkIdToDelete},
+                {'$pull': {'consumptions.drink': drinkIdToDelete}},
+                {multi: true},
+                function (err) {
+                    if (err) {
+                        return next(err);
+                    }
+                    Drink.findByIdAndRemove(drinkIdToDelete).remove(function (err) {
+                        if (err) {
+                            return next(err);
+                        }
+                        res.status(200).end();
+                    });
+                }
+            );
+        } else {
+            Measurement.update(
+                {'consumptions.drink': drinkIdToDelete},
+                {$set: {'consumptions.$.drink': drinkIdToReplace}},
+                {multi: true},
+                function (err) {
+                    if (err) {
+                        return next(err);
+                    }
+                    Drink.findByIdAndRemove(drinkIdToDelete).remove(function (err) {
+                        if (err) {
+                            return next(err);
+                        }
+                        res.status(200).end();
+                    });
+                }
+            );
+        }
     }
 };

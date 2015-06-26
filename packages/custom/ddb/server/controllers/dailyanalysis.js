@@ -11,7 +11,6 @@ var mongoose = require('mongoose'),
 module.exports = {
     all: function (req, res, next) {
         permissions.ifDailyAnalysisPermission(req.user, req.params.userId, function () {
-
             var fromDate = req.query.fromDate || moment.utc().subtract(30, 'days').valueOf();
             var toDate = req.query.toDate || moment.utc().valueOf();
 

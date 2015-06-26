@@ -79,7 +79,7 @@ module.exports = {
         //});
     },
     ifUserToolsPermission: function (requestUser, targetUserId, authorizedCallback, forbiddenCallback) {
-        if (targetUserId === requestUser._id || requestUser.roles.indexOf('admin') != -1) {
+        if (targetUserId === requestUser._id || (requestUser.roles && requestUser.roles.indexOf('admin') != -1) || requestUser.isAdmin()) {
             authorizedCallback();
         } else {
             forbiddenCallback();
