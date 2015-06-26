@@ -31,8 +31,8 @@ angular.module('mean.ddb').controller('DdbMeasurementsController', ['$rootScope'
         };
 
         $scope.setDays = function () {
-            $scope.nextDay = moment($scope.date).add(1, 'days').valueOf();
-            $scope.prevDay = moment($scope.date).subtract(1, 'days').valueOf();
+            $scope.nextDay = moment.utc($scope.date).add(1, 'days').valueOf();
+            $scope.prevDay = moment.utc($scope.date).subtract(1, 'days').valueOf();
             $scope.status = null;
         };
 
@@ -78,8 +78,8 @@ angular.module('mean.ddb').controller('DdbMeasurementsController', ['$rootScope'
             }
             $scope.loadData();
         });
-        $scope.date = moment().valueOf();
-        $scope.today = moment().valueOf();
+        $scope.date = moment.utc().valueOf();
+        $scope.today = moment.utc().valueOf();
         if ($scope.user.registrationDate) {
             $scope.registrationDate = moment.utc($scope.user.registrationDate, 'YYYY-MM-DD hh:mm:ss').valueOf();
         } else {

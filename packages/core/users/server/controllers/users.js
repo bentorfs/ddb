@@ -163,14 +163,13 @@ module.exports = function (MeanUser) {
                     return res.status(404).end();
                 }
 
-
                 var dbUser = user.toJSON();
 
                 var userId = dbUser._id;
                 delete dbUser._id;
                 delete req.user._id;
 
-                var eq = _.isEqual(dbUser, req.user)
+                var eq = _.isEqual(dbUser, req.user);
                 if (eq) {
                     req.user._id = userId;
                     return res.json(req.user);

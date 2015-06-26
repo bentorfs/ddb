@@ -1,8 +1,5 @@
 'use strict';
 
-/*
- * Defining the Package
- */
 var Module = require('meanio').Module;
 
 var Ddb = new Module('ddb');
@@ -26,27 +23,6 @@ Ddb.register(function (app, auth, database) {
     Ddb.aggregateAsset('css', '../lib/angular-chart.js/dist/angular-chart.css');
 
     Ddb.angularDependencies(['mean.system', 'chart.js', 'btorfs.multiselect', 'angularMoment', 'smoothScroll', 'ngTouch']);
-    /**
-     //Uncomment to use. Requires meanio@0.3.7 or above
-     // Save settings with callback
-     // Use this for saving data from administration pages
-     Ddb.settings({
-        'someSetting': 'some value'
-    }, function(err, settings) {
-        //you now have the settings object
-    });
-
-     // Another save settings example this time with no callback
-     // This writes over the last settings.
-     Ddb.settings({
-        'anotherSettings': 'some value'
-    });
-
-     // Get settings. Retrieves latest saved settigns
-     Ddb.settings(function(err, settings) {
-        //you now have the settings object
-    });
-     */
 
     return Ddb;
 });

@@ -4,15 +4,10 @@
         <section class="container" style="background-color: transparent">
 
             <div clas="row">
-                <div class="col-md-6 hidden-xs">
-                    <object type="image/svg+xml" data="ddb/assets/img/logo.svg" style="width: 30vw"/>
+                <div class="col-md-4">
+                    <object type="image/svg+xml" data="ddb/assets/img/logo.svg" style="width: 90%"/>
                 </div>
-                <div class="col-md-4 col-md-offset-2">
-                    <div class="alert alert-danger animated fadeIn" ng-show="login.loginError">
-                        {{login.loginError}}
-                    </div>
-                    <h2>Login</h2>
-
+                <div class="col-md-4">
                     <form id="login_form" ng-submit="login.login()">
                         <div class="form-group">
                             <label for="email_block">E-mail address</label>
@@ -28,16 +23,35 @@
 
                         <div class="row">
                             <div class="col-md-12">
+                                <div class="alert alert-danger" ng-show="login.loginError">
+                                    {{login.loginError}}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
                                 <button type="submit" class="btn btn-warning">Login</button>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-md-12">
-                                <p>Not registered yet? <a ui-sref='auth.register'>Sign up now</a>
-                                </p>
+                                <label style="padding-top: 10px">
+                                    Not registered yet? <a ui-sref='auth.register'>Sign up now</a>
+                                </label>
                             </div>
                         </div>
                     </form>
+                </div>
+                <div class="col-md-4">
+                    <label>Or..</label>
+
+                    <div class="social_icon social_icon_facebook">
+                        <a target="_self" ng-href="/api/auth/facebook" class="button">
+                            <span>Log In With Facebook</span>
+                        </a>
+                    </div>
                 </div>
             </div>
 

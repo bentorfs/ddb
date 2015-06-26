@@ -71,7 +71,7 @@ function getDailyAnalyses(measurements, user) {
         var analysisData = {
             user: new ObjectId(user._id),
             date: measurement.date,
-            dayOfWeek: moment(measurement.date).day(),
+            dayOfWeek: moment.utc(measurement.date).day(),
 
             todPilsner: getTotPilsner(measurement),
             todStrongbeer: getTotStrongbeer(measurement),

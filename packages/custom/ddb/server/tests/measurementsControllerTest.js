@@ -135,7 +135,7 @@ describe('<Unit Test>', function () {
                         _id: _user1._id
                     },
                     params: {
-                        date: moment().valueOf()
+                        date: moment.utc().valueOf()
                     }
                 }, {
                     json: function () {
@@ -145,7 +145,7 @@ describe('<Unit Test>', function () {
                                 _id: _user1._id
                             },
                             params: {
-                                date: moment().valueOf()
+                                date: moment.utc().valueOf()
                             },
                             body: {
                                 amount: 100,
@@ -164,7 +164,7 @@ describe('<Unit Test>', function () {
                                 _id: _user1._id
                             },
                             params: {
-                                date: moment().valueOf()
+                                date: moment.utc().valueOf()
                             },
                             body: {
                                 amount: 200,
@@ -188,7 +188,7 @@ describe('<Unit Test>', function () {
                         _id: _user1._id
                     },
                     params: {
-                        date: moment().valueOf()
+                        date: moment.utc().valueOf()
                     }
                 }, {
                     json: function (data) {
@@ -197,7 +197,7 @@ describe('<Unit Test>', function () {
                                 _id: _user1._id
                             },
                             params: {
-                                date: moment().valueOf()
+                                date: moment.utc().valueOf()
                             },
                             query: {
                                 consumptionId: measurement.consumptions[0]._id
