@@ -16,8 +16,8 @@ module.exports = {
     name: 'Beerkeeper - Dev'
   },
   facebook: {
-    clientID: 'DEFAULT_APP_ID',
-    clientSecret: 'APP_SECRET',
+    clientID: '111842445821348',
+    clientSecret: '921cdf7bf5be93a851053b27db174f98',
     callbackURL: 'http://localhost:3000/api/auth/facebook/callback'
   },
   twitter: {
