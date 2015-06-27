@@ -21,14 +21,14 @@ angular.module('mean.ddb').controller('DdbDrinkController', ['$scope', '$statePa
         };
 
         $scope.isOwnDrink = function () {
-            return $scope.drink && $scope.drink.createdBy && ($scope.drink.createdBy === $scope.user._id);
+            return $scope.drink && $scope.drink.createdBy && ($scope.drink.createdBy === $scope.user.get()._id);
         };
 
         $scope.loadDrink();
 
-        $scope.user = MeanUser.get();
+        $scope.user = MeanUser;
         $rootScope.$on('loggedin', function () {
-            $scope.user = MeanUser.get();;
+            $scope.user = MeanUser;
         });
     }
 ]);

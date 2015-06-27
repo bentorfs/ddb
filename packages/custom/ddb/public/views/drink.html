@@ -6,7 +6,12 @@
                 Drink
                 <br class="visible-xs"/>
                 <small>
-                    {{drink.name}}
+                    <span ng-show="!editMode || !user.isAdmin">
+                        {{drink.name}}
+                    </span>
+                    <span ng-show="editMode && user.isAdmin">
+                        <input type="text" class="form-control input-sm" ng-model="drink.name"/>
+                    </span>
                     <a ng-click="editMode = true" ng-show="!editMode" href="#">
                         <i class="glyphicon glyphicon-pencil"></i>
                     </a>
