@@ -77,9 +77,13 @@ module.exports = {
                 if (err) {
                     return next(err);
                 }
-                var enrichedResult = result.drink.toJSON();
-                enrichedResult.topDrinkers = result.topDrinkers;
-                res.json(enrichedResult);
+                if (result.drink) {
+                    var enrichedResult = result.drink.toJSON();
+                    enrichedResult.topDrinkers = result.topDrinkers;
+                    res.json(enrichedResult);
+                } else {
+                    res.status(404).end();
+                }
             }
         );
     },
@@ -125,11 +129,10 @@ module.exports = {
     delete: function (req, res, next) {
         var drinkIdToDelete = req.params.drinkId;
         var drinkIdToReplace = req.query.replacementId;
-
         if (!drinkIdToReplace) {
             Measurement.update(
                 {'consumptions.drink': drinkIdToDelete},
-                {'$pull': {'consumptions.drink': drinkIdToDelete}},
+                {'$pull': {'consumptions': {drink: drinkIdToDelete}}},
                 {multi: true},
                 function (err) {
                     if (err) {
@@ -144,22 +147,34 @@ module.exports = {
                 }
             );
         } else {
-            Measurement.update(
-                {'consumptions.drink': drinkIdToDelete},
-                {$set: {'consumptions.$.drink': drinkIdToReplace}},
-                {multi: true},
-                function (err) {
-                    if (err) {
-                        return next(err);
-                    }
+            Measurement.find({'consumptions.drink': drinkIdToDelete}).exec(function (err, docs) {
+                if (err) {
+                    return next(err);
+                }
+                var counter = _.after(docs.length, function () {
                     Drink.findByIdAndRemove(drinkIdToDelete).remove(function (err) {
                         if (err) {
                             return next(err);
                         }
                         res.status(200).end();
                     });
-                }
-            );
+                });
+                _.forEach(docs, function (doc) {
+                    var subCounter = _.after(doc.consumptions.length, function () {
+                        counter();
+                    });
+                    _.forEach(doc.consumptions, function (consumption) {
+                        if (JSON.stringify(consumption.drink) === JSON.stringify(drinkIdToDelete)) {
+                            consumption.drink = ObjectId(drinkIdToReplace);
+                            doc.save(function (err) {
+                                subCounter();
+                            });
+                        } else {
+                            subCounter();
+                        }
+                    });
+                });
+            });
         }
     }
 };

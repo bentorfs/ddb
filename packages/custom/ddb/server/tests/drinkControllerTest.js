@@ -3,6 +3,7 @@
 var expect = require('expect.js'),
     mongoose = require('mongoose'),
     User = mongoose.model('User'),
+    measurementCtrl = require('../controllers/measurement'),
     Drink = mongoose.model('Drink'),
     drinkCtrl = require('../controllers/drink'),
     _ = require('lodash'),
@@ -196,7 +197,6 @@ describe('<Unit Test>', function () {
                 });
             }
 
-
             it('Can add some drink with different names', function (done) {
                 var counter = _.after(3, done);
 
@@ -236,34 +236,120 @@ describe('<Unit Test>', function () {
                     done(err);
                 });
             });
-
         });
 
         describe('Deleting drinks', function () {
             var drinkId1;
             var drinkId2;
-            it('Can replace one drink with another', function (done) {
+
+            it('Can delete a drink', function (done) {
                 var counter = _.after(2, function () {
-                    drinkCtrl.delete({
+
+                    measurementCtrl.get({
                         user: {
-                            _id: _user1._id,
-                            isAdmin: function () {
-                                return true;
-                            }
+                            _id: _user1._id
                         },
                         params: {
-                            drinkId: drinkId1
-                        },
-                        query: {
-                            replacement: drinkId2
+                            date: moment.utc().valueOf()
                         }
                     }, {
-                        status: function (status) {
-                            expect(status).to.eql(200);
-                            done();
+                        json: function () {
+                            var counter2 = _.after(2, function () {
+                                drinkCtrl.delete({
+                                    user: {
+                                        _id: _user1._id,
+                                        isAdmin: function () {
+                                            return true;
+                                        }
+                                    },
+                                    params: {
+                                        drinkId: drinkId1
+                                    },
+                                    query: {}
+                                }, {
+                                    status: function (status) {
+                                        expect(status).to.eql(200);
+                                        return this;
+                                    },
+                                    end: function () {
+                                        var counter3 = _.after(2, done);
+                                        drinkCtrl.get({
+                                            user: {
+                                                _id: _user1._id
+                                            },
+                                            params: {
+                                                drinkId: drinkId1
+                                            }
+                                        }, {
+                                            status: function (code) {
+                                                expect(code).to.eql(404);
+                                                return this;
+                                            },
+                                            end: function () {
+                                                counter3();
+                                            }
+                                        }, function (err) {
+                                            done(err);
+                                        });
+
+                                        measurementCtrl.get({
+                                                user: {
+                                                    _id: _user1._id
+                                                },
+                                                params: {
+                                                    date: moment.utc().valueOf()
+                                                }
+                                            }, {
+                                                json: function (data) {
+                                                    expect(data.consumptions.length).to.eql(0);
+                                                    done();
+                                                }
+                                            }
+                                            , function (err) {
+                                                done(err)
+                                            });
+                                    }
+                                }, function (err) {
+                                    done(err);
+                                });
+                            });
+                            measurementCtrl.addConsumption({
+                                user: {
+                                    _id: _user1._id
+                                },
+                                params: {
+                                    date: moment.utc().valueOf()
+                                },
+                                body: {
+                                    amount: 100,
+                                    drink: drinkId1
+                                }
+                            }, {
+                                json: function (data) {
+                                    counter2();
+                                }
+                            }, function (err) {
+                                done(err);
+                            });
+                            measurementCtrl.addConsumption({
+                                user: {
+                                    _id: _user1._id
+                                },
+                                params: {
+                                    date: moment.utc().valueOf()
+                                },
+                                body: {
+                                    amount: 200,
+                                    drink: drinkId1
+                                }
+                            }, {
+                                json: function (data) {
+                                    counter2();
+                                }
+                            }, function (err) {
+                                done(err);
+                            });
                         }
-                    }, function (err) {
-                        done(err);
                     });
                 });
 
@@ -304,6 +390,157 @@ describe('<Unit Test>', function () {
                 });
             });
 
+            it('Can replace one drink with another', function (done) {
+                var counter = _.after(2, function () {
+
+                    measurementCtrl.get({
+                        user: {
+                            _id: _user1._id
+                        },
+                        params: {
+                            date: moment.utc().valueOf()
+                        }
+                    }, {
+                        json: function () {
+                            var counter2 = _.after(2, function () {
+                                drinkCtrl.delete({
+                                    user: {
+                                        _id: _user1._id,
+                                        isAdmin: function () {
+                                            return true;
+                                        }
+                                    },
+                                    params: {
+                                        drinkId: drinkId1
+                                    },
+                                    query: {
+                                        replacementId: drinkId2
+                                    }
+                                }, {
+                                    status: function (status) {
+                                        expect(status).to.eql(200);
+                                        return this;
+                                    },
+                                    end: function () {
+                                        var counter3 = _.after(2, done);
+                                        drinkCtrl.get({
+                                            user: {
+                                                _id: _user1._id
+                                            },
+                                            params: {
+                                                drinkId: drinkId1
+                                            }
+                                        }, {
+                                            status: function (code) {
+                                                expect(code).to.eql(404);
+                                                return this;
+                                            },
+                                            end: function () {
+                                                counter3();
+                                            }
+                                        }, function (err) {
+                                            done(err);
+                                        });
+
+                                        measurementCtrl.get({
+                                                user: {
+                                                    _id: _user1._id
+                                                },
+                                                params: {
+                                                    date: moment.utc().valueOf()
+                                                }
+                                            }, {
+                                                json: function (data) {
+                                                    expect(data.consumptions.length).to.eql(2);
+                                                    expect(data.consumptions[0].drink._id).to.eql(drinkId2);
+                                                    expect(data.consumptions[1].drink._id).to.eql(drinkId2);
+                                                    done();
+                                                }
+                                            }
+                                            , function (err) {
+                                                done(err)
+                                            });
+                                    }
+                                }, function (err) {
+                                    done(err);
+                                });
+                            });
+                            measurementCtrl.addConsumption({
+                                user: {
+                                    _id: _user1._id
+                                },
+                                params: {
+                                    date: moment.utc().valueOf()
+                                },
+                                body: {
+                                    amount: 100,
+                                    drink: drinkId1
+                                }
+                            }, {
+                                json: function (data) {
+                                    counter2();
+                                }
+                            }, function (err) {
+                                done(err);
+                            });
+                            measurementCtrl.addConsumption({
+                                user: {
+                                    _id: _user1._id
+                                },
+                                params: {
+                                    date: moment.utc().valueOf()
+                                },
+                                body: {
+                                    amount: 200,
+                                    drink: drinkId1
+                                }
+                            }, {
+                                json: function (data) {
+                                    counter2();
+                                }
+                            }, function (err) {
+                                done(err);
+                            });
+                        }
+                    });
+                });
+
+                drinkCtrl.add({
+                    user: {
+                        _id: _user1._id
+                    },
+                    body: {
+                        name: 'TestBier',
+                        alc: 0.05,
+                        type: 'beer'
+                    }
+                }, {
+                    json: function (data) {
+                        drinkId1 = data._id;
+                        counter();
+                    }
+                }, function (err) {
+                    done(err);
+                });
+
+                drinkCtrl.add({
+                    user: {
+                        _id: _user1._id
+                    },
+                    body: {
+                        name: 'TestBier2',
+                        alc: 0.05,
+                        type: 'beer'
+                    }
+                }, {
+                    json: function (data) {
+                        drinkId2 = data._id;
+                        counter();
+                    }
+                }, function (err) {
+                    done(err);
+                });
+            });
         });
 
     });
