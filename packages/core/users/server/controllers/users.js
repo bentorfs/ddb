@@ -39,7 +39,7 @@ module.exports = function (MeanUser) {
             // We are sending the payload inside the token
             var token = jwt.sign(escaped, config.secret, {expiresInMinutes: 60 * 5});
             res.cookie('token', token);
-            res.redirect('/');
+            res.redirect('/ddb/dashboard');
         },
 
         /**
@@ -49,7 +49,7 @@ module.exports = function (MeanUser) {
             if (req.isAuthenticated()) {
                 return res.redirect('/');
             }
-            res.redirect('/ddb/dashboard');
+            res.redirect('/');
         },
 
         /**
