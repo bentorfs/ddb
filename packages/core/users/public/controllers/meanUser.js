@@ -8,11 +8,6 @@ angular.module('mean.users')
             $scope.global = Global;
             $scope.$state = $state;
 
-            $http.get('/api/get-config')
-                .success(function (config) {
-                    $scope.socialButtons = config;
-                    $scope.socialButtonsCounter = Object.keys(config).length;
-                });
         }
     ])
     .controller('LoginCtrl', ['$rootScope', '$scope', 'MeanUser',

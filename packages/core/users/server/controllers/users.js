@@ -150,9 +150,8 @@ module.exports = function (MeanUser) {
          */
         me: function (req, res, next) {
             if (!req.user || !req.user.hasOwnProperty('_id')) {
-                console.log('No user provided');
-                console.log(req.user);
-                return res.status(404).end();
+                return
+            //    res.status(404).end();
             }
 
             User.findOne({
