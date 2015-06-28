@@ -49,7 +49,7 @@ module.exports = function (MeanUser) {
             if (req.isAuthenticated()) {
                 return res.redirect('/');
             }
-            res.redirect('/login');
+            res.redirect('/ddb/dashboard');
         },
 
         /**
@@ -148,16 +148,19 @@ module.exports = function (MeanUser) {
         /**
          * Send User
          */
-        me: function (req, res) {
-            if (!req.user || !req.user.hasOwnProperty('_id')) return null;
+        me: function (req, res, next) {
+            if (!req.user || !req.user.hasOwnProperty('_id')) {
+                console.log('No user provided');
+                console.log(req.user);
+                return res.status(404).end();
+            }
 
             User.findOne({
                 _id: req.user._id
             }).exec(function (err, user) {
 
                 if (err) {
-                    console.error(err);
-                    return res.status(500).json();
+                    next(err)
                 }
                 if (!user) {
                     return res.status(404).end();

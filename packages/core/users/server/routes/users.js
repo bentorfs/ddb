@@ -54,25 +54,6 @@ module.exports = function (MeanUser, app, auth, database, passport) {
             res.json({token: token});
         });
 
-    // AngularJS route to get config of social buttons
-    app.route('/api/get-config')
-        .get(function (req, res) {
-            // To avoid displaying unneccesary social logins
-            var clientIdProperty = 'clientID';
-            var defaultPrefix = 'DEFAULT_';
-            var socialNetworks = ['facebook', 'linkedin', 'twitter', 'github', 'google']; //ugly hardcoding :(
-            var configuredApps = {};
-            for (var network in socialNetworks) {
-                var netObject = config[socialNetworks[network]];
-                if (netObject.hasOwnProperty(clientIdProperty)) {
-                    if (netObject[clientIdProperty].indexOf(defaultPrefix) === -1) {
-                        configuredApps[socialNetworks[network]] = true;
-                    }
-                }
-            }
-            res.send(configuredApps);
-        });
-
     // Setting the facebook oauth routes
     app.route('/api/auth/facebook')
         .get(passport.authenticate('facebook', {
