@@ -195,20 +195,22 @@
                             <th colspan="2">Most Frequent Drinks</th>
                             <th>
                                 Count
-                                <i class="glyphicon glyphicon-info-sign pull-right"
-                                   tooltip="This table ranks the number of days on which the drinks were consumed at least once"
-                                   tooltip-placement="left"/>
                             </th>
                             </thead>
                             <tbody>
                             <tr ng-repeat="drink in frequentDrinks">
                                 <th>{{$index + 1}}</th>
-                                <td>{{drink.drink.name}}</td>
+                                <td>
+                                    <a ui-sref="drink({drinkId: drink.drink._id})">
+                                        {{drink.drink.name}}
+                                    </a>
+                                </td>
                                 <td>{{drink.nbDays}}</td>
                             </tr>
                             <tfoot>
                             <tr ng-if="!frequentDrinks.length">
-                                <td colspan="3" class="text-center"><em>There are no tracked consumptions so far</em></td>
+                                <td colspan="3" class="text-center"><em>There are no tracked consumptions so far</em>
+                                </td>
                             </tr>
                             </tfoot>
                             </tbody>

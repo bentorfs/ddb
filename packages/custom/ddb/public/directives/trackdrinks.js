@@ -34,12 +34,6 @@ angular.module('mean.ddb').directive('trackDrinks', function () {
                     }
                 });
 
-                $scope.$watch('selectedAmount', function () {
-                    if ($scope.selectedAmount) {
-                        $rootScope.$emit('amountSelected');
-                    }
-                });
-
                 $scope.getDrinks = function (name) {
                     $scope.newDrinkName = name;
                     return Drink.list(name, 0, 20).then(function (response) {
@@ -72,6 +66,7 @@ angular.module('mean.ddb').directive('trackDrinks', function () {
 
                 $scope.setAmount = function (amount) {
                     $scope.selectedAmount = amount;
+                    $rootScope.$emit('amountSelected');
                 };
 
                 $scope.getAmount = function () {
