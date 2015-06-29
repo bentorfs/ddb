@@ -11,6 +11,9 @@ module.exports = function (Group, app, auth) {
     app.route('/api/group/:groupId')
         .get(auth.requiresLogin, group.getGroup);
 
+    app.route('/api/group/:groupId/full')
+        .get(auth.requiresLogin, group.getFull);
+
     app.route('/api/group/:groupId/invitation/:userId')
         .post(auth.requiresLogin, group.addInvitation)
         .delete(auth.requiresLogin, group.removeInvitation);

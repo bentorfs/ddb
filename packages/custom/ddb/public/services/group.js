@@ -6,7 +6,7 @@ angular.module('mean.ddb').factory('Group', ['$http',
 
         dao.getGroup = function (id) {
             return $http({
-                url: '/api/group/' + id,
+                url: '/api/group/' + id + '/full',
                 method: 'GET'
             });
         };

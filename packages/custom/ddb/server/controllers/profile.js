@@ -34,7 +34,14 @@ module.exports = {
                 {$unwind: "$consumptions"},
                 {
                     '$group': {
-                        _id: '$consumptions.drink',
+                        _id: {'_id': '$_id'},
+                        uniqueDrinks: {$addToSet: "$consumptions.drink"}
+                    }
+                },
+                {$unwind: "$uniqueDrinks"},
+                {
+                    '$group': {
+                        _id: '$uniqueDrinks',
                         nbDays: {$sum: 1}
                     }
                 },

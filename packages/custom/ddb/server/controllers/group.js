@@ -3,10 +3,13 @@
 var mongoose = require('mongoose'),
     Group = mongoose.model('Group'),
     GroupRanking = mongoose.model('GroupRanking'),
+    Measurement = mongoose.model('Measurement'),
+    Drink = mongoose.model('Drink'),
     permissions = require('./../service/permissions'),
     _ = require('lodash'),
     moment = require('moment'),
-    grouprankingGenerator = require('./../service/groupranking-generator');
+    grouprankingGenerator = require('./../service/groupranking-generator'),
+    async = require('async');
 
 module.exports = {
     listGroups: function (req, res, next) {
@@ -36,14 +39,14 @@ module.exports = {
     },
     getGroup: function (req, res, next) {
         permissions.ifGroupPermission(req.user, req.params.groupId, function () {
-            Group.findById(req.params.groupId).populate('members', 'username').populate('invitations', 'username').exec(function (err, doc) {
+            getGroup(req.params.groupId, function (err, group) {
                 if (err) {
                     return next(err);
                 }
-                if (!doc) {
+                if (!group) {
                     return res.status(404).end();
                 }
-                res.json(doc);
+                res.json(group);
             });
         }, function () {
             res.status(401).end();
@@ -51,35 +54,15 @@ module.exports = {
     },
     getRanking: function (req, res, next) {
         permissions.ifGroupPermission(req.user, req.params.groupId, function () {
-            GroupRanking.findOne({group: req.params.groupId})
-                .populate('rankingHighestBinge.user', 'username')
-                .populate('rankingConsistencyFactor.user', 'username')
-                .populate('rankingDrinkingDayRate.user', 'username')
-                .populate('rankingLiquor.user', 'username')
-                .populate('rankingWine.user', 'username')
-                .populate('rankingStrongbeer.user', 'username')
-                .populate('rankingPilsner.user', 'username')
-                .populate('rankingWeekend.user', 'username')
-                .populate('rankingWorkWeek.user', 'username')
-                .populate('rankingSun.user', 'username')
-                .populate('rankingSat.user', 'username')
-                .populate('rankingFri.user', 'username')
-                .populate('rankingThu.user', 'username')
-                .populate('rankingWed.user', 'username')
-                .populate('rankingTue.user', 'username')
-                .populate('rankingMon.user', 'username')
-                .populate('rankingHappyLoner.user', 'username')
-                .populate('rankingSadLoner.user', 'username')
-                .populate('rankingSuperCup.user', 'username')
-                .exec(function (err, ranking) {
-                    if (err) {
-                        return next(err);
-                    }
-                    if (!ranking) {
-                        return res.status(404).end();
-                    }
-                    res.json(ranking);
-                });
+            getGroupRanking(req.params.groupId, function (err, ranking) {
+                if (err) {
+                    return next(err);
+                }
+                if (!ranking) {
+                    return res.status(404).end();
+                }
+                res.json(ranking);
+            });
         }, function () {
             res.status(401).end();
         });
@@ -169,5 +152,108 @@ module.exports = {
         }, function () {
             res.status(401).end();
         });
+    },
+    getFull: function (req, res, next) {
+        permissions.ifGroupPermission(req.user, req.params.groupId, function () {
+            async.parallel(
+                {
+                    group: function (callback) {
+                        getGroup(req.params.groupId, callback);
+                    },
+                    ranking: function (callback) {
+                        getGroupRanking(req.params.groupId, callback);
+                    }
+                },
+                function (err, result) {
+                    if (err) {
+                        return next(err);
+                    }
+                    getFrequentDrinks(result.group.members, function (err, frequentDrinks) {
+                        if (err) {
+                            return next(err);
+                        }
+                        var returnObject = result.group.toJSON();
+                        returnObject.ranking = result.ranking;
+                        returnObject.frequentDrinks = frequentDrinks;
+                        res.json(returnObject);
+                    });
+                }
+            );
+        }, function () {
+            res.status(401).end();
+        });
     }
 };
+
+function getGroup(groupId, callback) {
+    Group.findById(groupId).populate('members', 'username').populate('invitations', 'username').exec(function (err, doc) {
+        if (err) {
+            return callback(err);
+        }
+        callback(null, doc);
+    });
+}
+
+function getGroupRanking(groupId, callback) {
+    GroupRanking.findOne({group: groupId})
+        .populate('rankingHighestBinge.user', 'username')
+        .populate('rankingConsistencyFactor.user', 'username')
+        .populate('rankingDrinkingDayRate.user', 'username')
+        .populate('rankingLiquor.user', 'username')
+        .populate('rankingWine.user', 'username')
+        .populate('rankingStrongbeer.user', 'username')
+        .populate('rankingPilsner.user', 'username')
+        .populate('rankingWeekend.user', 'username')
+        .populate('rankingWorkWeek.user', 'username')
+        .populate('rankingSun.user', 'username')
+        .populate('rankingSat.user', 'username')
+        .populate('rankingFri.user', 'username')
+        .populate('rankingThu.user', 'username')
+        .populate('rankingWed.user', 'username')
+        .populate('rankingTue.user', 'username')
+        .populate('rankingMon.user', 'username')
+        .populate('rankingHappyLoner.user', 'username')
+        .populate('rankingSadLoner.user', 'username')
+        .populate('rankingSuperCup.user', 'username')
+        .exec(function (err, ranking) {
+            if (err) {
+                return callback(err);
+            }
+            callback(null, ranking);
+        });
+}
+
+function getFrequentDrinks(users, callback) {
+    var userIdList = _.pluck(users, '_id');
+    Measurement.aggregate([
+        {$match: {'user': {$in: userIdList}}},
+        {$project: {consumptions: 1}},
+        {$unwind: "$consumptions"},
+        {
+            '$group': {
+                _id: {'_id': '$_id'},
+                uniqueDrinks: {$addToSet: "$consumptions.drink"}
+            }
+        },
+        {$unwind: "$uniqueDrinks"},
+        {
+            '$group': {
+                _id: '$uniqueDrinks',
+                nbDays: {$sum: 1}
+            }
+        },
+        {$project: {_id: 0, drink: "$_id", nbDays: 1}},
+        {$sort: {nbDays: -1}},
+        {$limit: 5}
+    ]).exec(function (err, frequentDrinks) {
+        if (err) {
+            callback(err);
+        }
+        Drink.populate(frequentDrinks, {path: "drink"}, function (err, docs) {
+            if (err) {
+                return callback(err);
+            }
+            callback(null, docs);
+        });
+    });
+}
