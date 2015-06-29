@@ -33,7 +33,7 @@
                             <tr>
                                 <th>Heaviest binge</th>
                                 <td class="text-right">{{profile.highestBinge | number:2}} cl
-                                    ({{profile.highestBingeDate | date:'dd/MM/yy'}})
+                                    ({{profile.highestBingeDate | date:'dd/MM/yy':'UTC'}})
                                 </td>
                             </tr>
                             <tr>
@@ -269,7 +269,7 @@
                                 </thead>
                                 <body>
                                 <tr ng-repeat="daily in dailyAnalyses | orderBy:'-date' | limitTo: 10">
-                                    <th>{{daily.date | date:'EEE dd/MM/yy'}}</th>
+                                    <th>{{daily.date | date:'EEE dd/MM/yy':'UTC'}}</th>
                                     <td class="text-right"><em>{{daily.todAlc | number:2}} cl</em></td>
                                     <td class="text-right">{{daily.todPilsner}} cl</td>
                                     <td class="text-right">{{daily.todStrongbeer}} cl</td>
