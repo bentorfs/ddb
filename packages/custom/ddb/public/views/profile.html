@@ -147,6 +147,37 @@
                         </table>
                     </div>
                 </div>
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Drinking Trend</h3>
+                    </div>
+                    <div class="panel-body">
+                        <canvas id="trend" class="chart chart-line" data="trendData"
+                                options="trendDataOptions"
+                                colours="['#FF6700', '#FFBF00','#FF001E','#26B600,','#000000', '#1771FF','#FFA200', '#00FFD4']"
+                                labels="trendLabels" series="trendSeries">
+                        </canvas>
+                    </div>
+                    <div class="panel-body text-center">
+                        <div class="btn-group" role="group" aria-label="...">
+                            <button type="button" class="btn btn-sm btn-default"
+                                    ng-click="getDailyChart(90)"
+                                    ng-class="{active: trendGranularity === 'daily'}">
+                                Daily
+                            </button>
+                            <button type="button" class="btn btn-sm btn-default"
+                                    ng-click="getWeeklyChart()"
+                                    ng-class="{active: trendGranularity === 'weekly'}">
+                                Weekly
+                            </button>
+                            <button type="button" class="btn btn-sm btn-default"
+                                    ng-click="getMonthlyChart()"
+                                    ng-class="{active: trendGranularity === 'monthly'}">
+                                Monthly
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-md-6">
                 <div class="panel panel-danger">

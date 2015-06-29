@@ -89,7 +89,7 @@ describe('<Unit Test>', function () {
                             done();
                         }
                     };
-                    dailyAnalysisCtrl.all(req, res,
+                    dailyAnalysisCtrl.daily(req, res,
                         function (err) {
                             done(err);
                         });
@@ -130,7 +130,7 @@ describe('<Unit Test>', function () {
                             done();
                         }
                     };
-                    dailyAnalysisCtrl.all(req, res, function (err) {
+                    dailyAnalysisCtrl.daily(req, res, function (err) {
                         done(err);
                     });
 
@@ -182,7 +182,7 @@ describe('<Unit Test>', function () {
                             done();
                         }
                     };
-                    dailyAnalysisCtrl.all(req, res, function (err) {
+                    dailyAnalysisCtrl.daily(req, res, function (err) {
                         done(err);
                     });
                 });

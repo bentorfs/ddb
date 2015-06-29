@@ -1,12 +1,12 @@
 'use strict';
 
-angular.module('mean.ddb').factory('DailyAnalysis', ['$http',
+angular.module('mean.ddb').factory('Analysis', ['$http',
     function ($http) {
         var dao = {};
 
-        dao.get = function (userId, fromDate, toDate) {
+        dao.getDaily = function (userId, fromDate, toDate) {
             return $http({
-                url: '/api/dailyAnalysis/' + userId,
+                url: '/api/analysis/daily/' + userId,
                 method: 'GET',
                 params: {
                     fromDate: fromDate,
@@ -14,6 +14,21 @@ angular.module('mean.ddb').factory('DailyAnalysis', ['$http',
                 }
             });
         };
+
+        dao.getWeekly = function (userId) {
+            return $http({
+                url: '/api/analysis/weekly/' + userId,
+                method: 'GET'
+            });
+        };
+
+        dao.getMonthly = function (userId) {
+            return $http({
+                url: '/api/analysis/monthly/' + userId,
+                method: 'GET'
+            });
+        };
+
         return dao;
     }
 ]);

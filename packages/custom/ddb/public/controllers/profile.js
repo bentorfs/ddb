@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$stateParams', 'Global', 'Profile', 'DailyAnalysis', 'User', '$filter',
-    function ($scope, $stateParams, Global, Profile, DailyAnalysis, User, $filter) {
+angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$stateParams', 'Global', 'Profile', 'Analysis', 'User', '$filter',
+    function ($scope, $stateParams, Global, Profile, Analysis, User, $filter) {
 
         User.get($stateParams.userId).success(function (user) {
             $scope.user = user;
@@ -43,9 +43,60 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$state
             $scope.frequentDrinks = frequentDrinks;
         });
 
-        DailyAnalysis.get($stateParams.userId, moment.utc().subtract(11, 'days').valueOf(), moment.utc().valueOf()).success(function (dailyAnalyses) {
+        Analysis.getDaily($stateParams.userId, moment.utc().subtract(11, 'days').valueOf(), moment.utc().valueOf()).success(function (dailyAnalyses) {
             $scope.dailyAnalyses = dailyAnalyses;
         });
+
+        $scope.trendDataOptions = {
+            scaleOverride: true,
+            scaleShowVerticalLines: false,
+            bezierCurve: false,
+            showScale: true,
+            pointDot: false,
+            scaleSteps: 15,
+            scaleStartValue: 0,
+            pointHitDetectionRadius: 1
+        };
+
+        $scope.getDailyChart = function (nbDays) {
+            $scope.trendGranularity = 'daily';
+            $scope.trendDataOptions.scaleStepWidth = 2.5;
+            Analysis.getDaily($stateParams.userId, moment.utc().subtract(nbDays, 'days').valueOf(), moment.utc().valueOf()).success(function (analyses) {
+                $scope.analyses = analyses;
+                $scope.getTrendChartData();
+            });
+        };
+
+        $scope.getWeeklyChart = function () {
+            $scope.trendGranularity = 'weekly';
+            $scope.trendDataOptions.scaleStepWidth = 8;
+            Analysis.getWeekly($stateParams.userId).success(function (analyses) {
+                $scope.analyses = analyses;
+                $scope.getTrendChartData();
+            });
+        };
+
+        $scope.getMonthlyChart = function () {
+            $scope.trendGranularity = 'monthly';
+            $scope.trendDataOptions.scaleStepWidth = 25;
+            Analysis.getMonthly($stateParams.userId).success(function (analyses) {
+                $scope.analyses = analyses;
+                $scope.getTrendChartData();
+            });
+        };
+
+        $scope.getTrendChartData = function () {
+            $scope.trendLabels = [];
+            $scope.trendData = [
+                []
+            ];
+
+            $scope.trendSeries = ['Trend'];
+            angular.forEach($scope.analyses, function (analysis) {
+                $scope.trendLabels.push('');
+                $scope.trendData[0].push($filter('number')(analysis.totAlc || analysis.todAlc, 2));
+            });
+        };
 
         $scope.getSpreadAverageChartData = function (nbDays) {
             $scope.nbSpreadAverageDaysShown = nbDays;
@@ -101,7 +152,9 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$state
                     $scope.cumulativeTrendData[0].push($filter('number')(serie.cumAlc, 2));
                 }
             });
-        }
+        };
+
+        $scope.getWeeklyChart();
     }
 ]);
 
