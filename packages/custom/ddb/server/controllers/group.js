@@ -9,6 +9,7 @@ var mongoose = require('mongoose'),
     _ = require('lodash'),
     moment = require('moment'),
     grouprankingGenerator = require('./../service/groupranking-generator'),
+    notificationGenerator = require('./../service/notification-generator'),
     async = require('async');
 
 module.exports = {
@@ -36,6 +37,13 @@ module.exports = {
                 res.json(group);
             });
         });
+
+        _.forEach(group.invitations, function (invitation) {
+            notificationGenerator.raiseGroupInvitationNotification(invitation, {
+                type: 'groupInvitation',
+                title: 'You are invited to join the group ' + group.name
+            });
+        })
     },
     getGroup: function (req, res, next) {
         permissions.ifGroupPermission(req.user, req.params.groupId, function () {
@@ -124,10 +132,11 @@ module.exports = {
                 },
                 {
                     '$addToSet': {invitations: req.params.userId}
-                }, function (err) {
+                }, function (err, group) {
                     if (err) {
                         return next(err);
                     }
+                    notificationGenerator.raiseGroupInvitationNotification(req.params.userId, group);
                     res.status(200).end();
                 });
         }, function () {

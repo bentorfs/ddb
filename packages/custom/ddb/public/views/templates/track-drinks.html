@@ -4,7 +4,7 @@
 
             <h5>Search a drink</h5>
 
-            <div class="form-group has-success has-feedback">
+            <div class="form-group has-success has-feedback autocomplete-control">
                 <input type="text" ng-model="selectedDrink" placeholder="Search a drink"
                        typeahead="drink as drink.name for drink in getDrinks($viewValue)"
                        typeahead-loading="loadingDrinks"

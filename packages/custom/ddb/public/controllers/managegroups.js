@@ -21,6 +21,7 @@ angular.module('mean.ddb').controller('DdbManageGroupsController', ['$scope', 'G
             Group.acceptInvitation(groupId).success(function () {
                 $scope.loadInvitations();
                 $rootScope.$emit('beerkeeper.groups.update');
+                $state.go('group', {groupId: groupId});
             })
         };
 

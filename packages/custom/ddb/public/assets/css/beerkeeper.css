@@ -24,7 +24,7 @@ div.navbar-brand {
 }
 
 .navbar-nav > li > a {
-    color: #FFF0E6 !important;
+    color: #FFF0E6;
     background-color: #000 !important;
     border-bottom: 3px solid black !important;
 }
@@ -156,7 +156,7 @@ tr.active {
     margin: 5px;
 }
 
-.dropdown-menu {
+.autocomplete-control .dropdown-menu {
     width: 90%;
 }
 

@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('mean.system').controller('HeaderController', ['$scope', '$rootScope', 'Menus', 'MeanUser', '$state', '$anchorScroll', 'Group',
-    function ($scope, $rootScope, Menus, MeanUser, $state, $anchorScroll, Group) {
+angular.module('mean.system').controller('HeaderController', ['$scope', '$rootScope', 'MeanUser', '$state', '$anchorScroll', 'Group', 'Notification',
+    function ($scope, $rootScope, MeanUser, $state, $anchorScroll, Group, Notification) {
 
         $scope.isActive = function (state) {
             return state === $state.$current.name;
@@ -17,6 +17,12 @@ angular.module('mean.system').controller('HeaderController', ['$scope', '$rootSc
             });
         };
 
+        $scope.followNotification = function (notification) {
+            $state.go(notification.targetState, notification.targetStateParameters);
+            Notification.markAsRead(notification._id);
+            $scope.updateNotifications();
+        };
+
         $rootScope.$on('beerkeeper.groups.update', function () {
             $scope.updateGroups();
         });
@@ -24,6 +30,13 @@ angular.module('mean.system').controller('HeaderController', ['$scope', '$rootSc
         $rootScope.$on('$stateChangeSuccess', function () {
             $anchorScroll(top);
         });
+
+        $scope.updateNotifications = function () {
+            Notification.listNotifications().then(function (notifications) {
+                $scope.notifications = notifications.data;
+            });
+        };
+        $scope.updateNotifications();
 
         var vm = this;
 
@@ -45,7 +58,7 @@ angular.module('mean.system').controller('HeaderController', ['$scope', '$rootSc
                 user: MeanUser.user,
                 isAdmin: MeanUser.isAdmin
             };
-
+            $scope.updateNotifications();
             $scope.updateGroups();
         });
 

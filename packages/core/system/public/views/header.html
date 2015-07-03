@@ -69,6 +69,22 @@
                         <i class="glyphicon glyphicon-log-in"/> &nbsp; Log In
                     </a>
                 </li>
+                <li class="dropdown" ng-show="hdrctr.hdrvars.authenticated" dropdown>
+                    <a href="#" class="dropdown-toggle" href dropdown-toggle
+                       ng-style="{'color': notifications.length ? '#FF7400 ' : ''}">
+                        <i class="glyphicon glyphicon-envelope"/>
+                        &nbsp; {{notifications.length || 0}}
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li ng-repeat="notification in notifications">
+                            <notification-item notification="notification"></notification-item>
+                        </li>
+                        <li ng-if="!notifications.length" class="dropdown-header">
+                            You have no notifications
+                        </li>
+                    </ul>
+                </li>
                 <li ng-show="hdrctr.hdrvars.authenticated">
                     <a ui-sref='tools({userId: hdrctr.hdrvars.user._id})' ng-click="collapse()"
                        ng-class="{active: isActive('tools')}">
@@ -82,7 +98,7 @@
                     </a>
                     <ul class="dropdown-menu" role="menu">
                         <li>
-                            <a href="#" ng-click="hdrctr.logout()" ng-click="collapse()">
+                            <a href="#" ng-click="hdrctr.logout(); collapse()">
                                 <i class="glyphicon glyphicon-log-out"/> &nbsp; Log Out</a>
                         </li>
                     </ul>
