@@ -244,10 +244,10 @@ describe('<Unit Test>', function () {
 
             it('Can delete a drink', function (done) {
                 var counter = _.after(2, function () {
-
                     measurementCtrl.get({
                         user: {
-                            _id: _user1._id
+                            _id: _user1._id,
+                            registrationDate: moment.utc().subtract(5, 'days').format('YYYY-MM-DD')
                         },
                         params: {
                             date: moment.utc().valueOf()
@@ -302,7 +302,7 @@ describe('<Unit Test>', function () {
                                             }, {
                                                 json: function (data) {
                                                     expect(data.consumptions.length).to.eql(0);
-                                                    done();
+                                                    counter3();
                                                 }
                                             }
                                             , function (err) {
