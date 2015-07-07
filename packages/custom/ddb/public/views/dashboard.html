@@ -63,7 +63,7 @@
 
             </div>
             <div class="col-md-6">
-                <div class="panel panel-danger" ng-if="dailyAnalysis.todAlc !== 0">
+                <div class="panel panel-danger">
                     <div class="panel-heading">
                         <h3 class="panel-title">Status</h3>
                     </div>
@@ -82,7 +82,7 @@
                         </span>
                         <span ng-if="profile.highestBinge > dailyAnalysis.todAlc">
                             You would still have to drink about <strong>{{18 * (profile.highestBinge -
-                            dailyAnalysis.todAlc)}}cl</strong> of beer if you want to beat your personal binge record.
+                            dailyAnalysis.todAlc) | number:0}}cl</strong> of beer if you want to beat your personal binge record.
                         </span>
                         <span ng-if="profile.highestBinge <= dailyAnalysis.todAlc">
                             <em>You have even beaten your binge record today!</em>
