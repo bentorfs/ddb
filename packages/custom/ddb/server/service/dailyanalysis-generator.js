@@ -99,7 +99,7 @@ function getTotalAlcohol(measurement) {
     if (measurement.consumptions.length > 0) {
         result += _.reduce(measurement.consumptions, function (prevValue, curElement) {
             return prevValue + (curElement.amount * curElement.drink.alc);
-        }, 0); 
+        }, 0);
     }
     return result;
 }

@@ -7,11 +7,11 @@
             </h1>
         </div>
 
-       <!-- <div class="well">
-            <p>
-                <strong>New:</strong> Track your wines, using more than thousand AOC and grape varieties in our database!  <em>#winekeeper</em>
-            </p>
-        </div>-->
+        <!-- <div class="well">
+             <p>
+                 <strong>New:</strong> Track your wines, using more than thousand AOC and grape varieties in our database!  <em>#winekeeper</em>
+             </p>
+         </div>-->
 
         <div class="panel panel-primary" id="track-more">
             <div class="panel-heading">
@@ -22,39 +22,74 @@
             </div>
         </div>
 
-        <div class="panel panel-danger" id="today-consumptions">
-            <div class="panel-heading">
-                <h3 class="panel-title">Today's Consumptions</h3>
-            </div>
-            <div class="panel-body">
-                <div class="table-responsive">
-                    <table class="table table-condensed">
-                        <tr ng-hide="measurement.consumptions.length">
-                            <th colspan="4" class="text-center">
-                                No drinks tracked yet! Are you not thirsty today?
-                            </th>
-                        </tr>
-                        <tr ng-repeat="consumption in measurement.consumptions | orderBy:'-drinkDate'">
-                            <td class="col-xs-3">
-                                <span am-time-ago="consumption.drinkDate"></span>
-                            </td>
-                            <td class="text-right col-xs-3">
-                                {{consumption.amount}} cl
-                            </td>
-                            <td class="col-xs-5">
-                                <a ui-sref="drink({drinkId: consumption.drink._id})" autoscroll="true" tooltip="See drink details">
-                                    <i class="glyphicon glyphicon-zoom-in"></i> {{consumption.drink.name}}
-                                </a>
-                            </td>
-                            <td class="col-xs-1 text-right">
-                                <button type="button" class="close" ng-click="removeConsumption(consumption)"
-                                        aria-label="Close" tooltip="Delete this drink" tooltip-placement="left">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </td>
-                        </tr>
-                    </table>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-danger" id="today-consumptions">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Today's Consumptions</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-condensed">
+                                <tr ng-hide="measurement.consumptions.length">
+                                    <th colspan="4" class="text-center">
+                                        No drinks tracked yet! Are you not thirsty today?
+                                    </th>
+                                </tr>
+                                <tr ng-repeat="consumption in measurement.consumptions | orderBy:'-drinkDate'">
+                                    <td class="col-xs-3">
+                                        <span am-time-ago="consumption.drinkDate"></span>
+                                    </td>
+                                    <td class="text-right col-xs-3">
+                                        {{consumption.amount}} cl
+                                    </td>
+                                    <td class="col-xs-5">
+                                        <a ui-sref="drink({drinkId: consumption.drink._id})" autoscroll="true"
+                                           tooltip="See drink details">
+                                            <i class="glyphicon glyphicon-zoom-in"></i> {{consumption.drink.name}}
+                                        </a>
+                                    </td>
+                                    <td class="col-xs-1 text-right">
+                                        <button type="button" class="close" ng-click="removeConsumption(consumption)"
+                                                aria-label="Close" tooltip="Delete this drink" tooltip-placement="left">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-danger" ng-if="dailyAnalysis.todAlc !== 0">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Status</h3>
+                    </div>
+                    <div class="panel-body">
+                        <span ng-if="benchmark - dailyAnalysis.todAlc > 0">
+                            <i class="glyphicon glyphicon-thumbs-up"></i> &nbsp;
+                            So far today, you've had <span style="color: green; font-weight: bold">{{benchmark - dailyAnalysis.todAlc |number:2}}cl less</span>
+                            alcohol than usual on {{dayOfWeek}}s. That's equivalent to <strong>{{18 * (benchmark -
+                            dailyAnalysis.todAlc) | number:0}}cl</strong> of beer.
+                        </span>
+                        <span ng-if="benchmark - dailyAnalysis.todAlc < 0">
+                            <i class="glyphicon glyphicon-exclamation-sign"></i>&nbsp;
+                            So far, you've had <span style="color: red; font-weight: bold">{{dailyAnalysis.todAlc - benchmark |number:2}}cl more</span>
+                            alcohol than usual on {{dayOfWeek}}s. That's equivalent to <strong>{{18 *
+                            (dailyAnalysis.todAlc - benchmark) | number:0}}cl</strong> of beer.
+                        </span>
+                        <span ng-if="profile.highestBinge > dailyAnalysis.todAlc">
+                            You would still have to drink about <strong>{{18 * (profile.highestBinge -
+                            dailyAnalysis.todAlc)}}cl</strong> of beer if you want to beat your personal binge record.
+                        </span>
+                        <span ng-if="profile.highestBinge <= dailyAnalysis.todAlc">
+                            <em>You have even beaten your binge record today!</em>
+                        </span>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
