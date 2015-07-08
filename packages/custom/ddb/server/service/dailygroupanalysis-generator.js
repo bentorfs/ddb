@@ -33,12 +33,12 @@ function processUser(user, date, callback) {
 
 function processGroup(group, date, callback) {
     console.info('Generating new daily group analyses for: ' + group.name + ' on date ' + moment.utc(date).format());
-    var match = {'user': {'$in': group.members}};
+    var match = {'user': {'$in': group.members}, ignore: false};
     if (date) {
         match.date = new Date(date);
     }
     DailyAnalysis.aggregate([
-        {$project: {date: 1, user: 1, todAlc: 1, group: {$literal: group._id}}},
+        {$project: {date: 1, user: 1, ignore: 1, todAlc: 1, group: {$literal: group._id}}},
         {'$match': match},
         {
             '$group': {

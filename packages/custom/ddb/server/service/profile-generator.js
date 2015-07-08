@@ -11,7 +11,7 @@ var mongoose = require('mongoose'),
 
 module.exports = {
     processUser: function (user, callback) {
-        DailyAnalysis.find({user: user}).sort('date').exec(function (err, analyses) {
+        DailyAnalysis.find({user: user, ignore: false}).sort('date').exec(function (err, analyses) {
             if (err) {
                 return callback(err);
             }

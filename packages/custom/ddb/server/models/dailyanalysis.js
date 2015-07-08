@@ -18,41 +18,32 @@ var DailyAnalysisSchema = new Schema({
     },
     // Daily drinks
     todPilsner: {
-        type: Number,
-        required: true
+        type: Number
     },
     todStrongbeer: {
-        type: Number,
-        required: true
+        type: Number
     },
     todWine: {
-        type: Number,
-        required: true
+        type: Number
     },
     todLiquor: {
-        type: Number,
-        required: true
+        type: Number
     },
     // Daily alcohol content
     todAlcPilsner: {
-        type: Number,
-        required: true
+        type: Number
     },
     todAlcStrongbeer: {
-        type: Number,
-        required: true
+        type: Number
     },
     todAlcWine: {
-        type: Number,
-        required: true
+        type: Number
     },
     todAlcLiquor: {
-        type: Number,
-        required: true
+        type: Number
     },
     todAlc: {
-        type: Number,
-        required: true
+        type: Number
     },
     groups: [
         {
@@ -62,8 +53,7 @@ var DailyAnalysisSchema = new Schema({
                 required: true
             },
             lonerFactor: {
-                type: Number,
-                required: true
+                type: Number
             }
         }
     ],

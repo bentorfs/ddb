@@ -61,7 +61,7 @@ angular.module('mean.ddb').controller('DdbMeasurementsController', ['$rootScope'
         };
 
         $scope.toggleMissingData = function () {
-            if ($scope.isMissingData) {
+            if ($scope.measurement.ignore) {
                 Measurement.ignore($scope.date).success(function (data) {
                 });
             } else {

@@ -67,25 +67,39 @@ function getDailyAnalyses(measurements, user) {
     var result = [];
     var todAlc = 0;
     _.forEach(measurements, function (measurement) {
-        todAlc = getTotalAlcohol(measurement);
-        var analysisData = {
-            user: new ObjectId(user._id),
-            date: measurement.date,
-            dayOfWeek: moment.utc(measurement.date).day(),
+        var analysisData;
+        if (measurement.ignore) {
+            analysisData = {
+                user: new ObjectId(user._id),
+                date: measurement.date,
+                dayOfWeek: moment.utc(measurement.date).day(),
+                ignore: true
+            };
+        } else {
+            todAlc = getTotalAlcohol(measurement);
+            analysisData = {
+                user: new ObjectId(user._id),
+                date: measurement.date,
+                dayOfWeek: moment.utc(measurement.date).day(),
 
-            todPilsner: getTotPilsner(measurement),
-            todStrongbeer: getTotStrongbeer(measurement),
-            todWine: getTotWine(measurement),
-            todLiquor: getTotLiquor(measurement),
+                todPilsner: getTotPilsner(measurement),
+                todStrongbeer: getTotStrongbeer(measurement),
+                todWine: getTotWine(measurement),
+                todLiquor: getTotLiquor(measurement),
 
-            todAlcPilsner: getTotAlcPilsner(measurement),
-            todAlcStrongbeer: getTotAlcStrongbeer(measurement),
-            todAlcWine: getTotAlcWine(measurement),
-            todAlcLiquor: getTotAlcLiquor(measurement),
-            todAlc: todAlc,
+                todAlcPilsner: getTotAlcPilsner(measurement),
+                todAlcStrongbeer: getTotAlcStrongbeer(measurement),
+                todAlcWine: getTotAlcWine(measurement),
+                todAlcLiquor: getTotAlcLiquor(measurement),
+                todAlc: todAlc,
 
-            groups: []
-        };
+                groups: [],
+
+                ignore: false
+            };
+        }
+
+
         result.push(analysisData);
     });
 
@@ -255,19 +269,20 @@ function saveDailyAnalyses(dailyAnalyses, user, callback) {
 
 function calculateLonerFactor(dailyAnalyses, dailyGroupAnalyses) {
     _.forEach(dailyAnalyses, function (dailyAnalysis) {
+        if (!dailyAnalysis.ignore) {
+            var groupAnalysesForThisDay = _.filter(dailyGroupAnalyses, function (groupAnalysis) {
+                var result = _.isEqual(dailyAnalysis.date, groupAnalysis.date);
+                return result;
+            });
 
-        var groupAnalysesForThisDay = _.filter(dailyGroupAnalyses, function (groupAnalysis) {
-            var result = _.isEqual(dailyAnalysis.date, groupAnalysis.date);
-            return result;
-        });
-
-        _.forEach(groupAnalysesForThisDay, function (groupAnalysis) {
-            dailyAnalysis.groups.push(
-                {
-                    group: groupAnalysis.group,
-                    lonerFactor: dailyAnalysis.todAlc - groupAnalysis.todAvgAlc
-                }
-            );
-        })
+            _.forEach(groupAnalysesForThisDay, function (groupAnalysis) {
+                dailyAnalysis.groups.push(
+                    {
+                        group: groupAnalysis.group,
+                        lonerFactor: dailyAnalysis.todAlc - groupAnalysis.todAvgAlc
+                    }
+                );
+            })
+        }
     });
 }

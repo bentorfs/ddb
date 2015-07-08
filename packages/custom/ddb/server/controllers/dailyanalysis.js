@@ -15,7 +15,8 @@ module.exports = {
             var toDate = req.query.toDate || moment.utc().valueOf();
 
             DailyAnalysis.find({
-                user: req.params.userId, date: {
+                user: req.params.userId,
+                date: {
                     $gte: fromDate,
                     $lte: toDate
                 }
@@ -32,7 +33,7 @@ module.exports = {
     weekly: function (req, res, next) {
         permissions.ifDailyAnalysisPermission(req.user, req.params.userId, function () {
             DailyAnalysis.aggregate([
-                {$match: {'user': ObjectId(req.params.userId)}},
+                {$match: {'user': ObjectId(req.params.userId), ignore: false}},
                 {$project: {week: {$week: "$date"}, todAlc: 1}},
                 {
                     '$group': {
@@ -55,7 +56,7 @@ module.exports = {
     monthly: function (req, res, next) {
         permissions.ifDailyAnalysisPermission(req.user, req.params.userId, function () {
             DailyAnalysis.aggregate([
-                {$match: {'user': ObjectId(req.params.userId)}},
+                {$match: {'user': ObjectId(req.params.userId), ignore: false}},
                 {$project: {month: {$month: "$date"}, todAlc: 1}},
                 {
                     '$group': {

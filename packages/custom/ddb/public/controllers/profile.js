@@ -94,7 +94,12 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$state
             $scope.trendSeries = ['Trend'];
             angular.forEach($scope.analyses, function (analysis) {
                 $scope.trendLabels.push('');
-                $scope.trendData[0].push($filter('number')(analysis.totAlc || analysis.todAlc, 2));
+                if(analysis.ignore) {
+                    $scope.trendData[0].push(null);
+                } else {
+                    $scope.trendData[0].push($filter('number')(analysis.totAlc || analysis.todAlc, 2));
+                }
+
             });
         };
 
