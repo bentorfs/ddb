@@ -53,6 +53,10 @@ var MeasurementSchema = new Schema({
     },
     lastModifiedDate: {
         type: Date
+    },
+    ignore: {
+        type: Boolean,
+        default: false
     }
 });
 

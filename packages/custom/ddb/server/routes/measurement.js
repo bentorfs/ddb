@@ -8,7 +8,9 @@ module.exports = function (Measurements, app, auth) {
         .get(auth.requiresLogin, measurements.all);
 
     app.route('/api/measurement/:date')
-        .get(auth.requiresLogin, measurements.get);
+        .get(auth.requiresLogin, measurements.get)
+        .delete(auth.requiresLogin, measurements.ignore)
+        .put(auth.requiresLogin, measurements.unignore);
 
     app.route('/api/measurement')
         .post(auth.requiresLogin, measurements.update);

@@ -60,6 +60,16 @@ angular.module('mean.ddb').controller('DdbMeasurementsController', ['$rootScope'
             }
         };
 
+        $scope.toggleMissingData = function () {
+            if ($scope.isMissingData) {
+                Measurement.ignore($scope.date).success(function (data) {
+                });
+            } else {
+                Measurement.unignore($scope.date).success(function (data) {
+                });
+            }
+        };
+
         $scope.isValid = function (measurement) {
             measurement.pilsner = measurement.pilsner || 0;
             measurement.strongbeer = measurement.strongbeer || 0;

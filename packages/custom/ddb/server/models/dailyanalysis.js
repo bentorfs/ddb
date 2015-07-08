@@ -66,7 +66,11 @@ var DailyAnalysisSchema = new Schema({
                 required: true
             }
         }
-    ]
+    ],
+    ignore: {
+        type: Boolean,
+        default: false
+    }
 });
 
 DailyAnalysisSchema.index({date: 1, user: 1}, {unique: true});

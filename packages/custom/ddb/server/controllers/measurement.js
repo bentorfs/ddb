@@ -88,6 +88,46 @@ module.exports = {
             });
         });
     },
+    ignore: function (req, res, next) {
+        var dateToUpdate = moment.utc(parseInt(req.params.date, 10)).startOf('day');
+        Measurement.findOneAndUpdate({
+            date: dateToUpdate.valueOf(),
+            user: req.user,
+            isDeleted: false
+        }, {
+            ignore: true
+        }, function (err) {
+            if (err) {
+                return next(err);
+            }
+            rebuild.rebuildUser(req.user._id, dateToUpdate.valueOf(), function (err) {
+                if (err) {
+                    return next(err);
+                }
+                res.status(200).end();
+            });
+        });
+    },
+    unignore: function (req, res, next) {
+        var dateToUpdate = moment.utc(parseInt(req.params.date, 10)).startOf('day');
+        Measurement.findOneAndUpdate({
+            date: dateToUpdate.valueOf(),
+            user: req.user,
+            isDeleted: false
+        }, {
+            ignore: false
+        }, function (err) {
+            if (err) {
+                return next(err);
+            }
+            rebuild.rebuildUser(req.user._id, dateToUpdate.valueOf(), function (err) {
+                if (err) {
+                    return next(err);
+                }
+                res.status(200).end();
+            });
+        });
+    },
     all: function (req, res, next) {
         Measurement.find({user: req.user._id, isDeleted: false}).sort('date').exec(function (err, measurements) {
             if (err) {

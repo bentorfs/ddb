@@ -18,7 +18,10 @@
                         </button>
                     </div>
                     <div class="col-xs-4 text-center">
-                        <h3 style="margin: 5px 0px 0px 0px">{{date | date:'EEE dd/MM/yy':'UTC'}}</h3>
+                        <h3 style="margin: 5px 0px 0px 0px" ng-show="!measurement.ignore">{{date | date:'EEE dd/MM/yy':'UTC'}}</h3>
+                        <s ng-show="measurement.ignore">
+                            <h3 style="margin: 5px 0px 0px 0px">{{date | date:'EEE dd/MM/yy':'UTC'}}</h3>
+                        </s>
                     </div>
                     <div class="col-xs-4 text-right">
                         <button type="button" class="btn btn-primary dropdown-toggle"
@@ -114,57 +117,80 @@
             </div>
         </div>
 
-        <div class="panel panel-danger" ng-if="measurement">
-            <div class="panel-heading">
-                <h3 class="panel-title">Unspecified Drinks</h3>
+        <div class="row">
+            <div class="col-md-9">
+                <div class="panel panel-danger" ng-if="measurement">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Unspecified Drinks</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table">
+                            <tr style="min-height: 20px">
+                                <td colspan="3">
+                                    <div class="spinner" ng-show="status === 'saving'">
+                                        <div class="bounce1"></div>
+                                        <div class="bounce2"></div>
+                                        <div class="bounce3"></div>
+                                    </div>
+                                    <div class="text-success text-right" ng-show="status === 'saved'">
+                                        <i class="glyphicon glyphicon-saved"/>
+                                    </div>
+                                    <div class="text-danger text-right" ng-show="status === 'failed'">
+                                        Error saving <i class="glyphicon glyphicon-warning-sign"/>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Pilsner (5.5% alc)</th>
+                                <td>
+                                    <input class="form-control" type="number" ng-model="measurement.pilsner"
+                                           ng-blur="save(measurement)">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Strong beer (7.5% alc)</th>
+                                <td>
+                                    <input class="form-control" type="number" ng-model="measurement.strongbeer"
+                                           ng-blur="save(measurement)">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Wine (12.5% alc)</th>
+                                <td>
+                                    <input class="form-control" type="number" ng-model="measurement.wine"
+                                           ng-blur="save(measurement)">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Liquor (43% alc)</th>
+                                <td>
+                                    <input class="form-control" type="number" ng-model="measurement.liquor"
+                                           ng-blur="save(measurement)">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <div class="panel-body">
-                <table class="table">
-                    <tr style="min-height: 20px">
-                        <td colspan="3">
-                            <div class="spinner" ng-show="status === 'saving'">
-                                <div class="bounce1"></div>
-                                <div class="bounce2"></div>
-                                <div class="bounce3"></div>
-                            </div>
-                            <div class="text-success text-right" ng-show="status === 'saved'">
-                                <i class="glyphicon glyphicon-saved"/>
-                            </div>
-                            <div class="text-danger text-right" ng-show="status === 'failed'">
-                                Error saving <i class="glyphicon glyphicon-warning-sign"/>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Pilsner (5.5% alc)</th>
-                        <td>
-                            <input class="form-control" type="number" ng-model="measurement.pilsner"
-                                   ng-blur="save(measurement)">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Strong beer (7.5% alc)</th>
-                        <td>
-                            <input class="form-control" type="number" ng-model="measurement.strongbeer"
-                                   ng-blur="save(measurement)">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Wine (12.5% alc)</th>
-                        <td>
-                            <input class="form-control" type="number" ng-model="measurement.wine"
-                                   ng-blur="save(measurement)">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Liquor (43% alc)</th>
-                        <td>
-                            <input class="form-control" type="number" ng-model="measurement.liquor"
-                                   ng-blur="save(measurement)">
-                        </td>
-                    </tr>
-                </table>
+            <div class="col-md-3">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Options</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" ng-model="measurement.ignore" ng-click="toggleMissingData()"> Mark this day as missing data.
+                            </label>
+                        </div>
+                        <p>
+                            <em>When a day is marked as 'missing data', it will not be taken into account during your
+                                profile calculation, group statistics or rankings.</em>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
+
     </div>
 </section>

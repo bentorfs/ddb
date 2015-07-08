@@ -44,6 +44,20 @@ angular.module('mean.ddb').factory('Measurement', ['$http',
             });
         };
 
+        dao.ignore = function (date) {
+            return $http({
+                url: '/api/measurement/' + date,
+                method: 'DELETE'
+            });
+        };
+
+        dao.unignore = function (date) {
+            return $http({
+                url: '/api/measurement/' + date,
+                method: 'PUT'
+            });
+        };
+
         return dao;
     }
 ]);
