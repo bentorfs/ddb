@@ -18,7 +18,7 @@
             <div class="col-md-9">
 
                 <div class="row">
-                    <div class="col-md-3">
+                   <!-- <div class="col-md-3">
                         <div class="panel panel-danger">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Super Cup</h3>
@@ -34,9 +34,9 @@
                                 </table>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
 
-                    <div class="col-md-9">
+                    <div class="col-md-12">
                         <div class="panel panel-danger">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Group Trend</h3>
@@ -101,119 +101,94 @@
 
                 <div class="panel panel-danger">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Premier Trophies</h3>
+                        <div class="row" ng-if="!groupRanking">
+                            <div class="col-xs-12 ">
+                                <div class="spinner">
+                                    <div class="bounce1"></div>
+                                    <div class="bounce2"></div>
+                                    <div class="bounce3"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row hidden-xs">
+                            <div class="col-xs-4 text-left">
+                                <button type="button" class="btn btn-danger dropdown-toggle"
+                                        ng-click="goToPrevMonth()">
+                                    <i class="glyphicon glyphicon-backward"/> Last Month
+                                </button>
+                            </div>
+                            <div class="col-xs-4 text-center">
+                                <h3 class="panel-title">Trophies for {{month | date:'MMMM yyyy':'UTC'}}</h3>
+                            </div>
+                            <div class="col-xs-4 text-right">
+                                <button type="button" class="btn btn-danger dropdown-toggle"
+                                        ng-click="goToNextMonth()" ng-if="nextMonth <= today">
+                                    Next Month <i class="glyphicon glyphicon-forward"/>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row visible-xs">
+                            <div class="col-xs-12 text-center">
+                                <h3 class="panel-title">Trophies for {{month | date:'MMM yyyy':'UTC'}}</h3>
+                            </div>
+                        </div>
+                        <div class="row visible-xs">
+                            <div class="col-xs-6 text-left">
+                                <button type="button" class="btn btn-danger dropdown-toggle"
+                                        ng-click="goToPrevMonth()">
+                                    <i class="glyphicon glyphicon-backward"/> Last Month
+                                </button>
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <button type="button" class="btn btn-danger dropdown-toggle"
+                                        ng-click="goToNextMonth()" ng-if="nextMonth <= today">
+                                    Next Month <i class="glyphicon glyphicon-forward"/>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-sm-4">
-                                <trophy-ranking trophy-name="Consistency Trophy"
-                                                trophy-description="Awarded to the member with the least variation in daily alcohol intake"
-                                                ranking="group.ranking.rankingConsistencyFactor">
+                                <trophy-ranking trophy-name="Village Drunk Trophy"
+                                                trophy-description="Awarded to the member with the highest average daily alcohol intake"
+                                                ranking="groupRanking.rankingAlcohol">
                                 </trophy-ranking>
                                 <trophy-ranking trophy-name="Weekend Trophy"
                                                 trophy-description="Awarded to the member with the highest average alcohol intake on weekend days"
-                                                ranking="group.ranking.rankingWeekend">
+                                                ranking="groupRanking.rankingWeekend">
+                                </trophy-ranking>
+                                <trophy-ranking trophy-name="Strong Beer Trophy"
+                                                ranking="groupRanking.rankingStrongbeer"
+                                                trophy-description="Awarded to the member who drinks the most strong beers">
                                 </trophy-ranking>
                             </div>
                             <div class="col-sm-4">
                                 <trophy-ranking trophy-name="Habitual Drinker Trophy"
                                                 trophy-description="Awarded to the member who is drinking most frequently"
-                                                ranking="group.ranking.rankingDrinkingDayRate">
+                                                ranking="groupRanking.rankingDrinkingDays">
                                 </trophy-ranking>
-                                <trophy-ranking trophy-name="Sunday Trophy"
-                                                trophy-description="Awarded to the member with the highest average alcohol intake on Sundays"
-                                                ranking="group.ranking.rankingSun">
+                                <trophy-ranking trophy-name="Working Week Trophy"
+                                                ranking="groupRanking.rankingWorkweek"
+                                                trophy-description="Awarded to the member with the highest average alcohol intake from Monday to Thursday">
+                                </trophy-ranking>
+                                <trophy-ranking trophy-name="Wine Trophy"
+                                                ranking="groupRanking.rankingWine"
+                                                trophy-description="Awarded to the member who drinks the most wine">
                                 </trophy-ranking>
                             </div>
                             <div class="col-sm-4">
                                 <trophy-ranking trophy-name="Binge Trophy"
-                                                ranking="group.ranking.rankingHighestBinge"
+                                                ranking="groupRanking.rankingHighestBinge"
                                                 trophy-description="Awarded to the member with the highest alcohol intake in one day">
                                 </trophy-ranking>
-                                <trophy-ranking trophy-name="Working Week Trophy"
-                                                ranking="group.ranking.rankingWorkWeek"
-                                                trophy-description="Awarded to the member with the highest average alcohol intake from Monday to Thursday">
-                                </trophy-ranking>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="panel panel-danger">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Side Trophies</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-sm-4">
                                 <trophy-ranking trophy-name="Pilsner Trophy"
-                                                ranking="group.ranking.rankingPilsner"
-                                                trophy-description="Awarded to the member who is drinking the most regular beer">
+                                                ranking="groupRanking.rankingPilsner"
+                                                trophy-description="Awarded to the member who drinks the most pilsner beer">
                                 </trophy-ranking>
-                                <trophy-ranking trophy-name="Trappist Trophy"
-                                                ranking="group.ranking.rankingStrongbeer"
-                                                trophy-description="Awarded to the member who is drinking the most strong beers">
-                                </trophy-ranking>
-                            </div>
-                            <div class="col-sm-4">
-                                <trophy-ranking trophy-name="Whisky Trophy"
-                                                ranking="group.ranking.rankingLiquor"
-                                                trophy-description="Awarded to the member who is drinking the most liquor">
-                                </trophy-ranking>
-                                <trophy-ranking trophy-name="Wine Trophy"
-                                                ranking="group.ranking.rankingWine"
-                                                trophy-description="Awarded to the member who is drinking the most wine">
-                                </trophy-ranking>
-                            </div>
-                            <div class="col-sm-4">
-                                <trophy-ranking trophy-name="Happy Loner Trophy"
-                                                ranking="group.ranking.rankingHappyLoner"
-                                                trophy-description="Awarded to the member who is drinking, when the rest of the group isn't">
-                                </trophy-ranking>
-                                <trophy-ranking trophy-name="Sad Loner Trophy"
-                                                ranking="group.ranking.rankingSadLoner"
-                                                trophy-description="Awarded to the member who is not drinking, when the rest of the group is">
-                                </trophy-ranking>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="panel panel-danger">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Day Trophies</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <trophy-ranking trophy-name="Monday Trophy"
-                                                ranking="group.ranking.rankingMon"
-                                                trophy-description="Awarded to the member with the highest average alcohol intake on Mondays">
-                                </trophy-ranking>
-                                <trophy-ranking trophy-name="Tuesday Trophy"
-                                                ranking="group.ranking.rankingTue"
-                                                trophy-description="Awarded to the member with the highest average alcohol intake on Tuesdays">
-                                </trophy-ranking>
-                            </div>
-                            <div class="col-sm-4">
-                                <trophy-ranking trophy-name="Wednesday Trophy"
-                                                ranking="group.ranking.rankingWed"
-                                                trophy-description="Awarded to the member with the highest average alcohol intake on Wednesdays">
-
-                                </trophy-ranking>
-                                <trophy-ranking trophy-name="Thursday Trophy"
-                                                ranking="group.ranking.rankingThu"
-                                                trophy-description="Awarded to the member with the highest average alcohol intake on Thursdays">
-                                </trophy-ranking>
-                            </div>
-                            <div class="col-sm-4">
-                                <trophy-ranking trophy-name="Friday Trophy"
-                                                ranking="group.ranking.rankingFri"
-                                                trophy-description="Awarded to the member with the highest average alcohol intake on Fridays">
-                                </trophy-ranking>
-                                <trophy-ranking trophy-name="Saturday Trophy"
-                                                ranking="group.ranking.rankingSat"
-                                                trophy-description="Awarded to the member with the highest average alcohol intake on Saturdays">
+                                <trophy-ranking trophy-name="Liquor Trophy"
+                                                ranking="groupRanking.rankingLiquor"
+                                                trophy-description="Awarded to the member who drinks the most pilsner beer">
                                 </trophy-ranking>
                             </div>
                         </div>

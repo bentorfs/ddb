@@ -6,7 +6,7 @@ angular.module('mean.ddb').factory('Group', ['$http',
 
         dao.getGroup = function (id) {
             return $http({
-                url: '/api/group/' + id + '/full',
+                url: '/api/group/' + id,
                 method: 'GET'
             });
         };
@@ -71,6 +71,13 @@ angular.module('mean.ddb').factory('Group', ['$http',
         dao.getRanking = function (id) {
             return $http({
                 url: '/api/group/' + id + '/ranking',
+                method: 'GET'
+            });
+        };
+
+        dao.getMonthlyRanking = function (id, date) {
+            return $http({
+                url: '/api/group/' + id + '/ranking/monthly/' + date,
                 method: 'GET'
             });
         };

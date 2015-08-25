@@ -114,8 +114,35 @@ angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$statePa
             });
         };
 
+        $scope.loadMonthlyRanking = function() {
+            $scope.groupRanking = null;
+            Group.getMonthlyRanking($stateParams.groupId, $scope.month).success(function (groupRanking) {
+                $scope.groupRanking = groupRanking;
+            });
+        };
 
+        $scope.goToNextMonth = function () {
+            $scope.month = $scope.nextMonth;
+            $scope.setMonths();
+            $scope.loadMonthlyRanking();
+        };
+
+        $scope.goToPrevMonth = function () {
+            $scope.month = $scope.prevMonth;
+            $scope.setMonths();
+            $scope.loadMonthlyRanking();
+        };
+
+        $scope.setMonths = function () {
+            $scope.nextMonth = moment.utc($scope.month).add(1, 'months').valueOf();
+            $scope.prevMonth = moment.utc($scope.month).subtract(1, 'months').valueOf();
+        };
+
+        $scope.today = moment.utc().valueOf();
+        $scope.month = moment.utc().valueOf();
+        $scope.setMonths();
         $scope.loadGroup();
+        $scope.loadMonthlyRanking();
     }
 ]);
 

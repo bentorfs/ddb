@@ -112,7 +112,7 @@ function getTotalAlcohol(measurement) {
     result += measurement.pilsner * 0.055 + measurement.strongbeer * 0.075 + measurement.wine * 0.125 + measurement.liquor * 0.43;
     if (measurement.consumptions.length > 0) {
         result += _.reduce(measurement.consumptions, function (prevValue, curElement) {
-            return prevValue + (curElement.amount * curElement.drink.alc);
+            return prevValue + (curElement.amount * (curElement.drink ? curElement.drink.alc : 0));
         }, 0);
     }
     return result;
@@ -120,25 +120,41 @@ function getTotalAlcohol(measurement) {
 
 var getPilsners = function (consumptions) {
     return _.filter(consumptions, function (consumption) {
-        return consumption.drink.type === 'beer' && consumption.drink.alc <= 0.06;
+        if (consumption.drink) {
+            return consumption.drink.type === 'beer' && consumption.drink.alc <= 0.06;
+        } else {
+            return false
+        }
     });
 };
 
 var getStrongbeers = function (consumptions) {
     return _.filter(consumptions, function (consumption) {
-        return consumption.drink.type === 'beer' && consumption.drink.alc > 0.06;
+        if (consumption.drink) {
+            return consumption.drink.type === 'beer' && consumption.drink.alc > 0.06;
+        } else {
+            return false;
+        }
     });
 };
 
 var getWines = function (consumptions) {
     return _.filter(consumptions, function (consumption) {
-        return consumption.drink.type === 'wine';
+        if (consumption.drink) {
+            return consumption.drink.type === 'wine';
+        } else {
+            return false;
+        }
     });
 };
 
 var getLiquors = function (consumptions) {
     return _.filter(consumptions, function (consumption) {
-        return consumption.drink.type === 'liquor';
+        if (consumption.drink) {
+            return consumption.drink.type === 'liquor';
+        } else {
+            return false;
+        }
     });
 };
 

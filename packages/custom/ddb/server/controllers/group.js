@@ -3,6 +3,7 @@
 var mongoose = require('mongoose'),
     Group = mongoose.model('Group'),
     GroupRanking = mongoose.model('GroupRanking'),
+    MonthlyGroupRanking = mongoose.model('MonthlyGroupRanking'),
     Measurement = mongoose.model('Measurement'),
     Drink = mongoose.model('Drink'),
     permissions = require('./../service/permissions'),
@@ -63,6 +64,21 @@ module.exports = {
     getRanking: function (req, res, next) {
         permissions.ifGroupPermission(req.user, req.params.groupId, function () {
             getGroupRanking(req.params.groupId, function (err, ranking) {
+                if (err) {
+                    return next(err);
+                }
+                if (!ranking) {
+                    return res.status(404).end();
+                }
+                res.json(ranking);
+            });
+        }, function () {
+            res.status(401).end();
+        });
+    },
+    getMonthlyRanking: function (req, res, next) {
+        permissions.ifGroupPermission(req.user, req.params.groupId, function () {
+            getMonthlyGroupRanking(req.params.groupId, parseInt(req.params.date, 10), function (err, ranking) {
                 if (err) {
                     return next(err);
                 }
@@ -223,6 +239,26 @@ function getGroupRanking(groupId, callback) {
         .populate('rankingMon.user', 'username')
         .populate('rankingHappyLoner.user', 'username')
         .populate('rankingSadLoner.user', 'username')
+        .populate('rankingSuperCup.user', 'username')
+        .exec(function (err, ranking) {
+            if (err) {
+                return callback(err);
+            }
+            callback(null, ranking);
+        });
+}
+
+function getMonthlyGroupRanking(groupId, date, callback) {
+    MonthlyGroupRanking.findOne({group: groupId, date: moment.utc(date).startOf('month').valueOf()})
+        .populate('rankingLiquor.user', 'username')
+        .populate('rankingWine.user', 'username')
+        .populate('rankingStrongbeer.user', 'username')
+        .populate('rankingPilsner.user', 'username')
+        .populate('rankingWeekend.user', 'username')
+        .populate('rankingWorkweek.user', 'username')
+        .populate('rankingHighestBinge.user', 'username')
+        .populate('rankingAlcohol.user', 'username')
+        .populate('rankingDrinkingDays.user', 'username')
         .populate('rankingSuperCup.user', 'username')
         .exec(function (err, ranking) {
             if (err) {
