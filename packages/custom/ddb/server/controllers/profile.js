@@ -12,7 +12,7 @@ var mongoose = require('mongoose'),
 module.exports = {
     getUser: function (req, res, next) {
         permissions.ifProfilePermission(req.user, req.params.userId, function () {
-            Profile.findOne({user: req.params.userId}).exec(function (err, profile) {
+            Profile.findOne({'_id.user': req.params.userId}).exec(function (err, profile) {
                 if (err) {
                     return next(err);
                 }

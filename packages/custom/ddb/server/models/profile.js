@@ -5,9 +5,15 @@ var mongoose = require('mongoose'),
 
 
 var ProfileSchema = new Schema({
-    user: {
-        type: Schema.ObjectId,
-        ref: 'User',
+    _id: {
+        user: {
+            type: Schema.ObjectId,
+            ref: 'User',
+            required: true
+        }
+    },
+    calculationDate: {
+        type: Date,
         required: true
     },
     // Weekdays
@@ -53,10 +59,10 @@ var ProfileSchema = new Schema({
     avgAlcSun: {
         type: Number
     },
-    avgAlcWorkWeek: {
+    totAlcWorkWeek: {
         type: Number
     },
-    avgAlcWeekend: {
+    totAlcWeekend: {
         type: Number
     },
     // Types of drinks
@@ -82,9 +88,6 @@ var ProfileSchema = new Schema({
         type: Number
     },
     totAlcLiquor: {
-        type: Number
-    },
-    totAlc: {
         type: Number
     },
     avgPilsner: {
@@ -114,6 +117,12 @@ var ProfileSchema = new Schema({
     avgAlc: {
         type: Number
     },
+    maxAlc: {
+        type: Number
+    },
+    totAlc: {
+        type: Number
+    },
     // Various
     drinkingDays: {
         type: Number
@@ -123,19 +132,7 @@ var ProfileSchema = new Schema({
     },
     activeDays: {
         type: Number
-    },
-    consistencyFactor: {
-        type: Number
-    },
-    // Binge
-    highestBinge: {
-        type: Number
-    },
-    highestBingeDate: {
-        type: Date
     }
 });
-
-ProfileSchema.index({user: 1}, {unique: true});
 
 mongoose.model('Profile', ProfileSchema);

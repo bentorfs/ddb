@@ -32,25 +32,12 @@
                             </tr>
                             <tr>
                                 <th>Heaviest binge</th>
-                                <td class="text-right">{{profile.highestBinge | number:2}} cl
-                                    ({{profile.highestBingeDate | date:'dd/MM/yy':'UTC'}})
+                                <td class="text-right">{{profile.maxAlc | number:2}} cl
                                 </td>
                             </tr>
                             <tr>
                                 <th>Average daily alcohol intake</th>
                                 <td class="text-right">{{profile.avgAlc | number:2}} cl</td>
-                            </tr>
-                            <tr>
-                                <th>Average daily alcohol intake (Fri-Sun)</th>
-                                <td class="text-right">{{profile.avgAlcWeekend | number:2}} cl</td>
-                            </tr>
-                            <tr>
-                                <th>Average daily alcohol intake (Mon-Thu)</th>
-                                <td class="text-right">{{profile.avgAlcWorkWeek | number:2}} cl</td>
-                            </tr>
-                            <tr>
-                                <th>Consistency factor</th>
-                                <td class="text-right">{{profile.consistencyFactor | number:3}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -110,6 +97,79 @@
                             </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Recent Activity</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped ">
+                                <thead>
+                                <th>Date</th>
+                                <th>Total Alcohol</th>
+                                <th>Beer</th>
+                                <th>Strong<br/>Beer</th>
+                                <th>Wine</th>
+                                <th>Liquor</th>
+                                </thead>
+                                <body>
+                                <tr ng-repeat="daily in dailyAnalyses | orderBy:'-date' | limitTo: recentActivityLimit">
+                                    <th>{{daily.date | date:'EEE dd/MM/yy':'UTC'}}</th>
+                                    <td class="text-right"><em>{{daily.todAlc | number:2}} cl</em></td>
+                                    <td class="text-right">{{daily.todPilsner}} cl</td>
+                                    <td class="text-right">{{daily.todStrongbeer}} cl</td>
+                                    <td class="text-right">{{daily.todWine}} cl</td>
+                                    <td class="text-right">{{daily.todLiquor}} cl</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="30" class="text-center"><a href="#"
+                                                                            ng-click="recentActivityLimit=recentActivityLimit + 10; getRecentActivity()">
+                                        <small ng-show="!gettingRecentActivity">Show more..</small>
+                                        <div ng-show="gettingRecentActivity" class="spinner">
+                                            <div class="bounce1"></div>
+                                            <div class="bounce2"></div>
+                                            <div class="bounce3"></div>
+                                        </div>
+                                    </a></td>
+                                </tr>
+                                </body>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Drinking Trend</h3>
+                    </div>
+                    <div class="panel-body">
+                        <canvas id="trend" class="chart chart-line" data="trendData"
+                                options="trendDataOptions"
+                                colours="['#FF6700', '#FFBF00','#FF001E','#26B600,','#000000', '#1771FF','#FFA200', '#00FFD4']"
+                                labels="trendLabels" series="trendSeries">
+                        </canvas>
+                    </div>
+                    <div class="panel-body text-center">
+                        <div class="btn-group" role="group" aria-label="...">
+                            <button type="button" class="btn btn-sm btn-default"
+                                    ng-click="getDailyChart(90)"
+                                    ng-class="{active: trendGranularity === 'daily'}">
+                                Daily
+                            </button>
+                            <button type="button" class="btn btn-sm btn-default"
+                                    ng-click="getWeeklyChart()"
+                                    ng-class="{active: trendGranularity === 'weekly'}">
+                                Weekly
+                            </button>
+                            <button type="button" class="btn btn-sm btn-default"
+                                    ng-click="getMonthlyChart()"
+                                    ng-class="{active: trendGranularity === 'monthly'}">
+                                Monthly
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="panel panel-danger">
@@ -184,76 +244,13 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
                 <div class="panel panel-danger">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Drinking Trend</h3>
-                    </div>
-                    <div class="panel-body">
-                        <canvas id="trend" class="chart chart-line" data="trendData"
-                                options="trendDataOptions"
-                                colours="['#FF6700', '#FFBF00','#FF001E','#26B600,','#000000', '#1771FF','#FFA200', '#00FFD4']"
-                                labels="trendLabels" series="trendSeries">
-                        </canvas>
-                    </div>
-                    <div class="panel-body text-center">
-                        <div class="btn-group" role="group" aria-label="...">
-                            <button type="button" class="btn btn-sm btn-default"
-                                    ng-click="getDailyChart(90)"
-                                    ng-class="{active: trendGranularity === 'daily'}">
-                                Daily
-                            </button>
-                            <button type="button" class="btn btn-sm btn-default"
-                                    ng-click="getWeeklyChart()"
-                                    ng-class="{active: trendGranularity === 'weekly'}">
-                                Weekly
-                            </button>
-                            <button type="button" class="btn btn-sm btn-default"
-                                    ng-click="getMonthlyChart()"
-                                    ng-class="{active: trendGranularity === 'monthly'}">
-                                Monthly
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-danger">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Recent Activity</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped ">
-                                <thead>
-                                <th>Date</th>
-                                <th>Total Alcohol</th>
-                                <th>Beer</th>
-                                <th>Strong<br/>Beer</th>
-                                <th>Wine</th>
-                                <th>Liquor</th>
-                                </thead>
-                                <body>
-                                <tr ng-repeat="daily in dailyAnalyses | orderBy:'-date' | limitTo: recentActivityLimit">
-                                    <th>{{daily.date | date:'EEE dd/MM/yy':'UTC'}}</th>
-                                    <td class="text-right"><em>{{daily.todAlc | number:2}} cl</em></td>
-                                    <td class="text-right">{{daily.todPilsner}} cl</td>
-                                    <td class="text-right">{{daily.todStrongbeer}} cl</td>
-                                    <td class="text-right">{{daily.todWine}} cl</td>
-                                    <td class="text-right">{{daily.todLiquor}} cl</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="30" class="text-center"><a href="#"
-                                                                            ng-click="recentActivityLimit=recentActivityLimit + 10; getRecentActivity()">
-                                        <small ng-show="!gettingRecentActivity">Show more..</small>
-                                        <div ng-show="gettingRecentActivity" class="spinner">
-                                            <div class="bounce1"></div>
-                                            <div class="bounce2"></div>
-                                            <div class="bounce3"></div>
-                                        </div>
-                                    </a></td>
-                                </tr>
-                                </body>
-                            </table>
-                        </div>
+                    <div class="panel-heading text-center">
+                        <small>Information last updated on {{profile.calculationDate | date:'medium':'UTC'}}</small>
                     </div>
                 </div>
             </div>

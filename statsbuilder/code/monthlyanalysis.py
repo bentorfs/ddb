@@ -21,25 +21,25 @@ def generateMonthlyAnalyses(db):
 		 			'$cond': { 'if': {'$gt': ['$todAlc', 0]}, 'then': { '$literal': 1 }, 'else': { '$literal': 0 } }
 		 		},
 		 		'todAlcSun': {
-		 			'$cond': { 'if': {'$eq': ['$dayOfWeek', 1]}, 'then': '$todAlc', 'else': { '$literal': 0 } }
+		 			'$cond': { 'if': {'$eq': ['$dayOfWeek', 0]}, 'then': '$todAlc', 'else': { '$literal': 0 } }
 		 		},
 		 		'todAlcMon': {
-		 			'$cond': { 'if': {'$eq': ['$dayOfWeek', 2]}, 'then': '$todAlc', 'else': { '$literal': 0 } }
+		 			'$cond': { 'if': {'$eq': ['$dayOfWeek', 1]}, 'then': '$todAlc', 'else': { '$literal': 0 } }
 		 		},
 		 		'todAlcTue': {
-		 			'$cond': { 'if': {'$eq': ['$dayOfWeek', 3]}, 'then': '$todAlc', 'else': { '$literal': 0 } }
+		 			'$cond': { 'if': {'$eq': ['$dayOfWeek', 2]}, 'then': '$todAlc', 'else': { '$literal': 0 } }
 		 		},
 		 		'todAlcWed': {
-		 			'$cond': { 'if': {'$eq': ['$dayOfWeek', 4]}, 'then': '$todAlc', 'else': { '$literal': 0 } }
+		 			'$cond': { 'if': {'$eq': ['$dayOfWeek', 3]}, 'then': '$todAlc', 'else': { '$literal': 0 } }
 		 		},
 		 		'todAlcThu': {
-		 			'$cond': { 'if': {'$eq': ['$dayOfWeek', 5]}, 'then': '$todAlc', 'else': { '$literal': 0 } }
+		 			'$cond': { 'if': {'$eq': ['$dayOfWeek', 4]}, 'then': '$todAlc', 'else': { '$literal': 0 } }
 		 		},
 		 		'todAlcFri': {
-		 			'$cond': { 'if': {'$eq': ['$dayOfWeek', 6]}, 'then': '$todAlc', 'else': { '$literal': 0 } }
+		 			'$cond': { 'if': {'$eq': ['$dayOfWeek', 5]}, 'then': '$todAlc', 'else': { '$literal': 0 } }
 		 		},
 		 		'todAlcSat': {
-		 			'$cond': { 'if': {'$eq': ['$dayOfWeek', 7]}, 'then': '$todAlc', 'else': { '$literal': 0 } }
+		 			'$cond': { 'if': {'$eq': ['$dayOfWeek', 6]}, 'then': '$todAlc', 'else': { '$literal': 0 } }
 		 		}
 			}
 		},

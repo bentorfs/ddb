@@ -16,7 +16,6 @@
 
         <div class="row">
             <div class="col-md-9">
-
                 <div class="row">
                     <div class="col-md-12">
                         <div class="panel panel-danger">
@@ -181,11 +180,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel-footer text-center">
-                        Information last updated on {{month | date:'medium':'UTC'}}
-                    </div>
                 </div>
 
+                <div class="panel panel-danger">
+                    <div class="panel-heading text-center">
+                        <small>Information last updated on {{groupRanking.calculationDate | date:'medium':'UTC'}}</small>
+                    </div>
+                </div>
             </div>
             <div class="col-md-3">
 

@@ -17,7 +17,7 @@ class TestMonthlyAnalysis(unittest.TestCase):
 			'user': userId,
 			'date': datetime.datetime(2015, 7, 1, 15, 0, 0, 0),
 			'todAlc': 100,
-			'dayOfWeek': 1,
+			'dayOfWeek': 0,
 			'todAlcPilsner': 10,
 			'todAlcStrongbeer': 20,
 			'todAlcWine': 30,
@@ -28,7 +28,7 @@ class TestMonthlyAnalysis(unittest.TestCase):
 			'user': userId,
 			'date': datetime.datetime(2015, 8, 1, 15, 0, 0, 0),
 			'todAlc': 200,
-			'dayOfWeek': 1,
+			'dayOfWeek': 0,
 			'todAlcPilsner': 20,
 			'todAlcStrongbeer': 40,
 			'todAlcWine': 60,
@@ -39,7 +39,7 @@ class TestMonthlyAnalysis(unittest.TestCase):
 			'user': userId,
 			'date': datetime.datetime(2015, 8, 2, 15, 0, 0, 0),
 			'todAlc': 0,
-			'dayOfWeek': 1,
+			'dayOfWeek': 0,
 			'todAlcPilsner': 0,
 			'todAlcStrongbeer': 0,
 			'todAlcWine': 0,
@@ -49,7 +49,8 @@ class TestMonthlyAnalysis(unittest.TestCase):
 
 	def testOne(self):
 		monthlyanalysis.generateMonthlyAnalyses(self.db)
-		result = list(self.db.monthlyanalyses.find().sort('date'))
+		result = list(self.db.monthlyanalyses.find().sort('_id.month'))
+		self.assertEqual(result[0]['avgAlc'], 100)
 		self.assertEqual(result[0]['avgAlc'], 100)
 		self.assertEqual(result[0]['totAlcSun'], 100)
 		self.assertEqual(result[0]['totAlcMon'], 0)
