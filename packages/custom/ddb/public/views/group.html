@@ -18,24 +18,6 @@
             <div class="col-md-9">
 
                 <div class="row">
-                   <!-- <div class="col-md-3">
-                        <div class="panel panel-danger">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Super Cup</h3>
-                            </div>
-                            <div class="panel-body">
-                                <table class="table table-condensed">
-                                    <tr ng-repeat="rank in group.ranking.rankingSuperCup | limitTo:20"
-                                        ng-class="{active: $index === 0}">
-                                        <td class="col-xs-2">{{$index + 1}}</td>
-                                        <td class="col-xs-6">{{rank.user.username}}</td>
-                                        <td class="col-xs-4 text-right">{{rank.value}}</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>-->
-
                     <div class="col-md-12">
                         <div class="panel panel-danger">
                             <div class="panel-heading">
@@ -69,6 +51,28 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="panel panel-danger">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Super Cup
+                                    <i class="glyphicon glyphicon-info-sign pull-right" tooltip="Supercup points are awarded at the end of every month for every trophy won" tooltip-placement="left"/></h3>
+                            </div>
+                            <div class="panel-body">
+                                <table class="table table-condensed">
+                                    <tr ng-repeat="rank in groupRanking.supercup | limitTo:20"
+                                        ng-class="{active: $index === 0}">
+                                        <td class="col-xs-2">{{$index + 1}}</td>
+                                        <td class="col-xs-6">{{rank.user.username}}</td>
+                                        <td class="col-xs-4 text-right">{{rank.value}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
                         <div class="panel panel-danger">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Top Drinks</h3>
@@ -118,7 +122,8 @@
                                 </button>
                             </div>
                             <div class="col-xs-4 text-center">
-                                <h3 class="panel-title">Trophies for {{month | date:'MMMM yyyy':'UTC'}}</h3>
+                                <h3 class="panel-title">Trophies for {{month | date:'MMMM yyyy':'UTC'}}</h3><br/>
+                                <small>This information is updated on a daily basis</small>
                             </div>
                             <div class="col-xs-4 text-right">
                                 <button type="button" class="btn btn-danger dropdown-toggle"
@@ -150,45 +155,27 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-sm-4">
-                                <trophy-ranking trophy-name="Village Drunk Trophy"
-                                                trophy-description="Awarded to the member with the highest average daily alcohol intake"
-                                                ranking="groupRanking.rankingAlcohol">
+                                <trophy-ranking trophy="groupRanking.trophies[0]">
                                 </trophy-ranking>
-                                <trophy-ranking trophy-name="Weekend Trophy"
-                                                trophy-description="Awarded to the member with the highest average alcohol intake on weekend days"
-                                                ranking="groupRanking.rankingWeekend">
+                                <trophy-ranking trophy="groupRanking.trophies[1]">
                                 </trophy-ranking>
-                                <trophy-ranking trophy-name="Strong Beer Trophy"
-                                                ranking="groupRanking.rankingStrongbeer"
-                                                trophy-description="Awarded to the member who drinks the most strong beers">
+                                <trophy-ranking trophy="groupRanking.trophies[2]">
                                 </trophy-ranking>
                             </div>
                             <div class="col-sm-4">
-                                <trophy-ranking trophy-name="Habitual Drinker Trophy"
-                                                trophy-description="Awarded to the member who is drinking most frequently"
-                                                ranking="groupRanking.rankingDrinkingDays">
+                                <trophy-ranking trophy="groupRanking.trophies[3]">
                                 </trophy-ranking>
-                                <trophy-ranking trophy-name="Working Week Trophy"
-                                                ranking="groupRanking.rankingWorkweek"
-                                                trophy-description="Awarded to the member with the highest average alcohol intake from Monday to Thursday">
+                                <trophy-ranking trophy="groupRanking.trophies[4]">
                                 </trophy-ranking>
-                                <trophy-ranking trophy-name="Wine Trophy"
-                                                ranking="groupRanking.rankingWine"
-                                                trophy-description="Awarded to the member who drinks the most wine">
+                                <trophy-ranking trophy="groupRanking.trophies[5]">
                                 </trophy-ranking>
                             </div>
                             <div class="col-sm-4">
-                                <trophy-ranking trophy-name="Binge Trophy"
-                                                ranking="groupRanking.rankingHighestBinge"
-                                                trophy-description="Awarded to the member with the highest alcohol intake in one day">
+                                <trophy-ranking trophy="groupRanking.trophies[6]">
                                 </trophy-ranking>
-                                <trophy-ranking trophy-name="Pilsner Trophy"
-                                                ranking="groupRanking.rankingPilsner"
-                                                trophy-description="Awarded to the member who drinks the most pilsner beer">
+                                <trophy-ranking trophy="groupRanking.trophies[7]">
                                 </trophy-ranking>
-                                <trophy-ranking trophy-name="Liquor Trophy"
-                                                ranking="groupRanking.rankingLiquor"
-                                                trophy-description="Awarded to the member who drinks the most pilsner beer">
+                                <trophy-ranking trophy="groupRanking.trophies[8]">
                                 </trophy-ranking>
                             </div>
                         </div>

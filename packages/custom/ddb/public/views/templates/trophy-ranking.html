@@ -1,17 +1,17 @@
 <table class="table table-condensed">
     <thead>
     <tr>
-        <th colspan="3" class="text-center">{{trophyName}}
-            <i class="glyphicon glyphicon-info-sign pull-right" tooltip="{{trophyDescription}}" tooltip-placement="left"/>
+        <th colspan="3" class="text-center">{{trophy.name}}
+            <i class="glyphicon glyphicon-info-sign pull-right" tooltip="{{trophy.description}}" tooltip-placement="left"/>
         </th>
     </tr>
     </thead>
-    <tr ng-repeat="rank in ranking | limitTo:(showMore ? 20 : 3)" ng-class="{active: $index === 0}">
+    <tr ng-repeat="rank in trophy.ranking | limitTo:(showMore ? 20 : 3)" ng-class="{active: $index === 0}">
         <td class="col-xs-2">{{$index + 1}}</td>
         <td class="col-xs-6">{{rank.user.username}}</td>
         <td class="col-xs-4 text-right">{{rank.value | number:2}}</td>
     </tr>
-    <tr ng-hide="showMore || ranking.length <=3">
+    <tr ng-hide="showMore || trophy.ranking.length <=3">
         <td colspan="3" class="text-center"><a href="#" ng-click="showMore=true">
             <small>Show more..</small>
         </a></td>

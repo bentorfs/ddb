@@ -2,7 +2,7 @@ import unittest
 import sys
 import pymongo
 import datetime
-sys.path.append('../beerkeeper')
+sys.path.append('../code')
 import monthlygroupranking
 from bson.objectid import ObjectId  
 from pymongo import MongoClient
@@ -71,10 +71,21 @@ class TestGenerationOfRankings(unittest.TestCase):
 		monthlygroupranking.generateMonthlyGroupRankings(self.db)
 		result = list(self.db.monthlygrouprankings.find().sort('date'))
 		self.assertEqual(result[0]['date'], datetime.datetime(2015, 1, 1, 0, 0))
-		self.assertEqual(result[0]['rankingPilsner'][0]['user'], self.userId1)
-		self.assertEqual(result[0]['rankingPilsner'][0]['value'], 10)
-		self.assertEqual(result[0]['rankingPilsner'][1]['user'], self.userId2)
-		self.assertEqual(result[0]['rankingPilsner'][1]['value'], 5)
+
+		pilsnerTrophy = next(trophy for trophy in result[0]['trophies'] if trophy['name']=='Pilsner Trophy')
+
+		self.assertEqual(pilsnerTrophy['ranking'][0]['user'], self.userId1)
+		self.assertEqual(pilsnerTrophy['ranking'][0]['value'], 10)
+		self.assertEqual(pilsnerTrophy['ranking'][1]['user'], self.userId2)
+		self.assertEqual(pilsnerTrophy['ranking'][1]['value'], 5)
+
+		superCupTrophy = next(trophy for trophy in result[1]['trophies'] if trophy['name']=='Super Cup')
+
+		self.assertEqual(result[1]['date'], datetime.datetime(2015, 2, 1, 0, 0))
+		self.assertEqual(superCupTrophy['ranking'][0]['user'], self.userId1)
+		self.assertEqual(superCupTrophy['ranking'][0]['value'], 5)
+		self.assertEqual(superCupTrophy['ranking'][1]['user'], self.userId2)
+		self.assertEqual(superCupTrophy['ranking'][1]['value'], 4)
 
 
 if __name__ == '__main__':

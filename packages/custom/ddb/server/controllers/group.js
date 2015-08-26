@@ -2,14 +2,12 @@
 
 var mongoose = require('mongoose'),
     Group = mongoose.model('Group'),
-    GroupRanking = mongoose.model('GroupRanking'),
     MonthlyGroupRanking = mongoose.model('MonthlyGroupRanking'),
     Measurement = mongoose.model('Measurement'),
     Drink = mongoose.model('Drink'),
     permissions = require('./../service/permissions'),
     _ = require('lodash'),
     moment = require('moment'),
-    grouprankingGenerator = require('./../service/groupranking-generator'),
     notificationGenerator = require('./../service/notification-generator'),
     async = require('async');
 
@@ -34,9 +32,7 @@ module.exports = {
             if (err) {
                 return next(err);
             }
-            grouprankingGenerator.processGroup(group, function () {
-                res.json(group);
-            });
+            res.json(group);
         });
 
         _.forEach(group.invitations, function (invitation) {
@@ -56,21 +52,6 @@ module.exports = {
                     return res.status(404).end();
                 }
                 res.json(group);
-            });
-        }, function () {
-            res.status(401).end();
-        });
-    },
-    getRanking: function (req, res, next) {
-        permissions.ifGroupPermission(req.user, req.params.groupId, function () {
-            getGroupRanking(req.params.groupId, function (err, ranking) {
-                if (err) {
-                    return next(err);
-                }
-                if (!ranking) {
-                    return res.status(404).end();
-                }
-                res.json(ranking);
             });
         }, function () {
             res.status(401).end();
@@ -112,9 +93,7 @@ module.exports = {
                 if (!group) {
                     return res.status(404).end();
                 }
-                grouprankingGenerator.processGroup(group, function () {
-                    res.status(200).end();
-                });
+                res.status(200).end();
             });
     },
     leaveGroup: function (req, res, next) {
@@ -134,9 +113,7 @@ module.exports = {
                 if (!group) {
                     return res.status(404).end();
                 }
-                grouprankingGenerator.processGroup(group, function () {
-                    res.status(200).end();
-                });
+                res.status(200).end();
             });
     },
     addInvitation: function (req, res, next) {
@@ -177,36 +154,6 @@ module.exports = {
         }, function () {
             res.status(401).end();
         });
-    },
-    getFull: function (req, res, next) {
-        permissions.ifGroupPermission(req.user, req.params.groupId, function () {
-            async.parallel(
-                {
-                    group: function (callback) {
-                        getGroup(req.params.groupId, callback);
-                    },
-                    ranking: function (callback) {
-                        getGroupRanking(req.params.groupId, callback);
-                    }
-                },
-                function (err, result) {
-                    if (err) {
-                        return next(err);
-                    }
-                    getFrequentDrinks(result.group.members, function (err, frequentDrinks) {
-                        if (err) {
-                            return next(err);
-                        }
-                        var returnObject = result.group.toJSON();
-                        returnObject.ranking = result.ranking;
-                        returnObject.frequentDrinks = frequentDrinks;
-                        res.json(returnObject);
-                    });
-                }
-            );
-        }, function () {
-            res.status(401).end();
-        });
     }
 };
 
@@ -219,47 +166,10 @@ function getGroup(groupId, callback) {
     });
 }
 
-function getGroupRanking(groupId, callback) {
-    GroupRanking.findOne({group: groupId})
-        .populate('rankingHighestBinge.user', 'username')
-        .populate('rankingConsistencyFactor.user', 'username')
-        .populate('rankingDrinkingDayRate.user', 'username')
-        .populate('rankingLiquor.user', 'username')
-        .populate('rankingWine.user', 'username')
-        .populate('rankingStrongbeer.user', 'username')
-        .populate('rankingPilsner.user', 'username')
-        .populate('rankingWeekend.user', 'username')
-        .populate('rankingWorkWeek.user', 'username')
-        .populate('rankingSun.user', 'username')
-        .populate('rankingSat.user', 'username')
-        .populate('rankingFri.user', 'username')
-        .populate('rankingThu.user', 'username')
-        .populate('rankingWed.user', 'username')
-        .populate('rankingTue.user', 'username')
-        .populate('rankingMon.user', 'username')
-        .populate('rankingHappyLoner.user', 'username')
-        .populate('rankingSadLoner.user', 'username')
-        .populate('rankingSuperCup.user', 'username')
-        .exec(function (err, ranking) {
-            if (err) {
-                return callback(err);
-            }
-            callback(null, ranking);
-        });
-}
-
 function getMonthlyGroupRanking(groupId, date, callback) {
     MonthlyGroupRanking.findOne({group: groupId, date: moment.utc(date).startOf('month').valueOf()})
-        .populate('rankingLiquor.user', 'username')
-        .populate('rankingWine.user', 'username')
-        .populate('rankingStrongbeer.user', 'username')
-        .populate('rankingPilsner.user', 'username')
-        .populate('rankingWeekend.user', 'username')
-        .populate('rankingWorkweek.user', 'username')
-        .populate('rankingHighestBinge.user', 'username')
-        .populate('rankingAlcohol.user', 'username')
-        .populate('rankingDrinkingDays.user', 'username')
-        .populate('rankingSuperCup.user', 'username')
+        .populate('trophies.ranking.user', 'username')
+        .populate('supercup.user', 'username')
         .exec(function (err, ranking) {
             if (err) {
                 return callback(err);

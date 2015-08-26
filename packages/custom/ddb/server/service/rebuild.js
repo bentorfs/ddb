@@ -6,7 +6,6 @@ var mongoose = require('mongoose'),
     dailyanalysisGenerator = require('./dailyanalysis-generator'),
     dailygroupanalysisGenerator = require('./dailygroupanalysis-generator'),
     profileGenerator = require('./profile-generator'),
-    grouprankingGenerator = require('./groupranking-generator'),
     _ = require('lodash'),
     async = require('async'),
     moment = require('moment');
@@ -30,9 +29,6 @@ module.exports = {
                     },
                     function (callback) {
                         dailygroupanalysisGenerator.processUser(user, date, callback);
-                    },
-                    function (callback) {
-                        grouprankingGenerator.processUser(user, callback);
                     }
                 ], function (err) {
                     done(err);
@@ -80,26 +76,10 @@ function rebuildAllProfiles(done) {
             console.error('Could not retrieve users for rebuilding profiles, because: ' + err);
             return done(err);
         }
-        var counter = _.after(users.length, function () {
-            rebuildAllGroupRankings(done);
-        });
+        var counter = _.after(users.length, done);
         _.forEach(users, function (user) {
             console.log('Rebuilding profile for user ' + user.username);
             profileGenerator.processUser(user, counter);
-        });
-    });
-}
-
-function rebuildAllGroupRankings(done) {
-    Group.find({}).exec(function (err, groups) {
-        if (err) {
-            console.error('Could not retrieve groups for rebuilding rankings, because: ' + err);
-            return done(err);
-        }
-        var counter = _.after(groups.length, done);
-        _.forEach(groups, function (group) {
-            console.log('Rebuilding rankings for group ' + group.name);
-            grouprankingGenerator.processGroup(group, counter);
         });
     });
 }

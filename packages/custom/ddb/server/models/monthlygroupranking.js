@@ -14,35 +14,17 @@ var MonthlyGroupRankingSchema = new Schema({
         type: Date,
         required: true
     },
-    rankingPilsner: [
+    supercup: [
         {user: {type: Schema.ObjectId, ref: 'User'}, value: {type: Number}}
     ],
-    rankingStrongbeer: [
-        {user: {type: Schema.ObjectId, ref: 'User'}, value: {type: Number}}
-    ],
-    rankingWine: [
-        {user: {type: Schema.ObjectId, ref: 'User'}, value: {type: Number}}
-    ],
-    rankingLiquor: [
-        {user: {type: Schema.ObjectId, ref: 'User'}, value: {type: Number}}
-    ],
-    rankingWeekend: [
-        {user: {type: Schema.ObjectId, ref: 'User'}, value: {type: Number}}
-    ],
-    rankingWorkweek: [
-        {user: {type: Schema.ObjectId, ref: 'User'}, value: {type: Number}}
-    ],
-    rankingHighestBinge: [
-        {user: {type: Schema.ObjectId, ref: 'User'}, value: {type: Number}}
-    ],
-    rankingAlcohol: [
-        {user: {type: Schema.ObjectId, ref: 'User'}, value: {type: Number}}
-    ],
-    rankingDrinkingDays: [
-        {user: {type: Schema.ObjectId, ref: 'User'}, value: {type: Number}}
-    ],
-    rankingSuperCup: [
-        {user: {type: Schema.ObjectId, ref: 'User'}, value: {type: Number}}
+    trophies: [
+        {
+            name: String,
+            ranking: [
+                {user: {type: Schema.ObjectId, ref: 'User'}, value: {type: Number}}
+            ],
+            description: String
+        }
     ]
 });
 

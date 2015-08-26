@@ -1,7 +1,7 @@
 import unittest
 import sys
 import datetime
-sys.path.append('../beerkeeper')
+sys.path.append('../code')
 import monthlyanalysis
 from bson.objectid import ObjectId  
 from pymongo import MongoClient

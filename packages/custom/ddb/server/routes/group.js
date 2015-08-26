@@ -11,9 +11,6 @@ module.exports = function (Group, app, auth) {
     app.route('/api/group/:groupId')
         .get(auth.requiresLogin, group.getGroup);
 
-    app.route('/api/group/:groupId/full')
-        .get(auth.requiresLogin, group.getFull);
-
     app.route('/api/group/:groupId/invitation/:userId')
         .post(auth.requiresLogin, group.addInvitation)
         .delete(auth.requiresLogin, group.removeInvitation);
@@ -24,9 +21,6 @@ module.exports = function (Group, app, auth) {
 
     app.route('/api/invitation')
         .get(auth.requiresLogin, group.listInvitations);
-
-    app.route('/api/group/:groupId/ranking')
-        .get(auth.requiresLogin, group.getRanking);
 
     app.route('/api/group/:groupId/ranking/monthly/:date')
         .get(auth.requiresLogin, group.getMonthlyRanking);

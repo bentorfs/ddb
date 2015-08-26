@@ -4,7 +4,6 @@ var mongoose = require('mongoose'),
     DailyAnalysis = mongoose.model('DailyAnalysis'),
     DailyGroupAnalysis = mongoose.model('DailyGroupAnalysis'),
     Group = mongoose.model('Group'),
-    GroupRanking = mongoose.model('GroupRanking'),
     Profile = mongoose.model('Profile'),
     _ = require('lodash'),
     moment = require('moment');
