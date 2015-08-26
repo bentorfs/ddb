@@ -51,7 +51,14 @@ module.exports = {
                 if (!group) {
                     return res.status(404).end();
                 }
-                res.json(group);
+                getFrequentDrinks(group.members, function (err, frequentDrinks) {
+                    if (err) {
+                        return next(err);
+                    }
+                    var returnObject = group.toJSON();
+                    returnObject.frequentDrinks = frequentDrinks;
+                    res.json(returnObject);
+                });
             });
         }, function () {
             res.status(401).end();
