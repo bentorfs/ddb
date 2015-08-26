@@ -63,6 +63,7 @@ def generateMonthlyGroupRankings(db):
 			thisDate = datetime.datetime(year, month, 1, 0, 0, 0, 0)
 			newRanking = {
 				'group': group['_id'],
+				'calculationDate': datetime.datetime.utcnow(),
 				'date': thisDate,
 				'supercup': rankingSuperCup,
 				'trophies': [

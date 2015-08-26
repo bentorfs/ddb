@@ -10,6 +10,10 @@ var MonthlyGroupRankingSchema = new Schema({
         ref: 'Group',
         required: true
     },
+    calculationDate: {
+        type: Date,
+        required: true
+    },
     date: {
         type: Date,
         required: true

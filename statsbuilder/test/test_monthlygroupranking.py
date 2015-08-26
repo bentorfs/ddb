@@ -79,13 +79,12 @@ class TestGenerationOfRankings(unittest.TestCase):
 		self.assertEqual(pilsnerTrophy['ranking'][1]['user'], self.userId2)
 		self.assertEqual(pilsnerTrophy['ranking'][1]['value'], 5)
 
-		superCupTrophy = next(trophy for trophy in result[1]['trophies'] if trophy['name']=='Super Cup')
 
 		self.assertEqual(result[1]['date'], datetime.datetime(2015, 2, 1, 0, 0))
-		self.assertEqual(superCupTrophy['ranking'][0]['user'], self.userId1)
-		self.assertEqual(superCupTrophy['ranking'][0]['value'], 5)
-		self.assertEqual(superCupTrophy['ranking'][1]['user'], self.userId2)
-		self.assertEqual(superCupTrophy['ranking'][1]['value'], 4)
+		self.assertEqual(result[1]['supercup'][0]['user'], self.userId1)
+		self.assertEqual(result[1]['supercup'][0]['value'], 5)
+		self.assertEqual(result[1]['supercup'][1]['user'], self.userId2)
+		self.assertEqual(result[1]['supercup'][1]['value'], 4)
 
 
 if __name__ == '__main__':

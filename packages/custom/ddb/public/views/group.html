@@ -58,7 +58,9 @@
                         <div class="panel panel-danger">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Super Cup
-                                    <i class="glyphicon glyphicon-info-sign pull-right" tooltip="Supercup points are awarded at the end of every month for every trophy won" tooltip-placement="left"/></h3>
+                                    <i class="glyphicon glyphicon-info-sign pull-right"
+                                       tooltip="Supercup points are awarded at the end of every month for every trophy won"
+                                       tooltip-placement="left"/></h3>
                             </div>
                             <div class="panel-body">
                                 <table class="table table-condensed">
@@ -122,8 +124,7 @@
                                 </button>
                             </div>
                             <div class="col-xs-4 text-center">
-                                <h3 class="panel-title">Trophies for {{month | date:'MMMM yyyy':'UTC'}}</h3><br/>
-                                <small>This information is updated on a daily basis</small>
+                                <h3 class="panel-title">Trophies for {{month | date:'MMMM yyyy':'UTC'}}</h3>
                             </div>
                             <div class="col-xs-4 text-right">
                                 <button type="button" class="btn btn-danger dropdown-toggle"
@@ -134,7 +135,8 @@
                         </div>
                         <div class="row visible-xs">
                             <div class="col-xs-12 text-center">
-                                <h3 class="panel-title">Trophies for {{month | date:'MMM yyyy':'UTC'}}</h3>
+                                <h3 class="panel-title">Trophies for {{groupRanking.calculationDate | date:'MMM
+                                    yyyy':'UTC'}}</h3>
                             </div>
                         </div>
                         <div class="row visible-xs">
@@ -179,6 +181,9 @@
                                 </trophy-ranking>
                             </div>
                         </div>
+                    </div>
+                    <div class="panel-footer text-center">
+                        Information last updated on {{month | date:'medium':'UTC'}}
                     </div>
                 </div>
 
