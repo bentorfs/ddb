@@ -5,7 +5,6 @@ var mongoose = require('mongoose'),
     Group = mongoose.model('Group'),
     dailyanalysisGenerator = require('./dailyanalysis-generator'),
     dailygroupanalysisGenerator = require('./dailygroupanalysis-generator'),
-    profileGenerator = require('./profile-generator'),
     _ = require('lodash'),
     async = require('async'),
     moment = require('moment');
@@ -23,9 +22,6 @@ module.exports = {
                 async.waterfall([
                     function (callback) {
                         dailyanalysisGenerator.processUser(user, date, callback);
-                    },
-                    function (callback) {
-                        profileGenerator.processUser(user, callback);
                     },
                     function (callback) {
                         dailygroupanalysisGenerator.processUser(user, date, callback);
