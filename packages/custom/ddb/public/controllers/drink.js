@@ -20,6 +20,23 @@ angular.module('mean.ddb').controller('DdbDrinkController', ['$scope', '$statePa
             });
         };
 
+        $scope.replaceDrink = function() {
+            $scope.saving = true;
+            Drink.replace($scope.drink._id, $scope.replacementDrink._id).success(function (drink) {
+                $scope.drink = $scope.replacementDrink;
+                $scope.editMode = false;
+            }).finally(function () {
+                $scope.saving = false;
+            });
+        };
+
+        $scope.getDrinks = function (name) {
+            $scope.newDrinkName = name;
+            return Drink.list(name, 0, 20).then(function (response) {
+                return response.data;
+            });
+        };
+
         $scope.isOwnDrink = function () {
             return $scope.drink && $scope.drink.createdBy && ($scope.drink.createdBy === $scope.user.get()._id);
         };

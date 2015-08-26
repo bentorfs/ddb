@@ -125,6 +125,28 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$state
             });
         };
 
+        $scope.getDiffFromAvg = function (dailyAnalysis) {
+            if (dailyAnalysis.dayOfWeek == 0) {
+                return $scope.profile.avgAlcSun - dailyAnalysis.todAlc;
+            } else if (dailyAnalysis.dayOfWeek == 1) {
+                return $scope.profile.avgAlcMon - dailyAnalysis.todAlc;
+            } else if (dailyAnalysis.dayOfWeek == 2) {
+                return $scope.profile.avgAlcTue - dailyAnalysis.todAlc;
+            } else if (dailyAnalysis.dayOfWeek == 3) {
+                return $scope.profile.avgAlcWed - dailyAnalysis.todAlc;
+            } else if (dailyAnalysis.dayOfWeek == 4) {
+                return $scope.profile.avgAlcThu - dailyAnalysis.todAlc;
+            } else if (dailyAnalysis.dayOfWeek == 5) {
+                return $scope.profile.avgAlcFri - dailyAnalysis.todAlc;
+            } else if (dailyAnalysis.dayOfWeek == 6) {
+                return $scope.profile.avgAlcSat - dailyAnalysis.todAlc;
+            }
+        };
+
+        $scope.abs = function (val) {
+            return Math.abs(val);
+        };
+
         $scope.getWeeklyChart();
         $scope.getRecentActivity();
     }

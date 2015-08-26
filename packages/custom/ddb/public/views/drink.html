@@ -131,6 +131,30 @@
                                     </button>
                                 </td>
                             </tr>
+                            <tr ng-show="editMode && user.isAdmin">
+                                <th>
+                                    <small>Replace by another drink</small>
+                                </th>
+                            </tr>
+                            <tr ng-show="editMode && user.isAdmin">
+                                <td>
+                                    <input type="text" ng-model="replacementDrink" placeholder="Search a replacement"
+                                           typeahead="drink as drink.name for drink in getDrinks($viewValue)"
+                                           typeahead-loading="loadingDrinks"
+                                           class="form-control"
+                                           typeahead-template-url="ddb/views/templates/select-drink.html"
+                                           typeahead-editable="false" typeahead-min-length="2">
+                                        <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"
+                                              ng-if="selectedDrink"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button ng-click="replaceDrink()" class="btn btn-warning" ng-show="editMode">
+                                        <i class="glyphicon glyphicon-ok"></i> Replace
+                                    </button>
+                                </td>
+                            </tr>
                             </tfoot>
                         </table>
                     </div>

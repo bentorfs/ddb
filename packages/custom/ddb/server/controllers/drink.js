@@ -146,7 +146,7 @@ module.exports = {
                     });
                 }
             );
-        } else {
+        } else if (drinkIdToDelete !== drinkIdToReplace) {
             Measurement.find({'consumptions.drink': drinkIdToDelete}).exec(function (err, docs) {
                 if (err) {
                     return next(err);
@@ -175,6 +175,8 @@ module.exports = {
                     });
                 });
             });
+        } else {
+            res.status(400).end();
         }
     }
 };

@@ -40,6 +40,16 @@ angular.module('mean.ddb').factory('Drink', ['$http',
             });
         };
 
+        dao.replace = function (drinkId, replacementId) {
+            return $http({
+                url: '/api/drink/' + drinkId,
+                method: 'DELETE',
+                params: {
+                    replacementId: replacementId
+                }
+            });
+        };
+
         return dao;
     }
 ]);
