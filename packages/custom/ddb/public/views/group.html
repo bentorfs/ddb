@@ -32,21 +32,20 @@
                             </div>
                             <div class="panel-body text-center">
                                 <div class="btn-group" role="group" aria-label="...">
-                                    <button type="button" class="btn btn-sm btn-default" ng-click="drawGroupChart(365)"
-                                            ng-class="{active: nbGroupDaysShown === 365}">
-                                        1 Year
+                                    <button type="button" class="btn btn-sm btn-default"
+                                            ng-click="getDailyChart(90)"
+                                            ng-class="{active: groupTrendGranularity === 'daily'}">
+                                        Daily
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-default" ng-click="drawGroupChart(90)"
-                                            ng-class="{active: nbGroupDaysShown === 90}">
-                                        3 Months
+                                    <button type="button" class="btn btn-sm btn-default"
+                                            ng-click="getWeeklyChart()"
+                                            ng-class="{active: groupTrendGranularity === 'weekly'}">
+                                        Weekly
                                     </button>
-                                    <button type="button" class="btn btn-sm btn-default" ng-click="drawGroupChart(30)"
-                                            ng-class="{active: nbGroupDaysShown === 30}">
-                                        1 Month
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-default" ng-click="drawGroupChart(7)"
-                                            ng-class="{active: nbGroupDaysShown === 7}">
-                                        1 Week
+                                    <button type="button" class="btn btn-sm btn-default"
+                                            ng-click="getMonthlyChart()"
+                                            ng-class="{active: groupTrendGranularity === 'monthly'}">
+                                        Monthly
                                     </button>
                                 </div>
                             </div>

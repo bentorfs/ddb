@@ -31,8 +31,6 @@ function updateProfile(analyses, user, callback) {
     var groups = {};
     var totAlc = 0, totPilsner = 0, totStrongbeer = 0, totWine = 0, totLiquor = 0;
     var totAlcPilsner = 0, totAlcStrongbeer = 0, totAlcWine = 0, totAlcLiquor = 0;
-    var series = [];
-    var spreadAlc = [0, 0, 0, 0, 0, 0, 0];
 
     for (var i = 0; i < analyses.length; i++) {
         totPilsner += analyses[i].todPilsner;
@@ -44,21 +42,6 @@ function updateProfile(analyses, user, callback) {
         totAlcStrongbeer += analyses[i].todAlcStrongbeer;
         totAlcWine += analyses[i].todAlcWine;
         totAlcLiquor += analyses[i].todAlcLiquor;
-
-        spreadAlc[i % 7] = analyses[i].todAlc;
-        series.push(
-            {
-                date: analyses[i].date,
-                cumAlc: totAlc,
-                cumAlcPilsner: totAlcPilsner,
-                cumAlcStrongbeer: totAlcStrongbeer,
-                cumAlcWine: totAlcWine,
-                cumAlcLiquor: totAlcLiquor,
-                spreadAlc: _.reduce(spreadAlc, function (prev, cur) {
-                    return prev + cur;
-                }, 0) / spreadAlc.length
-            }
-        );
 
         alcPerDay[analyses[i].dayOfWeek] += analyses[i].todAlc;
 
@@ -87,17 +70,6 @@ function updateProfile(analyses, user, callback) {
             }
         });
     }
-
-    var groupData = [];
-    _.forEach(_.keys(groups), function (key) {
-        groupData.push(
-            {
-                group: key,
-                sadLonerFactor: groups[key].sadLonerFactor,
-                happyLonerFactor: groups[key].happyLonerFactor
-            }
-        );
-    });
 
     var avgAlcStdev = standardDeviation(dailyAlcohol);
 
@@ -150,10 +122,7 @@ function updateProfile(analyses, user, callback) {
         drinkingDayRate: analyses.length > 0 ? (drinkingDays / analyses.length) : 0,
 
         highestBinge: highestBinge,
-        highestBingeDate: highestBingeDate,
-
-        groups: groupData,
-        series: series
+        highestBingeDate: highestBingeDate
     };
 
     Profile.findOneAndUpdate({

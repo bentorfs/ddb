@@ -133,33 +133,7 @@ var ProfileSchema = new Schema({
     },
     highestBingeDate: {
         type: Date
-    },
-    // Loner
-    sadLonerFactor: {
-        type: Number
-    },
-    happyLonerFactor: {
-        type: Number
-    },
-    // Group-related data
-    groups: [
-        {
-            group: {
-                type: Schema.ObjectId,
-                ref: 'Group'
-            },
-            sadLonerFactor: Number,
-            happyLonerFactor: Number
-        }
-    ],
-    // Chart data
-    series: [
-        {
-            date: Date,
-            cumAlc: Number,
-            spreadAlc: Number
-        }
-    ]
+    }
 });
 
 ProfileSchema.index({user: 1}, {unique: true});

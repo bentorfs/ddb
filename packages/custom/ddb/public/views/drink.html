@@ -50,7 +50,7 @@
                             <tr>
                                 <td>
                                     <div ng-show="!editMode">
-                                        <em>{{drink.alc * 100}}%</em>
+                                        <em>{{drink.alc * 100 | number:2}}%</em>
                                     </div>
                                     <div ng-show="editMode">
                                         <input type="text" class="form-control input-sm" ng-model="drink.alc"/>

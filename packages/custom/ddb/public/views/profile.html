@@ -58,41 +58,6 @@
                 </div>
                 <div class="panel panel-danger">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Averaged Drinking Trend</h3>
-                    </div>
-                    <div class="panel-body">
-                        <canvas id="spreadTrend" class="chart chart-line" data="spreadAverageData"
-                                options="spreadAverageDataOptions"
-                                colours="['#FF6700', '#FFBF00','#FF001E','#26B600,','#000000', '#1771FF','#FFA200', '#00FFD4']"
-                                labels="spreadAverageLabels" series="spreadAverageSeries">
-                        </canvas>
-                    </div>
-                    <div class="panel-body text-center">
-                        <div class="btn-group" role="group" aria-label="...">
-                            <button type="button" class="btn btn-sm btn-default"
-                                    ng-click="getSpreadAverageChartData(365)"
-                                    ng-class="{active: nbSpreadAverageDaysShown === 365}">
-                                1 Year
-                            </button>
-                            <button type="button" class="btn btn-sm btn-default"
-                                    ng-click="getSpreadAverageChartData(90)"
-                                    ng-class="{active: nbSpreadAverageDaysShown === 90}">
-                                3 Months
-                            </button>
-                            <button type="button" class="btn btn-sm btn-default"
-                                    ng-click="getSpreadAverageChartData(30)"
-                                    ng-class="{active: nbSpreadAverageDaysShown === 30}">
-                                1 Month
-                            </button>
-                            <button type="button" class="btn btn-sm btn-default" ng-click="getSpreadAverageChartData(7)"
-                                    ng-class="{active: nbSpreadAverageDaysShown === 7}">
-                                1 Week
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-danger">
-                    <div class="panel-heading">
                         <h3 class="panel-title">Week Profile</h3>
                     </div>
                     <div class="panel-body">
@@ -147,39 +112,6 @@
                         </table>
                     </div>
                 </div>
-                <div class="panel panel-danger">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Drinking Trend</h3>
-                    </div>
-                    <div class="panel-body">
-                        <canvas id="trend" class="chart chart-line" data="trendData"
-                                options="trendDataOptions"
-                                colours="['#FF6700', '#FFBF00','#FF001E','#26B600,','#000000', '#1771FF','#FFA200', '#00FFD4']"
-                                labels="trendLabels" series="trendSeries">
-                        </canvas>
-                    </div>
-                    <div class="panel-body text-center">
-                        <div class="btn-group" role="group" aria-label="...">
-                            <button type="button" class="btn btn-sm btn-default"
-                                    ng-click="getDailyChart(90)"
-                                    ng-class="{active: trendGranularity === 'daily'}">
-                                Daily
-                            </button>
-                            <button type="button" class="btn btn-sm btn-default"
-                                    ng-click="getWeeklyChart()"
-                                    ng-class="{active: trendGranularity === 'weekly'}">
-                                Weekly
-                            </button>
-                            <button type="button" class="btn btn-sm btn-default"
-                                    ng-click="getMonthlyChart()"
-                                    ng-class="{active: trendGranularity === 'monthly'}">
-                                Monthly
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
                 <div class="panel panel-danger">
                     <div class="panel-heading">
                         <h3 class="panel-title">Preference Profile</h3>
@@ -251,34 +183,35 @@
                         </table>
                     </div>
                 </div>
+            </div>
+            <div class="col-md-6">
                 <div class="panel panel-danger">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Cumulative Drinking Trend</h3>
+                        <h3 class="panel-title">Drinking Trend</h3>
                     </div>
                     <div class="panel-body">
-                        <canvas id="cumulativeTrend" class="chart chart-line" data="cumulativeTrendData"
-                                options="cumulativeTrendDataOptions"
+                        <canvas id="trend" class="chart chart-line" data="trendData"
+                                options="trendDataOptions"
                                 colours="['#FF6700', '#FFBF00','#FF001E','#26B600,','#000000', '#1771FF','#FFA200', '#00FFD4']"
-                                labels="cumulativeTrendLabels" series="cumulativeTrendSeries">
+                                labels="trendLabels" series="trendSeries">
                         </canvas>
                     </div>
                     <div class="panel-body text-center">
                         <div class="btn-group" role="group" aria-label="...">
-                            <button type="button" class="btn btn-sm btn-default" ng-click="getCumulativeChartData(365)"
-                                    ng-class="{active: nbCumulativeDaysShown === 365}">
-                                1 Year
+                            <button type="button" class="btn btn-sm btn-default"
+                                    ng-click="getDailyChart(90)"
+                                    ng-class="{active: trendGranularity === 'daily'}">
+                                Daily
                             </button>
-                            <button type="button" class="btn btn-sm btn-default" ng-click="getCumulativeChartData(90)"
-                                    ng-class="{active: nbCumulativeDaysShown === 90}">
-                                3 Months
+                            <button type="button" class="btn btn-sm btn-default"
+                                    ng-click="getWeeklyChart()"
+                                    ng-class="{active: trendGranularity === 'weekly'}">
+                                Weekly
                             </button>
-                            <button type="button" class="btn btn-sm btn-default" ng-click="getCumulativeChartData(30)"
-                                    ng-class="{active: nbCumulativeDaysShown === 30}">
-                                1 Month
-                            </button>
-                            <button type="button" class="btn btn-sm btn-default" ng-click="getCumulativeChartData(7)"
-                                    ng-class="{active: nbCumulativeDaysShown === 7}">
-                                1 Week
+                            <button type="button" class="btn btn-sm btn-default"
+                                    ng-click="getMonthlyChart()"
+                                    ng-class="{active: trendGranularity === 'monthly'}">
+                                Monthly
                             </button>
                         </div>
                     </div>
@@ -299,13 +232,24 @@
                                 <th>Liquor</th>
                                 </thead>
                                 <body>
-                                <tr ng-repeat="daily in dailyAnalyses | orderBy:'-date' | limitTo: 10">
+                                <tr ng-repeat="daily in dailyAnalyses | orderBy:'-date' | limitTo: recentActivityLimit">
                                     <th>{{daily.date | date:'EEE dd/MM/yy':'UTC'}}</th>
                                     <td class="text-right"><em>{{daily.todAlc | number:2}} cl</em></td>
                                     <td class="text-right">{{daily.todPilsner}} cl</td>
                                     <td class="text-right">{{daily.todStrongbeer}} cl</td>
                                     <td class="text-right">{{daily.todWine}} cl</td>
                                     <td class="text-right">{{daily.todLiquor}} cl</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="30" class="text-center"><a href="#"
+                                                                            ng-click="recentActivityLimit=recentActivityLimit + 10; getRecentActivity()">
+                                        <small ng-show="!gettingRecentActivity">Show more..</small>
+                                        <div ng-show="gettingRecentActivity" class="spinner">
+                                            <div class="bounce1"></div>
+                                            <div class="bounce2"></div>
+                                            <div class="bounce3"></div>
+                                        </div>
+                                    </a></td>
                                 </tr>
                                 </body>
                             </table>

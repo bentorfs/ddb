@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$stateParams', '$state', '$filter', '$rootScope', 'Group', 'Profile', '$q',
-    function ($scope, $stateParams, $state, $filter, $rootScope, Group, Profile, $q) {
+angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$stateParams', '$state', '$filter', '$rootScope', 'Group', 'Analysis', '$q',
+    function ($scope, $stateParams, $state, $filter, $rootScope, Group, Analysis, $q) {
 
         $scope.usersToInvite = [];
         $scope.inviteUsers = function () {
@@ -26,7 +26,7 @@ angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$statePa
             Group.getGroup($stateParams.groupId).success(function (group) {
                 $scope.group = group;
 
-                $scope.loadTrendData();
+                $scope.getDailyChart();
             });
         };
 
@@ -37,39 +37,56 @@ angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$statePa
             })
         };
 
-        $scope.drawGroupChart = function (nbDays) {
-            $scope.nbGroupDaysShown = nbDays;
+        $scope.groupTrendDataOptions = {
+            datasetFill: false,
+            scaleOverride: true,
+            scaleShowVerticalLines: false,
+            scaleSteps: 15,
+            scaleStepWidth: 1,
+            scaleStartValue: 0,
+            bezierCurve: false,
+            bezierCurveTension: 0.4,
+            showScale: true,
+            pointDot: false,
+            pointHitDetectionRadius: 1
+        };
+
+        $scope.drawGroupChart = function () {
             $scope.groupTrendLabels = [];
             $scope.groupTrendData = [];
-            $scope.groupTrendDataOptions = {
-                datasetFill: false,
-                scaleOverride: true,
-                scaleShowVerticalLines: false,
-                scaleSteps: 15,
-                scaleStepWidth: 1,
-                scaleStartValue: 0,
-                bezierCurve: true,
-                bezierCurveTension: 0.4,
-                showScale: true,
-                pointDot: false,
-                pointHitDetectionRadius: 1
-            };
+
             $scope.groupTrendSeries = [];
-            var fromDate = moment.utc().startOf('day').subtract(nbDays, 'days');
+
+            var fromDate;
+            if ($scope.groupTrendGranularity === 'monthly') {
+                fromDate = moment.utc().startOf('day').subtract(12, 'months');
+            } else if ($scope.groupTrendGranularity === 'weekly') {
+                fromDate = moment.utc().startOf('day').subtract(10, 'weeks');
+            } else if ($scope.groupTrendGranularity === 'daily') {
+                fromDate = moment.utc().startOf('day').subtract(30, 'days');
+            }
             var today = moment.utc().startOf('day');
             var dataMap = {};
 
             _.forEach($scope.group.members, function (member) {
                 var dataForMember = [];
                 var i = 0;
-                _.forEach($scope.groupProfiles[member.username].data.series, function (serie) {
-                    var date = moment.utc(serie.date, 'YYYY-MM-DD hh:mm:ss');
+                _.forEach($scope.groupProfiles[member.username].data, function (analysis) {
+                    //var date = moment.utc(serie.date, 'YYYY-MM-DD hh:mm:ss');
+                    var date;
+                    if ($scope.groupTrendGranularity === 'monthly') {
+                        date = moment.utc().month(analysis.month)
+                    } else if ($scope.groupTrendGranularity === 'weekly') {
+                        date = moment.utc().weeks(analysis.week)
+                    } else if ($scope.groupTrendGranularity === 'daily') {
+                        date = moment.utc(analysis.date, 'YYYY-MM-DD hh:mm:ss');
+                    }
                     if (date >= fromDate && date < today) {
                         var formattedDate = date.format('YYYY-MM-DD');
                         if (!dataMap[formattedDate]) {
                             dataMap[formattedDate] = {}
                         }
-                        dataMap[formattedDate][member.username] = $filter('number')(serie.spreadAlc, 2);
+                        dataMap[formattedDate][member.username] = $filter('number')(analysis.totAlc || analysis.todAlc, 2);
                     }
                 });
             });
@@ -89,29 +106,81 @@ angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$statePa
                         value = null;
                     }
                     dataForMember.push(value);
-                    currentDate = currentDate.add(1, 'days');
+
+                    if ($scope.groupTrendGranularity === 'monthly') {
+                        currentDate = currentDate.add(1, 'months');
+                    } else if ($scope.groupTrendGranularity === 'weekly') {
+                        currentDate = currentDate.add(1, 'weeks');
+                    } else if ($scope.groupTrendGranularity === 'daily') {
+                        currentDate = currentDate.add(1, 'days');
+                    }
                 }
                 $scope.groupTrendData.push(dataForMember);
                 $scope.groupTrendSeries.push(member.username);
             });
             var currentDate = moment.utc(fromDate);
+            var label;
             while (currentDate < today) {
-                $scope.groupTrendLabels.push('');
-                currentDate = currentDate.add(1, 'days');
+                if ($scope.groupTrendGranularity === 'monthly') {
+                    $scope.groupTrendLabels.push(currentDate.format('MMM'));
+                    currentDate = currentDate.add(1, 'months');
+                } else if ($scope.groupTrendGranularity === 'weekly') {
+                    $scope.groupTrendLabels.push(currentDate.format('D MMM'));
+                    currentDate = currentDate.add(1, 'weeks');
+                } else if ($scope.groupTrendGranularity === 'daily') {
+                    $scope.groupTrendLabels.push(currentDate.format('D MMM'));
+                    currentDate = currentDate.add(1, 'days');
+                }
             }
         };
 
-        $scope.loadTrendData = function () {
+        $scope.getDailyChart = function (nbDays) {
+            $scope.groupTrendGranularity = 'daily';
+            $scope.groupTrendDataOptions.scaleStepWidth = 2.5;
+
             $scope.groupProfiles = {};
             var promises = {};
             _.forEach($scope.group.members, function (member) {
-                promises[member.username] = Profile.getUser(member._id)
+                promises[member.username] = Analysis.getDaily(member._id);
             });
 
             $q.all(promises).then(function (result) {
                 $scope.groupProfiles = result;
-                $scope.drawGroupChart(30);
+                $scope.drawGroupChart();
             });
+        };
+
+        $scope.getWeeklyChart = function () {
+            $scope.groupTrendGranularity = 'weekly';
+            $scope.groupTrendDataOptions.scaleStepWidth = 8;
+
+            $scope.groupProfiles = {};
+            var promises = {};
+            _.forEach($scope.group.members, function (member) {
+                promises[member.username] = Analysis.getWeekly(member._id);
+            });
+
+            $q.all(promises).then(function (result) {
+                $scope.groupProfiles = result;
+                $scope.drawGroupChart();
+            });
+        };
+
+        $scope.getMonthlyChart = function () {
+            $scope.groupTrendGranularity = 'monthly';
+            $scope.groupTrendDataOptions.scaleStepWidth = 25;
+
+            $scope.groupProfiles = {};
+            var promises = {};
+            _.forEach($scope.group.members, function (member) {
+                promises[member.username] = Analysis.getMonthly(member._id);
+            });
+
+            $q.all(promises).then(function (result) {
+                $scope.groupProfiles = result;
+                $scope.drawGroupChart();
+            });
+
         };
 
         $scope.loadMonthlyRanking = function() {
