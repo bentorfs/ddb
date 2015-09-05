@@ -36,6 +36,7 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$state
             }
         });
 
+
         Profile.getFrequentDrinks($stateParams.userId).success(function (frequentDrinks) {
             $scope.frequentDrinks = frequentDrinks;
         });
@@ -107,7 +108,7 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$state
             var label;
             angular.forEach($scope.analyses, function (analysis) {
                 if ($scope.trendGranularity === 'monthly') {
-                    label = moment.utc().month(analysis.month);
+                    label = moment.utc().month(analysis.month - 1);
                     $scope.trendLabels.push(label.format('MMM'));
                 } else if ($scope.trendGranularity === 'weekly') {
                     label = moment.utc().week(analysis.week);
@@ -126,20 +127,22 @@ angular.module('mean.ddb').controller('DdbProfileController', ['$scope', '$state
         };
 
         $scope.getDiffFromAvg = function (dailyAnalysis) {
-            if (dailyAnalysis.dayOfWeek == 0) {
-                return $scope.profile.avgAlcSun - dailyAnalysis.todAlc;
-            } else if (dailyAnalysis.dayOfWeek == 1) {
-                return $scope.profile.avgAlcMon - dailyAnalysis.todAlc;
-            } else if (dailyAnalysis.dayOfWeek == 2) {
-                return $scope.profile.avgAlcTue - dailyAnalysis.todAlc;
-            } else if (dailyAnalysis.dayOfWeek == 3) {
-                return $scope.profile.avgAlcWed - dailyAnalysis.todAlc;
-            } else if (dailyAnalysis.dayOfWeek == 4) {
-                return $scope.profile.avgAlcThu - dailyAnalysis.todAlc;
-            } else if (dailyAnalysis.dayOfWeek == 5) {
-                return $scope.profile.avgAlcFri - dailyAnalysis.todAlc;
-            } else if (dailyAnalysis.dayOfWeek == 6) {
-                return $scope.profile.avgAlcSat - dailyAnalysis.todAlc;
+            if ($scope.profile) {
+                if (dailyAnalysis.dayOfWeek == 0) {
+                    return $scope.profile.avgAlcSun - dailyAnalysis.todAlc;
+                } else if (dailyAnalysis.dayOfWeek == 1) {
+                    return $scope.profile.avgAlcMon - dailyAnalysis.todAlc;
+                } else if (dailyAnalysis.dayOfWeek == 2) {
+                    return $scope.profile.avgAlcTue - dailyAnalysis.todAlc;
+                } else if (dailyAnalysis.dayOfWeek == 3) {
+                    return $scope.profile.avgAlcWed - dailyAnalysis.todAlc;
+                } else if (dailyAnalysis.dayOfWeek == 4) {
+                    return $scope.profile.avgAlcThu - dailyAnalysis.todAlc;
+                } else if (dailyAnalysis.dayOfWeek == 5) {
+                    return $scope.profile.avgAlcFri - dailyAnalysis.todAlc;
+                } else if (dailyAnalysis.dayOfWeek == 6) {
+                    return $scope.profile.avgAlcSat - dailyAnalysis.todAlc;
+                }
             }
         };
 

@@ -75,7 +75,7 @@ angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$statePa
                     //var date = moment.utc(serie.date, 'YYYY-MM-DD hh:mm:ss');
                     var date;
                     if ($scope.groupTrendGranularity === 'monthly') {
-                        date = moment.utc().month(analysis.month)
+                        date = moment.utc().month(analysis.month - 1)
                     } else if ($scope.groupTrendGranularity === 'weekly') {
                         date = moment.utc().weeks(analysis.week)
                     } else if ($scope.groupTrendGranularity === 'daily') {
