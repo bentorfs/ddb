@@ -117,7 +117,7 @@
                         <div class="row hidden-xs">
                             <div class="col-xs-4 text-left">
                                 <button type="button" class="btn btn-danger dropdown-toggle"
-                                        ng-click="goToPrevMonth()">
+                                        ng-click="goToPrevMonth()" ng-if="prevMonth >= firstMonth">
                                     <i class="glyphicon glyphicon-backward"/> Last Month
                                 </button>
                             </div>

@@ -20,7 +20,8 @@ class TestGenerationOfRankings(unittest.TestCase):
 
 		self.db.groups.insert_one({
 			'_id': ObjectId(),
-			'members': [self.userId1, self.userId2]
+			'members': [self.userId1, self.userId2],
+			'creationDate': datetime.datetime(2014, 1, 1, 0, 0)
 			})
 
 		self.db.monthlyanalyses.insert_one({

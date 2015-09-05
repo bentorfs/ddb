@@ -25,7 +25,7 @@ angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$statePa
         $scope.loadGroup = function () {
             Group.getGroup($stateParams.groupId).success(function (group) {
                 $scope.group = group;
-
+                $scope.firstMonth = moment.utc(group.creationDate, 'YYYY-MM-DD hh:mm:ss').startOf('month').valueOf();
                 $scope.getDailyChart();
             });
         };

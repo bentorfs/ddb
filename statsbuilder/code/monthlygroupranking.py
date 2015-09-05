@@ -34,93 +34,98 @@ def generateMonthlyGroupRankings(db):
 		monthlyGroupRankings = []
 
 		while (month <= currentMonth and year <= currentYear):
-			monthlyAnalyses = list(db['monthlyanalyses'].find({
-				'_id.user': {'$in': group['members']}, 
-				'_id.year': year,
-				'_id.month': month
-				}))
-
-			# rankingSun = getFieldRanking(monthlyAnalyses, 'totAlcSun', False)
-			# rankingMon = getFieldRanking(monthlyAnalyses, 'totAlcMon', False)
-			# rankingTue = getFieldRanking(monthlyAnalyses, 'totAlcTue', False)
-			# rankingWed = getFieldRanking(monthlyAnalyses, 'totAlcWed', False)
-			# rankingThu = getFieldRanking(monthlyAnalyses, 'totAlcThu', False)
-			# rankingFri = getFieldRanking(monthlyAnalyses, 'totAlcFri', False)
-			# rankingSat = getFieldRanking(monthlyAnalyses, 'totAlcSat', False)
-
-			rankingPilsner = getFieldRanking(monthlyAnalyses, 'totAlcPilsner', False)
-			rankingStrongbeer = getFieldRanking(monthlyAnalyses, 'totAlcStrongbeer', False)
-			rankingWine = getFieldRanking(monthlyAnalyses, 'totAlcWine', False)
-			rankingLiquor = getFieldRanking(monthlyAnalyses, 'totAlcLiquor', False)
-			rankingWeekend = getFieldRanking(monthlyAnalyses, 'totAlcWeekend', False)
-			rankingWorkweek = getFieldRanking(monthlyAnalyses, 'totAlcWorkweek', False)
-			rankingHighestBinge = getFieldRanking(monthlyAnalyses, 'maxAlc', False)
-			rankingAlcohol = getFieldRanking(monthlyAnalyses, 'avgAlc', False)
-			rankingDrinkingDays = getFieldRanking(monthlyAnalyses, 'drinkingDays', False)
-
-			rankingSuperCup = getSuperCup(group['members'], monthlyGroupRankings)
 
 			thisDate = datetime.datetime(year, month, 1, 0, 0, 0, 0)
-			newRanking = {
-				'group': group['_id'],
-				'calculationDate': datetime.datetime.utcnow(),
-				'date': thisDate,
-				'supercup': rankingSuperCup,
-				'trophies': [
-					{
-						'name': 'Pilsner Trophy',
-						'ranking': rankingPilsner,
-						'description': 'Awarded to the member who drinks the most pilsner beer'
-					},
-					{
-						'name': 'Trappist Trophy',
-						'ranking': rankingStrongbeer,
-						'description': 'Awarded to the member who drinks the most strong beer'
-					},
-					{
-						'name': 'Wine Trophy',
-						'ranking': rankingWine,
-						'description': 'Awarded to the member who drinks the most wine'
-					},
-					{
-						'name': 'Liquor Trophy',
-						'ranking': rankingLiquor,
-						'description': 'Awarded to the member who drinks the most liquor'
-					},
+			creationMonth = datetime.datetime(group['creationDate'].year, group['creationDate'].month, 1, 0, 0, 0, 0)
+			if (thisDate >= creationMonth):
+
+				monthlyAnalyses = list(db['monthlyanalyses'].find({
+					'_id.user': {'$in': group['members']}, 
+					'_id.year': year,
+					'_id.month': month
+					}))
+
+				# rankingSun = getFieldRanking(monthlyAnalyses, 'totAlcSun', False)
+				# rankingMon = getFieldRanking(monthlyAnalyses, 'totAlcMon', False)
+				# rankingTue = getFieldRanking(monthlyAnalyses, 'totAlcTue', False)
+				# rankingWed = getFieldRanking(monthlyAnalyses, 'totAlcWed', False)
+				# rankingThu = getFieldRanking(monthlyAnalyses, 'totAlcThu', False)
+				# rankingFri = getFieldRanking(monthlyAnalyses, 'totAlcFri', False)
+				# rankingSat = getFieldRanking(monthlyAnalyses, 'totAlcSat', False)
+
+				rankingPilsner = getFieldRanking(monthlyAnalyses, 'totAlcPilsner', False)
+				rankingStrongbeer = getFieldRanking(monthlyAnalyses, 'totAlcStrongbeer', False)
+				rankingWine = getFieldRanking(monthlyAnalyses, 'totAlcWine', False)
+				rankingLiquor = getFieldRanking(monthlyAnalyses, 'totAlcLiquor', False)
+				rankingWeekend = getFieldRanking(monthlyAnalyses, 'totAlcWeekend', False)
+				rankingWorkweek = getFieldRanking(monthlyAnalyses, 'totAlcWorkweek', False)
+				rankingHighestBinge = getFieldRanking(monthlyAnalyses, 'maxAlc', False)
+				rankingAlcohol = getFieldRanking(monthlyAnalyses, 'avgAlc', False)
+				rankingDrinkingDays = getFieldRanking(monthlyAnalyses, 'drinkingDays', False)
+
+				rankingSuperCup = getSuperCup(group['members'], monthlyGroupRankings)
+
 				
-					{
-						'name': 'Weekend Trophy',
-						'ranking': rankingWeekend,
-						'description': 'Awarded to the member with the highest average alcohol intake on weekend days'
-					},
-					{
-						'name': 'Working Week Trophy',
-						'ranking': rankingWorkweek,
-						'description': 'Awarded to the member with the highest average alcohol intake from Monday to Thursday'
-					},
+				newRanking = {
+					'group': group['_id'],
+					'calculationDate': datetime.datetime.utcnow(),
+					'date': thisDate,
+					'supercup': rankingSuperCup,
+					'trophies': [
+						{
+							'name': 'Pilsner Trophy',
+							'ranking': rankingPilsner,
+							'description': 'Awarded to the member who drinks the most pilsner beer'
+						},
+						{
+							'name': 'Trappist Trophy',
+							'ranking': rankingStrongbeer,
+							'description': 'Awarded to the member who drinks the most strong beer'
+						},
+						{
+							'name': 'Wine Trophy',
+							'ranking': rankingWine,
+							'description': 'Awarded to the member who drinks the most wine'
+						},
+						{
+							'name': 'Liquor Trophy',
+							'ranking': rankingLiquor,
+							'description': 'Awarded to the member who drinks the most liquor'
+						},
+					
+						{
+							'name': 'Weekend Trophy',
+							'ranking': rankingWeekend,
+							'description': 'Awarded to the member with the highest average alcohol intake on weekend days'
+						},
+						{
+							'name': 'Working Week Trophy',
+							'ranking': rankingWorkweek,
+							'description': 'Awarded to the member with the highest average alcohol intake from Monday to Thursday'
+						},
 
-					{
-						'name': 'Binge Trophy',
-						'ranking': rankingHighestBinge,
-						'description': 'Awarded to the member with the highest alcohol intake in one day'
-					},
-					{
-						'name': 'Village Drunk Trophy',
-						'ranking': rankingAlcohol,
-						'description': 'Awarded to the member with the highest average daily alcohol intake'
-					},
-					{
-						'name': 'Habitual Drinker Trophy',
-						'ranking': rankingDrinkingDays,
-						'description': 'Awarded to the member who is drinking most frequently'
-					}
-				]
-				
-			}
+						{
+							'name': 'Binge Trophy',
+							'ranking': rankingHighestBinge,
+							'description': 'Awarded to the member with the highest alcohol intake in one day'
+						},
+						{
+							'name': 'Village Drunk Trophy',
+							'ranking': rankingAlcohol,
+							'description': 'Awarded to the member with the highest average daily alcohol intake'
+						},
+						{
+							'name': 'Habitual Drinker Trophy',
+							'ranking': rankingDrinkingDays,
+							'description': 'Awarded to the member who is drinking most frequently'
+						}
+					]
+					
+				}
 
-			monthlyGroupRankings.append(newRanking)
+				monthlyGroupRankings.append(newRanking)
 
-			db['monthlygrouprankings'].replace_one({'group': group['_id'], 'date': thisDate}, newRanking, upsert=True)
+				db['monthlygrouprankings'].replace_one({'group': group['_id'], 'date': thisDate}, newRanking, upsert=True)
 
 			month = month + 1
 			if (month > 12):
