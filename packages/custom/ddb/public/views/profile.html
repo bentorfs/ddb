@@ -120,8 +120,8 @@
                                     <td class="text-right">
                                         <em>{{daily.todAlc | number:2}} cl</em>&nbsp;
                                          <span ng-switch="getDiffFromAvg(daily) < 0">
-                                            <span ng-switch-when="true" class="glyphicon glyphicon-arrow-up" style="color: #ff6700" tooltip="{{abs(alcDiff) | number:2}} cl more than usual on this day of the week"></span>
-                                            <span ng-switch-when="false" class="glyphicon glyphicon-arrow-down" style="color: #9b3f00" tooltip="{{abs(alcDiff) | number:2}} cl less than usual on this day of the week"></span>
+                                            <span ng-switch-when="true" class="glyphicon glyphicon-arrow-up" style="color: red" tooltip="{{abs(getDiffFromAvg(daily)) | number:2}} cl more than usual on this day of the week"></span>
+                                            <span ng-switch-when="false" class="glyphicon glyphicon-arrow-down" style="color: green" tooltip="{{abs(getDiffFromAvg(daily)) | number:2}} cl less than usual on this day of the week"></span>
                                         </span>
                                     </td>
                                     <td class="text-right">{{daily.todPilsner}} cl</td>

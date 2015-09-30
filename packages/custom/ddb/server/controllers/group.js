@@ -206,7 +206,7 @@ function getFrequentDrinks(users, callback) {
         },
         {$project: {_id: 0, drink: "$_id", nbDays: 1}},
         {$sort: {nbDays: -1}},
-        {$limit: 5}
+        {$limit: 10}
     ]).exec(function (err, frequentDrinks) {
         if (err) {
             callback(err);

@@ -86,7 +86,7 @@
 
             <div class="form-group btn-collection">
                 <button type="button" class="btn btn-danger"
-                        ng-repeat="frequentDrink in frequentDrinks | limitTo: 5"
+                        ng-repeat="frequentDrink in frequentDrinks | limitTo: 10"
                         ng-class="{active: selectedDrink._id === frequentDrink.drink._id}"
                         ng-click="selectDrink(frequentDrink.drink)">
                     {{frequentDrink.drink.name}}

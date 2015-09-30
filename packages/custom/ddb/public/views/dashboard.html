@@ -70,13 +70,13 @@
                     <div class="panel-body">
                         <span ng-if="benchmark - dailyAnalysis.todAlc > 0">
                             <i class="glyphicon glyphicon-thumbs-up"></i> &nbsp;
-                            So far today, you've had <span style="color: #9b3f00; font-weight: bold">{{benchmark - dailyAnalysis.todAlc |number:2}}cl less</span>
+                            So far today, you've had <span style="color: green; font-weight: bold">{{benchmark - dailyAnalysis.todAlc |number:2}}cl less</span>
                             alcohol than usual on {{dayOfWeek}}s. That's equivalent to <strong>{{18 * (benchmark -
                             dailyAnalysis.todAlc) | number:0}}cl</strong> of beer.
                         </span>
                         <span ng-if="benchmark - dailyAnalysis.todAlc < 0">
                             <i class="glyphicon glyphicon-exclamation-sign"></i>&nbsp;
-                            So far, you've had <span style="color: #ff6700; font-weight: bold">{{dailyAnalysis.todAlc - benchmark |number:2}}cl more</span>
+                            So far, you've had <span style="color: red; font-weight: bold">{{dailyAnalysis.todAlc - benchmark |number:2}}cl more</span>
                             alcohol than usual on {{dayOfWeek}}s. That's equivalent to <strong>{{18 *
                             (dailyAnalysis.todAlc - benchmark) | number:0}}cl</strong> of beer.
                         </span>
