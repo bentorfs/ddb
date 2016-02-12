@@ -75,18 +75,23 @@ angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$statePa
                     //var date = moment.utc(serie.date, 'YYYY-MM-DD hh:mm:ss');
                     var date;
                     if ($scope.groupTrendGranularity === 'monthly') {
-                        date = moment.utc().month(analysis.month - 1)
+                        date = moment.utc().month(analysis.month - 1).year(analysis.year)
                     } else if ($scope.groupTrendGranularity === 'weekly') {
-                        date = moment.utc().weeks(analysis.week)
+                        date = moment.utc().weeks(analysis.week).year(analysis.year)
                     } else if ($scope.groupTrendGranularity === 'daily') {
                         date = moment.utc(analysis.date, 'YYYY-MM-DD hh:mm:ss');
                     }
+                    var valueToUse;
                     if (date >= fromDate && date < today) {
                         var formattedDate = date.format('YYYY-MM-DD');
                         if (!dataMap[formattedDate]) {
                             dataMap[formattedDate] = {}
                         }
-                        dataMap[formattedDate][member.username] = $filter('number')(analysis.totAlc || analysis.todAlc, 2);
+                        valueToUse = analysis.todAlc;
+                        if (typeof valueToUse === 'undefined') {
+                            valueToUse = analysis.totAlc;
+                        }
+                        dataMap[formattedDate][member.username] = $filter('number')(valueToUse, 2);
                     }
                 });
             });
@@ -99,7 +104,7 @@ angular.module('mean.ddb').controller('DdbGroupController', ['$scope', '$statePa
                     var formattedDate = currentDate.format('YYYY-MM-DD');
                     if (dataMap[formattedDate]) {
                         value = dataMap[formattedDate][member.username];
-                        if (!value) {
+                        if (typeof value === 'undefined') {
                             value = null;
                         }
                     } else {
