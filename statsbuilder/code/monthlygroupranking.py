@@ -32,13 +32,10 @@ def generateMonthlyGroupRankings(db):
 		currentMonth = now.month
 
 		monthlyGroupRankings = []
-
-		while (month <= currentMonth and year <= currentYear):
-
+		while (month <= currentMonth or year <= currentYear):
 			thisDate = datetime.datetime(year, month, 1, 0, 0, 0, 0)
 			creationMonth = datetime.datetime(group['creationDate'].year, group['creationDate'].month, 1, 0, 0, 0, 0)
 			if (thisDate >= creationMonth):
-
 				monthlyAnalyses = list(db['monthlyanalyses'].find({
 					'_id.user': {'$in': group['members']}, 
 					'_id.year': year,

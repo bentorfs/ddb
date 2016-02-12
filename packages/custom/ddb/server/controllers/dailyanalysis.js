@@ -34,15 +34,15 @@ module.exports = {
         permissions.ifDailyAnalysisPermission(req.user, req.params.userId, function () {
             DailyAnalysis.aggregate([
                 {$match: {'user': ObjectId(req.params.userId), ignore: false}},
-                {$project: {week: {$week: "$date"}, todAlc: 1}},
+                {$project: {week: {$week: "$date"}, year: {$year: "$date"}, todAlc: 1}},
                 {
                     '$group': {
-                        _id: '$week',
+                        _id: {week: '$week', year: '$year'},
                         totAlc: {$sum: '$todAlc'}
                     }
                 },
-                {$project: {_id: 0, week: "$_id", totAlc: 1}},
-                {$sort: {week: 1}}
+                {$project: {_id: 0, week: "$_id.week", year: "$_id.year", totAlc: 1}},
+                {$sort: {year: 1, week: 1}}
             ]).exec(function (err, weeklyAnalyses) {
                 if (err) {
                     next(err);
@@ -57,15 +57,15 @@ module.exports = {
         permissions.ifDailyAnalysisPermission(req.user, req.params.userId, function () {
             DailyAnalysis.aggregate([
                 {$match: {'user': ObjectId(req.params.userId), ignore: false}},
-                {$project: {month: {$month: "$date"}, todAlc: 1}},
+                {$project: {month: {$month: "$date"}, year: {$year: "$date"}, todAlc: 1}},
                 {
                     '$group': {
-                        _id: '$month',
+                        _id: {month: '$month', year: '$year'},
                         totAlc: {$sum: '$todAlc'}
                     }
                 },
-                {$project: {_id: 0, month: "$_id", totAlc: 1}},
-                {$sort: {month: 1}}
+                {$project: {_id: 0, month: "$_id.month", year: "$_id.year", totAlc: 1}},
+                {$sort: {year: 1, month: 1}}
             ]).exec(function (err, weeklyAnalyses) {
                 if (err) {
                     next(err);
